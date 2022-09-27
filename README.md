@@ -1,4 +1,4 @@
-# Mineração de Dados
+# Estrutura de Dados II
 
 | **Sumário** |
 |-------------|
@@ -25,4 +25,6 @@
 
 ### Links Úteis
 
-* [Livros](https://drive.google.com/drive/folders/1THlHpt0TFc1Tw7XBmAVVFuS6vzlGh1IK?usp=sharing)
+* [Especificação do Trabalho](https://drive.google.com/file/d/1JyFdW51OyGMDqLKBihBS6wx7TFB441lK/view?usp=sharing) <br>
+
+* [Relatório](https://docs.google.com/document/d/1wnsLxzRpGx570Co6qUlEIlP0S5nK7nz_/edit?usp=sharing&ouid=112002808412360346355&rtpof=true&sd=true) <br>
