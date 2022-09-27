@@ -28,3 +28,5 @@
 * [Especificação do Trabalho](https://drive.google.com/file/d/1MmjmUyoL1xdPzCIZEUEGlBnwWLnqM_Uw/view?usp=sharing) <br>
 
 * [Relatório](https://docs.google.com/document/d/14vnyY3xUYAWb4GPUKzaJWeJ33qqOYRk8/edit?usp=sharing&ouid=112002808412360346355&rtpof=true&sd=true) <br>
+
+* [Trello do Grupo](https://trello.com/b/01zBdtaH/estrutura-de-dados-ii) <br>
