@@ -6,6 +6,6 @@ class ProductReview
     private:
 
     public:
-}
+};
 
 #endif // ProductReview_H_INCLUDED
