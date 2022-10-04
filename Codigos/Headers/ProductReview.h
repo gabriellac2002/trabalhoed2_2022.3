@@ -3,7 +3,11 @@
 
 class ProductReview
 {
+    private:
+        int tamanho;
     public:
+        ProductReview(int n);
+
         void print();
 };
 
