@@ -5,6 +5,7 @@
 | [Objetivo do Repositório](#objetivo-do-repositorio) |
 | [Integrantes do Grupo](#integrantes-do-grupo) |
 | [Professor da Disciplina](#professor-da-disciplina) |
+| [Manual de Uso](#manual-de-uso) |
 | [Links Úteis](#links-uteis) |
 
 ## Objetivo do repositório
@@ -22,6 +23,15 @@
 
 \* Marcelo Caniato Renhe
 
+## Manual de uso
+
+\* Clonar o repositório `https://github.com/gabriellac2002/trabalhoed2_2022.3.git` pelo terminal;
+
+\* Para compilar: `g++ *.cpp -o main`;
+
+\* Para rodar o programa (Windows): `./main diretorio/do/arquivo/`;
+
+* O arquivo `ratings_Eletronics.csv` deve ser incluido na pasta do código, o usuário deve [baixá-lo aqui](https://www.kaggle.com/datasets/saurav9786/amazon-product-reviews) e copiá-lo na pasta principal.
 
 ### Links Úteis
 
@@ -30,3 +40,7 @@
 * [Relatório](https://docs.google.com/document/d/14vnyY3xUYAWb4GPUKzaJWeJ33qqOYRk8/edit?usp=sharing&ouid=112002808412360346355&rtpof=true&sd=true) <br>
 
 * [Trello do Grupo](https://trello.com/b/01zBdtaH/estrutura-de-dados-ii) <br>
+
+* [GitHub](https://github.com/gabriellac2002/trabalhoed2_2022.3.git) <br>
+
+* [Base de Dados](https://www.kaggle.com/datasets/saurav9786/amazon-product-reviews) <br>
