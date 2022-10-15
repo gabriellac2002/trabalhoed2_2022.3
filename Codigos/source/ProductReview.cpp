@@ -10,9 +10,14 @@ ProductReview::ProductReview(int n)
     tamanho = n;
 }
 
-ProductReview::print()
+void ProductReview::print(int n)
 {
-    for(int i = 0; i < n; i++) {
-        //cout
+    for (int i = 0; i < n; i++)
+    {
+        // cout
     }
+}
+
+int ProductReview::GetuserId(){
+    return userId;
 }
