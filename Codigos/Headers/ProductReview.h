@@ -1,5 +1,9 @@
 #ifndef ProductReview_H_INCLUDED
 #define ProductReview_H_INCLUDED
+#include "./Product.h"
+#include "string"
+
+using namespace std;
 
 class ProductReview
 {
