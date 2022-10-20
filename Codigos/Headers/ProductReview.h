@@ -1,6 +1,6 @@
 #ifndef ProductReview_H_INCLUDED
 #define ProductReview_H_INCLUDED
-#include "./Product.h"
+#include "Product.h"
 #include "string"
 
 using namespace std;
@@ -8,15 +8,15 @@ using namespace std;
 class ProductReview
 {
     private:
-        int tamanho;
+        string userId;
+        string productId;
+        float rating;
+        long timestamp;
 
     public:
-        ProductReview(int n);
-
         void print();
         void createBinary(string& path);
         void getReview(int i);
-
         ProductReview* import(int n);
 };
 

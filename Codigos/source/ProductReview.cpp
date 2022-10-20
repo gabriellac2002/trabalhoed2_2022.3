@@ -6,26 +6,21 @@
 
 #include "../Headers/ProductReview.h"
 
+#define STRING_MAX_SIZE 128
+#define PRODUCT_REVIEW_SIZE (2*sizeof(char)*STRING_MAX_SIZE + sizeof(float) + sizeof(long))
+
 using namespace std;
 
 
-
-ProductReview::ProductReview(int n)
-{
-    tamanho = n;
-}
-
-void ProductReview::print()
-{
-    for(int i = 0; i < tamanho; i++) {
-        //cout
-    }
-}
+// void ProductReview::print()
+// {
+    
+// }
 
 void ProductReview::createBinary(string& path)
 {
-    std::ifstream ler(path+"a.csv");
-    std::fstream escrever("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
+    std::ifstream ler(path+"test.csv");
+    std::fstream escrever("test.bin", ios::out | ios::in | ios::ate | ios::binary);
     
     string s;
     //le linha a linha do arquivo
@@ -84,4 +79,43 @@ void ProductReview::createBinary(string& path)
     escrever.close();
     // std::fstream escrever2("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
 
+}
+
+void ProductReview::getReview(int i) 
+{
+
+    std::ifstream is ("test.txt", ios::binary);
+
+    int registerSize = PRODUCT_REVIEW_SIZE;
+
+    for (int j = 0; j < i; j++)
+    {
+        is.seekg (0, is.beg);
+        int position = i+1;
+        int startPosition = (position*registerSize);
+        int endPosition = startPosition + registerSize;
+        is.seekg (startPosition, is.end);
+    }
+
+}
+
+ProductReview *import(int n)
+{
+
+    std::ifstream is ("test.txt", ios::binary);
+
+    ProductReview *binaryVector = new ProductReview[n];
+    int registerSize = PRODUCT_REVIEW_SIZE;
+
+    for (int i = 0; i < n; i++)
+    {
+        is.seekg (0, is.beg);
+        int position = rand() % n;
+        int startPosition = (position*registerSize);
+        int endPosition = startPosition + registerSize;
+        is.seekg (startPosition, is.end);
+        binaryVector[i] = ;
+    }
+    
+    return binaryVector;
 }
