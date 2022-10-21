@@ -17,6 +17,14 @@ using namespace std;
     
 // }
 
+ProductReview::ProductReview()
+{
+    this->userId = " ";
+    this->productId =" ";
+    this->rating = 0;
+    this->timestamp = 0;
+}
+
 void ProductReview::createBinary(string& path)
 {
     std::ifstream ler(path+"test.csv");
@@ -99,12 +107,16 @@ void ProductReview::getReview(int i)
 
 }
 
-ProductReview *import(int n)
+ProductReview* ProductReview::import(int n)
 {
 
-    std::ifstream is ("test.txt", ios::binary);
+    std::ifstream is ("test.txt", ios::binary | ios::in | ios::out | ios::trunc);
+    if(!is.is_open()){
+        std::cout<<"erro ao abrir o arquivo";
+        return NULL;
+    }    
 
-    ProductReview *binaryVector = new ProductReview[n];
+    ProductReview* binaryVector  = new ProductReview [n];
     int registerSize = PRODUCT_REVIEW_SIZE;
 
     for (int i = 0; i < n; i++)
@@ -114,7 +126,7 @@ ProductReview *import(int n)
         int startPosition = (position*registerSize);
         int endPosition = startPosition + registerSize;
         is.seekg (startPosition, is.end);
-        binaryVector[i] = ;
+        is.read((char *) &binaryVector[i],registerSize);
     }
     
     return binaryVector;

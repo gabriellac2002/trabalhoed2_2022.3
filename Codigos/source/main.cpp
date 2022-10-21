@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
     string qualquer_nome(argv[1]);
-    ProductReview product(5);
+    ProductReview product;
     product.createBinary(qualquer_nome);
 
     return 0;
