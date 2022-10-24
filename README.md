@@ -27,7 +27,7 @@
 
 \* Clonar o repositório `https://github.com/gabriellac2002/trabalhoed2_2022.3.git` pelo terminal;
 
-\* Para compilar: `g++ *.cpp -o main`;
+\* E para compilar: `g++ *.cpp -o main`;
 
 \* Para rodar o programa (Windows): `./main diretorio/do/arquivo/`;
 
