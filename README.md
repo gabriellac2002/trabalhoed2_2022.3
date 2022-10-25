@@ -2,15 +2,17 @@
 
 | **Sumário** |
 |-------------|
-| [Objetivo do Repositório](#objetivo-do-repositorio) |
+| [Descrição](#descricao) |
 | [Integrantes do Grupo](#integrantes-do-grupo) |
 | [Professor da Disciplina](#professor-da-disciplina) |
 | [Manual de Uso](#manual-de-uso) |
 | [Links Úteis](#links-uteis) |
 
-## Objetivo do repositório
+## Descrição
 * Esse repositório tem o intuito de versionamento de código da disciplina de Estrutura de Dados II da UFJF no semestre de 2022.3 <br>
 
+## Linguagem escolhida
+* <img alt="C++" src="https://www.alura.com.br/artigos/assets/formacao-linguagem-c-plus-plus/img-01.png" width="20"></img>
 
 ## Integrantes do grupo:
 
@@ -32,9 +34,9 @@
 
 \* E Para compilar: `g++ *.cpp -o main`;
 
-\* Para rodar o programa (Windows): `./main diretorio/do/arquivo/`;
+\* Para rodar o programa (Windows): `./main diretorio/do/arquivo/ratings_Electronics.csv`;
 
-* O arquivo `ratings_Eletronics.csv` deve ser incluido na pasta do código, o usuário deve [baixá-lo aqui](https://www.kaggle.com/datasets/saurav9786/amazon-product-reviews) e copiá-lo na pasta principal.
+* O arquivo `ratings_Eletronics.csv` deve ser incluido na pasta do código, o usuário deve [baixá-lo aqui](https://www.kaggle.com/datasets/saurav9786/amazon-product-reviews) e copiá-lo na pasta Source do projeto.
 
 ### Links Úteis
 
