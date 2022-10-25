@@ -38,3 +38,8 @@ void Product::Imprimir()
     cout <<"rating: "       << this->_rating << endl; 
     cout <<"timestamp: "       << this->_timestamp << endl;
 }
+
+void Product::printId()
+{
+    cout << "Teste " << this->_userId << endl;
+}

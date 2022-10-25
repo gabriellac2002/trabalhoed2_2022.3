@@ -87,7 +87,7 @@ void ProductReview::getReview(int i)
     Product product;
 
     std::ifstream arqLer("ratings_Electronics.bin");
-    std::fstream arqEscrever("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
+    //std::fstream arqEscrever("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
 
     arqLer.seekg(i * sizeof(Product), ios_base::beg);
     
@@ -95,5 +95,6 @@ void ProductReview::getReview(int i)
 
     arqLer.close();
 
-    print(product, arqEscrever);
+    product.printId();
+    //print(product, arqEscrever);
 }

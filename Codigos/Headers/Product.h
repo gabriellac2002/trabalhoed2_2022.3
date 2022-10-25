@@ -17,6 +17,7 @@ class Product
         void LerDoArquivoBinario(fstream &file);
         void EscreverNoArquivoBinario(fstream &file);
         void Imprimir();
+        void printId();
 
     private:
         char _userId[STR_MAX_SIZE];
