@@ -25,9 +25,12 @@
 
 ## Manual de uso
 
+
 \* Clonar o repositório `https://github.com/gabriellac2002/trabalhoed2_2022.3.git` pelo terminal;
 
-\* E para compilar: `g++ *.cpp -o main`;
+\* Ir para a pasta "Source" pelo caminho `Codigos/Source`;
+
+\* E Para compilar: `g++ *.cpp -o main`;
 
 \* Para rodar o programa (Windows): `./main diretorio/do/arquivo/`;
 
