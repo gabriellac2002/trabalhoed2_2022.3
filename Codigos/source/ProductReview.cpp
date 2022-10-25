@@ -15,11 +15,10 @@ ProductReview::ProductReview(int n)
     tamanho = n;
 }
 
-void ProductReview::print()
+void ProductReview::print(Product product, fstream &file)
 {
-    for(int i = 0; i < tamanho; i++) {
-        //cout
-    }
+    product.LerDoArquivoBinario(file);
+    product.Imprimir();
 }
 
 void ProductReview::createBinary(string& path)
@@ -75,12 +74,13 @@ void ProductReview::createBinary(string& path)
     ler.close();
     Product produto2 = Product();
     escrever.seekg(0, ios::beg);
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
+    print(produto2, escrever);
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
     escrever.close();
     // std::fstream escrever2("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
 
