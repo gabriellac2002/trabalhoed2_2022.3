@@ -30,7 +30,7 @@
 
 \* Clonar o repositório `https://github.com/gabriellac2002/trabalhoed2_2022.3.git` pelo terminal;
 
-\* Ir para a pasta "Source" pelo caminho `Codigos/Source`;
+\* Ir para a pasta "Source" pelo caminho `src/Source`;
 
 \* E Para compilar: `g++ *.cpp -o main`;
 
