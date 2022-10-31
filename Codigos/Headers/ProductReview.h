@@ -14,10 +14,17 @@ class ProductReview
         long timestamp;
 
     public:
+        ProductReview();
         void print();
         void createBinary(string& path);
         void getReview(int i);
         ProductReview* import(int n);
+
+        // setters
+        void setUserId(string uId);
+        void setProductId(string pId);
+        void setRating(float rat);
+        void setTimestamp(long time);
 };
 
 #endif // ProductReview_H_INCLUDED
