@@ -148,8 +148,8 @@ ProductReview *import(int n)
         ProductReview item;
         item.setProductId(vector[0]);
         item.setUserId(vector[1]);
-        item.setRating(stol(vector[2]));
-        item.setRating(stoi(vector[3]));
+        item.setRating(stof(vector[2]));
+        item.setTimestamp(stol(vector[3]));
 
         binaryVector[i] = item;
     }
