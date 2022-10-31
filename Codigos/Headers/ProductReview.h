@@ -14,7 +14,6 @@ class ProductReview
         long timestamp;
 
     public:
-        ProductReview();
         void print();
         void createBinary(string& path);
         void getReview(int i);

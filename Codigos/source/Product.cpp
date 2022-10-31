@@ -32,8 +32,8 @@ void Product::EscreverNoArquivoBinario(fstream &file)
 
 void Product::Imprimir()
 {
-    cout <<"userId: "      << this->_userId << endl;
-    cout <<"productId: " << this->_productId << endl;
-    cout <<"rating: "       << this->_rating << endl; 
-    cout <<"timestamp: "       << this->_timestamp << endl;
+    cout << "userId: " << this->_userId << endl;
+    cout << "productId: " << this->_productId << endl;
+    cout << "rating: " << this->_rating << endl; 
+    cout << "timestamp: " << this->_timestamp << endl;
 }

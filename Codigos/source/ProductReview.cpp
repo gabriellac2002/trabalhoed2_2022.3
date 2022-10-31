@@ -20,6 +20,28 @@ using namespace std;
 //     this->timestamp = 0;
 // }
 
+// Setters para o TAD ProductReview
+
+void ProductReview::setUserId(string uId)
+{
+    this->userId = uId;
+}
+
+void ProductReview::setProductId(string pId)
+{
+    this->productId = pId;
+}
+
+void ProductReview::setRating(float rat)
+{
+    this->rating = rat;
+}
+
+void ProductReview::setTimestamp(long time)
+{
+    this->timestamp = time;
+}
+
 void ProductReview::print()
 {
     cout << "____________________" << endl;
@@ -79,14 +101,14 @@ void ProductReview::createBinary(string& path)
     }
 
     ler.close();
-    Product produto2 = Product();
+    // Product produto2 = Product();
     escrever.seekg(0, ios::beg);
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
     escrever.close();
 
 }
@@ -114,6 +136,8 @@ void ProductReview::getReview(int i)
     readArchive.seekg(i * sizeof(Product), ios_base::beg);
     readArchive.read((char *) &product,sizeof(Product));
     readArchive.close();
+
+    product.Imprimir();
 
 }
 
