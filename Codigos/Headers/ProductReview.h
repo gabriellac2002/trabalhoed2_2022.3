@@ -8,6 +8,8 @@ using namespace std;
 class ProductReview
 {
     private:
+        int sizeOfUserId = sizeof(userId);
+        int sizeOfProductId = sizeof(productId);
         string userId;
         string productId;
         float rating;
@@ -18,12 +20,6 @@ class ProductReview
         void createBinary(string& path);
         void getReview(int i);
         ProductReview* import(int n);
-
-        // setters
-        void setUserId(string uId);
-        void setProductId(string pId);
-        void setRating(float rat);
-        void setTimestamp(long time);
 };
 
 #endif // ProductReview_H_INCLUDED

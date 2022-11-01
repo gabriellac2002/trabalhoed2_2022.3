@@ -6,7 +6,7 @@
 using namespace std;
 
 #define STR_MAX_SIZE 128
-#define PRODUTO_SIZE (sizeof(char)STR_MAX_SIZE + 2sizeof(int) + sizeof(float))
+// #define PRODUTO_SIZE (sizeof(char)STR_MAX_SIZE + 2sizeof(int) + sizeof(float))
 
 class Product
 {
