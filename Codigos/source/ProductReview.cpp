@@ -61,6 +61,9 @@ void createBinary(string& path)
         cerr << "ERRO: O arquivo não pôde ser aberto!" << endl;
     }
 
+    csvArchive.close();
+    binaryArchive.close();
+
 }
 
 void ProductReview::getReview(int i) 
