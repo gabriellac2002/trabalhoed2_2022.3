@@ -31,10 +31,10 @@ void ProductReview::print()
     cout << "____________________" << endl;
 }
 
-void createBinary(string& path) 
+void ProductReview::createBinary(string& path) 
 {
-    std::ifstream csvArchive(path+"test.csv");
-    std::fstream binaryArchive("test.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
+    std::ifstream csvArchive(path+"ratings_Electronics.csv");
+    std::fstream binaryArchive("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
 
     string str, str2;
     char* buffer = new char[sizeOfArchive(csvArchive)];
@@ -46,14 +46,14 @@ void createBinary(string& path)
 
         for(int i=0; i<=sizeOfArchive(csvArchive); i++)
         {
-            cout << buffer[i] << endl;
+            // cout << buffer[i] << endl;
             str = buffer[i];
             binaryArchive.write(reinterpret_cast<const char*>(&str), sizeof(str));
         }   
         
-        binaryArchive.read(reinterpret_cast<char*>(&str2), sizeof(str2));
+        // binaryArchive.read(reinterpret_cast<char*>(&str2), sizeof(str2));
 
-        cout << str2;
+        // cout << str2;
         
     }
     else
@@ -68,7 +68,17 @@ void createBinary(string& path)
 
 void ProductReview::getReview(int i) 
 {
-    std::ifstream binaryArchive("test.bin");
+    // std::ifstream binaryArchive("test.bin");
+
+    // char* buffer = new char[sizeOfArchive(binaryArchive)];
+
+    // ProductReview productReview;
+
+    // if(binaryArchive.is_open())
+    // {
+
+    // }
+
 }
 
 ProductReview *import(int n)
