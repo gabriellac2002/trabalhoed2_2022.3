@@ -17,66 +17,47 @@ using namespace std;
 
 // }
 
-void ProductReview::createBinary(string &path)
+int sizeOfArchive(ifstream& archive) 
 {
-    std::ifstream ler(path + "test.csv");
-    std::fstream escrever("test.bin", ios::out | ios::in | ios::ate | ios::binary);
+    archive.seekg(0, archive.end);
+    int size = archive.tellg();
+    archive.seekg(0);
+    return size;
+}
 
-    string s;
-    // le linha a linha do arquivo
-    while (getline(ler, s))
+void createBinary(string& path) 
+{
+    std::ifstream csvArchive(path+"test.csv");
+    std::fstream binaryArchive("test.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
+
+    string str, str2;
+    char* buffer = new char[sizeOfArchive(csvArchive)];
+    
+    if(csvArchive.is_open())
     {
-        string userId;
-        string productId;
-        float rating;
-        long timestamp;
-        stringstream temp(s); // lendo o dado do arquivo da serialização
-        // Product produto;
-        int z = 0;
-        while (getline(temp, s, ','))
-        { // separa por virgula
-            switch (z)
-            {
-            case 0:
-                userId = s;
-                z++;
-                break;
-            case 1:
-                productId = s;
-                z++;
-                break;
-            case 2:
-                rating = stof(s); // converte string pra float
-                z++;
-                break;
+        int size = sizeOfArchive(csvArchive);
+        csvArchive.read((char*) buffer, size);
 
-            default:
-                timestamp = stoi(s); // converte string pra int
-                z++;
-                break;
-            }
-        }
+        for(int i=0; i<=sizeOfArchive(csvArchive); i++)
+        {
+            cout << buffer[i] << endl;
+            str = buffer[i];
+            binaryArchive.write(reinterpret_cast<const char*>(&str), sizeof(str));
+        }   
+        
+        binaryArchive.read(reinterpret_cast<char*>(&str2), sizeof(str2));
 
-        Product produto(userId.c_str(), productId.c_str(), rating, timestamp);
-
-        produto.EscreverNoArquivoBinario(escrever);
-        // produto2.LerDoArquivoBinario(escrever);
-        // produto.Imprimir();
-
-        // cout<< prduto2.userId << "," << produto.productId << "," << produto.rating << "," << produto.timestamp<< '\n';
+        cout << str2;
+        
+    }
+    else
+    {
+        cerr << "ERRO: O arquivo não pôde ser aberto!" << endl;
     }
 
-    ler.close();
-    Product produto2 = Product();
-    escrever.seekg(0, ios::beg);
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    produto2.LerDoArquivoBinario(escrever);
-    produto2.Imprimir();
-    escrever.close();
-    // std::fstream escrever2("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
+    csvArchive.close();
+    binaryArchive.close();
+
 }
 
 void ProductReview::getReview(int i)
@@ -119,7 +100,7 @@ void ProductReview::setTimestamp(long time)
 ProductReview *import(int n)
 {
 
-    std::ifstream is("test.txt", ios::binary | ios::in);
+    std::ifstream is("test.bin", ios::binary | ios::in);
 
     ProductReview *binaryVector = new ProductReview[n];
     int registerSize = PRODUCT_REVIEW_SIZE;
