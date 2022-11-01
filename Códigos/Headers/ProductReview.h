@@ -12,7 +12,7 @@ class ProductReview
     public:
         ProductReview(int n);
 
-        void print();
+        void print(Product product, fstream &file);
         void createBinary(string& path);
         void getReview(int i);
 

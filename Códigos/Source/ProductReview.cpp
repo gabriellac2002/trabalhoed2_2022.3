@@ -16,11 +16,10 @@ ProductReview::ProductReview(int n)
     tamanho = n;
 }
 
-void ProductReview::print()
+void ProductReview::print(Product product, fstream &file)
 {
-    for(int i = 0; i < tamanho; i++) {
-        //cout
-    }
+    product.LerDoArquivoBinario(file);
+    product.Imprimir();
 }
 
 int sizeOfArchive(ifstream& archive) 
@@ -61,9 +60,24 @@ void ProductReview::createBinary(string& path)
     else
         cerr << "ERRO: O arquivo nao pode ser aberto!" << endl;
 
+<<<<<<< HEAD:Codigos/source/ProductReview.cpp
     csv.close();
     binario.close();
    
    
+=======
+    ler.close();
+    Product produto2 = Product();
+    escrever.seekg(0, ios::beg);
+    print(produto2, escrever);
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    // produto2.LerDoArquivoBinario(escrever);
+    // produto2.Imprimir();
+    escrever.close();
+    // std::fstream escrever2("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
+>>>>>>> main:Códigos/Source/ProductReview.cpp
 
 }
