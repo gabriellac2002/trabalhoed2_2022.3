@@ -7,8 +7,6 @@ using namespace std;
 class ProductReview
 {
     private:
-        int sizeOfUserId = sizeof(userId);
-        int sizeOfProductId = sizeof(productId);
         string userId;
         string productId;
         float rating;

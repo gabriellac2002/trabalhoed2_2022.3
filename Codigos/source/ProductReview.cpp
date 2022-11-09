@@ -68,16 +68,16 @@ void ProductReview::createBinary(string& path)
 
 void ProductReview::getReview(int i) 
 {
-    // std::ifstream binaryArchive("test.bin");
+    std::ifstream binaryArchive("test.bin");
 
-    // char* buffer = new char[sizeOfArchive(binaryArchive)];
+    char* buffer = new char[sizeOfArchive(binaryArchive)];
 
-    // ProductReview productReview;
+    ProductReview productReview;
 
-    // if(binaryArchive.is_open())
-    // {
-
-    // }
+    if(binaryArchive.is_open())
+    {
+        binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
+    }
 
 }
 
