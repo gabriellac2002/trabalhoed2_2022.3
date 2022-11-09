@@ -81,43 +81,44 @@ void ProductReview::getReview(int i)
 
 }
 
+
 ProductReview *import(int n)
 {
 
-    std::ifstream is("test.bin", ios::binary | ios::in);
+    // std::ifstream is("test.bin", ios::binary | ios::in);
 
-    ProductReview *binaryVector = new ProductReview[n];
-    int registerSize = PRODUCT_REVIEW_SIZE;
-    char *data = new char[registerSize];
-    string dataString;
-    string *vector = new string[4];
-    stringstream s_stream(dataString);
-    int count = 0;
+    // ProductReview *binaryVector = new ProductReview[n];
+    // int registerSize = PRODUCT_REVIEW_SIZE;
+    // char *data = new char[registerSize];
+    // string dataString;
+    // string *vector = new string[4];
+    // stringstream s_stream(dataString);
+    // int count = 0;
 
-    for (int i = 0; i < n; i++)
-    {
-        is.seekg(0, is.beg);
-        int position = rand() % n;
-        int startPosition = (position * registerSize);
-        int endPosition = startPosition + registerSize;
-        is.seekg(startPosition, is.end);
-        is.read(data, registerSize);
-        dataString = data;
-        while (s_stream.good())
-        {
-            string substr;
-            getline(s_stream, substr, ','); // get first string delimited by comma
-            vector[count] = substr;
-            count++;
-        }
-        ProductReview item;
-        item.setProductId(vector[0]);
-        item.setUserId(vector[1]);
-        item.setRating(stof(vector[2]));
-        item.setTimestamp(stol(vector[3]));
+    // for (int i = 0; i < n; i++)
+    // {
+    //     is.seekg(0, is.beg);
+    //     int position = rand() % n;
+    //     int startPosition = (position * registerSize);
+    //     int endPosition = startPosition + registerSize;
+    //     is.seekg(startPosition, is.end);
+    //     is.read(data, registerSize);
+    //     dataString = data;
+    //     while (s_stream.good())
+    //     {
+    //         string substr;
+    //         getline(s_stream, substr, ','); // get first string delimited by comma
+    //         vector[count] = substr;
+    //         count++;
+    //     }
+    //     ProductReview item;
+    //     item.setProductId(vector[0]);
+    //     item.setUserId(vector[1]);
+    //     item.setRating(stof(vector[2]));
+    //     item.setTimestamp(stol(vector[3]));
 
-        binaryVector[i] = item;
-    }
+    //     binaryVector[i] = item;
+    // }
 
-    return binaryVector;
+    // return binaryVector;
 }
