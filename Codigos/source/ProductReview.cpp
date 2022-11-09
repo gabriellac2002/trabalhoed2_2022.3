@@ -33,8 +33,8 @@ void ProductReview::print()
 
 void ProductReview::createBinary(string& path) 
 {
-    std::ifstream csvArchive(path+"test.csv");
-    std::fstream binaryArchive("test.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
+    std::ifstream csvArchive(path+"ratings_Electronics.csv");
+    std::fstream binaryArchive("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
 
     string str, str2;
     char* buffer = new char[sizeOfArchive(csvArchive)];
@@ -68,37 +68,17 @@ void ProductReview::createBinary(string& path)
 
 void ProductReview::getReview(int i) 
 {
-    // std::ifstream binaryArchive("test.bin");
+    std::ifstream binaryArchive("test.bin");
 
-    // char* buffer = new char[sizeOfArchive(binaryArchive)];
+    char* buffer = new char[sizeOfArchive(binaryArchive)];
 
-    // ProductReview productReview;
+    ProductReview productReview;
 
-    // if(binaryArchive.is_open())
-    // {
+    if(binaryArchive.is_open())
+    {
+        binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
+    }
 
-    // }
-
-}
-
-void ProductReview::setUserId(string uId)
-{
-    this->userId = uId;
-}
-
-void ProductReview::setProductId(string pId)
-{
-    this->productId = pId;
-}
-
-void ProductReview::setRating(float rat)
-{
-    this->rating = rat;
-}
-
-void ProductReview::setTimestamp(long time)
-{
-    this->timestamp = time;
 }
 
 ProductReview *import(int n)
