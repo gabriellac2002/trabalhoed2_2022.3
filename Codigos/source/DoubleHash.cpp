@@ -9,16 +9,6 @@ using namespace std;
 // Handline of collision via open addressing
 // Method for Probing: Double Hashing
 
-DoubleHash::DoubleHash(int Table_Size, int keysPresent, int prime, vector<int> hasgTable, bitset<Max_Size> isPrime)
-{
-    Table_Size = Table_Size;
-    keysPresent = keysPresent;
-    prime = prime;
-    hashTable = hashTable;
-    isPrime = isPrime;
-}
-
-DoubleHash::~DoubleHash() {}
 
 void DoubleHash::__setSieve()
 {
@@ -30,6 +20,25 @@ void DoubleHash::__setSieve()
                 isPrime[j] = 1;
             }
         }
+    }
+}
+
+DoubleHash::DoubleHash(int n)
+{
+    __setSieve();
+    Table_Size = n;
+
+    // Find the largest prime number smaller than table's size
+    prime = Table_Size - 1;
+    while (isPrime[prime] == 1) {
+        prime--;
+    }
+    
+    keysPresent = 0;
+
+    //Fill the hash table with -1 (empty entries)
+    for(int i = 0; i < Table_Size; i++) {
+        hashTable.push_back(-1);
     }
 }
 

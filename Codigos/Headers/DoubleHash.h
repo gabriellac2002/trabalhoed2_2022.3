@@ -17,7 +17,7 @@ class DoubleHash
         bitset<Max_Size> isPrime;
 
     public:
-        DoubleHash(int Table_Size, int keysPresent, int prime, vector<int> hasgTable, bitset<Max_Size> isPrime);
+        DoubleHash(int n);
         ~DoubleHash();
         void __setSieve();
         int inline hash1(int value);
