@@ -159,6 +159,26 @@ ProductReview *import(int n)
     }
 }
 
+// Funções Obrigatórias da 2ª Etapa
+
+void sort(ProductReview *vet, int n, int methodId)
+{
+    switch(methodId)
+    {
+        case 0:
+            // espaço para a chamada do MergeSort
+            break;
+        case 1:
+            // espaço para a chamada do QuickSort
+            break;
+        case 2:
+            // espaço para a chamada do CountingSort
+            break;  
+        default:
+            cout <<"Método de organização não encontrado";              
+    }
+}
+
 int main(int argc, char** argv)
 {
     string path_teste(argv[1]);
