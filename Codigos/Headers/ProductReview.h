@@ -14,9 +14,11 @@ class ProductReview
 
     public:
         void print();
-        void createBinary(string& path);
-        void getReview(int i);
-        // ProductReview* import(int n);
+        void setProductId(string usId);
+        void setUserId(string prodId);
+        void setRating(float rat);
+        void setTimestamp(long time);
+
 };
 
 #endif // ProductReview_H_INCLUDED
