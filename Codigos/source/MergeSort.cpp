@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int mergeSortMovements= 0;
+int mergeSortMovements = 0;
 int mergeSortComparisons = 0;
 
 void merge(ProductReview* array, int left, int mid, int right)

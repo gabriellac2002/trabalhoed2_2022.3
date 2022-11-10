@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int countingSortMovements= 0;
+int countingSortMovements = 0;
 int countingSortComparisons = 0;
 
 void countingSort(ProductReview* array)

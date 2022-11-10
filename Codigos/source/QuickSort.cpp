@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int quickSortMovements= 0;
+int quickSortMovements = 0;
 int quickSortComparisons = 0;
 
 void swap(ProductReview* a, ProductReview* b)
