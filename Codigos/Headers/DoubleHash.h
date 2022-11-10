@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define Max_Size 10000001ll
+#define Max_Size 130
 
 class DoubleHash
 {
@@ -17,6 +17,8 @@ class DoubleHash
         bitset<Max_Size> isPrime;
 
     public:
+        DoubleHash(int Table_Size, int keysPresent, int prime, vector<int> hasgTable, bitset<Max_Size> isPrime);
+        ~DoubleHash();
         void __setSieve();
         int inline hash1(int value);
         int inline hash2(int value);
