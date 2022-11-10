@@ -17,12 +17,16 @@ class DoubleHash
         bitset<Max_Size> isPrime;
 
     public:
-        DoubleHash(int n);
-        ~DoubleHash();
         void __setSieve();
+        DoubleHash(int n);
         int inline hash1(int value);
         int inline hash2(int value);
         int inline isFull();
+        void __printPrime(long long n);
+        void insert(int value);
+        void erase(int value);
+        bool search(int value);
+        void print();
 };
 
 #endif // DoubleHash_H_INCLUDED
