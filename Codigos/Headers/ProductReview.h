@@ -18,6 +18,10 @@ class ProductReview
         void setUserId(string prodId);
         void setRating(float rat);
         void setTimestamp(long time);
+        string getProductId();
+        string getUserId();
+        float getRating();
+        long getTimestamp();
 
 };
 

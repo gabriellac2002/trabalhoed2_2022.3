@@ -11,21 +11,25 @@
 
 using namespace std;
 
-int sizeOfArchive(ifstream& archive) 
-{
-    archive.seekg(0, archive.end);
-    int size = archive.tellg();
-    archive.seekg(0);
-    return size;
-}
-
 // Funções Obrigatórias da 1ª Etapa
 
 void ProductReview::print()
 {
     cout << "____________________" << endl;
-    cout <<"userId: " << this->userId << endl;
-    cout <<"productId: " << this->productId << endl;
+
+    // cout <<"userId: " << this->userId << endl;
+    for(int i=0; i<14; i++)
+    {
+        cout << userId[i] << " ";
+    }
+
+    // cout <<"productId: " << this->productId << endl;
+    for(int i=0; i<10; i++)
+    {
+        cout << productId[i] << " ";
+    }
+
+
     cout <<"rating: " << this->rating << endl; 
     cout <<"timestamp: " << this->timestamp << endl;
     cout << "____________________" << endl;
@@ -40,9 +44,28 @@ void ProductReview::setUserId(string prodId)
 {
     this->productId = prodId;
 }
-void ProductReview::setRating(float rat){
+void ProductReview::setRating(float rat)
+{
     this->rating = rat;
 }
-void ProductReview::setTimestamp(long time){
+void ProductReview::setTimestamp(long time)
+{
     this->timestamp = time;
+}
+
+string ProductReview::getProductId()
+{
+    return this->userId;
+}
+string ProductReview::getUserId()
+{
+    return this->productId;
+}
+float ProductReview::getRating()
+{
+    return this->rating;
+}
+long ProductReview::getTimestamp()
+{
+    return this->timestamp;
 }
