@@ -12,6 +12,54 @@
 
 using namespace std;
 
+//construtor vazio
+ProductReview::ProductReview()
+{
+
+}
+
+ProductReview::ProductReview(char* userId, char* productId, float rating, long timestamp)
+{
+    strcpy(this->userId,userId);
+    strcpy(this->productId,productId);
+    this->rating = rating;
+    this->timestamp = timestamp;
+}
+
+//getters and setters
+
+string ProductReview::getUserId(){
+    return this->userId;
+}
+
+void ProductReview::setUserId(string userId){
+    this->userId = userId;
+}
+
+string ProductReview::getProductId(){
+    return productId;
+}
+
+void ProductReview::setProductId(string productId){
+    this->productId = productId;
+}
+
+float ProductReview::getRating(){
+    return this->rating;
+}
+
+void ProductReview::setRating(float rating){
+    this->rating = rating;
+}
+
+long ProductReview::getTimesTamp(){
+    return this->timestamp;
+}
+
+void ProductReview::setTimesTamp(long timestamp){
+    this->timestamp = timestamp;
+}
+
 // // calcula o tamanho do arquivo passado como parâmetro
 
 // int sizeOfArchive(ifstream& archive) 
@@ -92,40 +140,53 @@ void ProductReview::print()
 
 }
 
-// void createBinary(string& path) 
-// {
-//     std::ifstream csvArchive(path+"test.csv");
-//     std::fstream binaryArchive("test.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
+void createBinary(string& path) 
+{
+    std::ifstream csvArchive(path+"test.csv");
+    std::fstream binaryArchive("test.bin", ios::out | ios::in | ios::ate | ios::binary | ios::trunc);
 
-//     string str, str2;
-//     char* buffer = new char[sizeOfArchive(csvArchive)];
+    string s;
+
+    while(getline(csvArchive, s)) {
+        string userId_;
+        string productId_;
+        string rating_;
+        string timestamp_;
+
+        stringstream temp(s); //lendo o dado do arquivo da serialização
+
+        getline(temp, userId_, ',');
+        getline(temp, productId_, ',');
+        getline(temp, rating_, ',');
+        getline(temp, timestamp_, ',');
+
+        float rating = stof(rating_);
+
+        ProductReview *product = new ProductReview(); 
+
+        product->setUserId(userId_);
+        product->setProductId(productId_);
+        product->setRating(rating);
+        product->setTimesTamp(timestamp_);
+
+        if(csvArchive.is_open())
+        {
+            binaryArchive.write(reinterpret_cast<const char*>(&product), sizeof(product));
+            binaryArchive.read(reinterpret_cast<const char*>(&product), sizeof(product));
+        }
+        else
+        {
+            cout << "Erro encontrado na função void createBinary(string& path)" << endl;
+        }
+
+    }
     
-//     if(csvArchive.is_open())
-//     {
-//         int size = sizeOfArchive(csvArchive);
-//         csvArchive.read((char*) buffer, size);
+    
 
-//         for(int i=0; i<=sizeOfArchive(csvArchive); i++)
-//         {
-//             // cout << buffer[i] << endl;
-//             str = buffer[i];
-//             binaryArchive.write(reinterpret_cast<const char*>(&str), sizeof(str));
-//         }   
-        
-//         // binaryArchive.read(reinterpret_cast<char*>(&str2), sizeof(str2));
+    csvArchive.close();
+    binaryArchive.close();
 
-//         // cout << str2;
-        
-//     }
-//     else
-//     {
-//         cout << "Erro encontrado na função void createBinary(string& path)" << endl;
-//     }
-
-//     csvArchive.close();
-//     binaryArchive.close();
-
-// }
+}
 
 // void getReview(int i) 
 // {
