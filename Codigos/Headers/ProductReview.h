@@ -10,7 +10,7 @@ class ProductReview
         string userId;
         string productId;
         float rating;
-        long timestamp;
+        double timestamp;
 
     public:
         void print();

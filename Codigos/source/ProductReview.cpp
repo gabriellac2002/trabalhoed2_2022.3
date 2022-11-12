@@ -6,8 +6,7 @@
 
 #include "../Headers/ProductReview.h"
 
-#define STRING_MAX_SIZE 128
-#define PRODUCT_REVIEW_SIZE (2*sizeof(char)*STRING_MAX_SIZE + sizeof(float) + sizeof(long))
+#define PRODUCT_REVIEW_SIZE (24*sizeof(char) + sizeof(float) + sizeof(double))
 
 using namespace std;
 
@@ -17,19 +16,8 @@ void ProductReview::print()
 {
     cout << "____________________" << endl;
 
-    // cout <<"userId: " << this->userId << endl;
-    for(int i=0; i<14; i++)
-    {
-        cout << userId[i] << " ";
-    }
-
-    // cout <<"productId: " << this->productId << endl;
-    for(int i=0; i<10; i++)
-    {
-        cout << productId[i] << " ";
-    }
-
-
+    cout <<"userId: " << this->userId << endl;
+    cout <<"productId: " << this->productId << endl;
     cout <<"rating: " << this->rating << endl; 
     cout <<"timestamp: " << this->timestamp << endl;
     cout << "____________________" << endl;

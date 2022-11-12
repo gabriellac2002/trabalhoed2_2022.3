@@ -6,14 +6,13 @@
 #include <ctime>
 #include "../Headers/ProductReview.h"
 
-#define STRING_MAX_SIZE 128
-#define PRODUCT_REVIEW_SIZE (2*sizeof(char)*STRING_MAX_SIZE + sizeof(float) + sizeof(long))
+#define PRODUCT_REVIEW_SIZE (24*sizeof(char) + sizeof(float) + sizeof(double)+1)
 
 using namespace std;
 
 // calcula o tamanho do arquivo passado como parâmetro
 
-int sizeOfArchive(ifstream& archive) 
+int sizeOfArchive(ifstream& archive)
 {
     archive.seekg(0, archive.end);
     int size = archive.tellg();
@@ -23,13 +22,15 @@ int sizeOfArchive(ifstream& archive)
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)s
 
-int numberOfRegisters(ifstream& archive) 
+int numberOfRegisters(ifstream& archive)
 {
     if(archive.is_open())
     {
-        archive.seekg(0, ios_base::end);
-        int number = int(archive.tellg()/sizeof(ProductReview)); 
-        return number; 
+        archive.seekg(0, archive.end);
+        cout<<"tamanho do arquivo ="<<archive.tellg()<<endl;
+        int number = int(archive.tellg()/PRODUCT_REVIEW_SIZE);
+        cout<<"numero de registros = "<<number<<endl;
+        return number;
     }
     else
     {
@@ -40,40 +41,14 @@ int numberOfRegisters(ifstream& archive)
 
 // acessa o i-ésimo registro do arquivo binário e o retorna
 
-// ProductReview returnRegister(int n)
-// {
-//     // correção do índice a ser buscado
-//     int x = n - 1;
-
-//     std::ifstream binaryArchive("test.bin");
-
-//     // char* buffer = new char[sizeOfArchive(binaryArchive)];
-
-//     ProductReview productReview;
-
-//     if(binaryArchive.is_open())
-//     {
-//         binaryArchive.seekg(xsizeof(ProductReview), ios_base::beg);
-//         // binaryArchive.read((char) buffer, sizeOfArchive(binaryArchive));
-//         binaryArchive.read((char *) &productReview, sizeof(ProductReview));
-//     }
-//     else
-//     {
-//         cout << "Não foi possível abrir o arquivo!" << endl;
-//         cout << "Erro encontrado na função void getReview(int i)" << endl;
-//     }
-
-//     return productReview;
-// }
-
 ProductReview returnRegister(int n)
 {
     // correção do índice a ser buscado
     int x = n - 1;
 
-    std::ifstream binaryArchive;
+    fstream binaryArchive;
 
-    binaryArchive.open("test.bin",ios::binary);
+    binaryArchive.open("test.bin",ios::in);
 
     std::string::size_type sz;
 
@@ -102,14 +77,14 @@ ProductReview returnRegister(int n)
         }
         // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
         binaryArchive.seekg(sizeofId+1, ios::cur);
-        binaryArchive.read((char *) &productId, 10*sizeof(char)); 
+        binaryArchive.read((char *) &productId, 10*sizeof(char));
         // getline( binaryArchive, productId, ',');
         productReview.setProductId(productId);
-        binaryArchive.seekg(sizeof(productId)+1, ios::cur); 
-        binaryArchive.read((char *) &rating, 3*sizeof(char)); 
+        binaryArchive.seekg(sizeof(productId)+1, ios::cur);
+        binaryArchive.read((char *) &rating, 3*sizeof(char));
         // productReview.setRating(stof(rating,&sz));
-        binaryArchive.seekg(sizeof(rating)+1, ios::cur); 
-        binaryArchive.read((char *) &timestamp, 10*sizeof(char)); 
+        binaryArchive.seekg(sizeof(rating)+1, ios::cur);
+        binaryArchive.read((char *) &timestamp, 10*sizeof(char));
         // productReview.setTimestamp(stold(timestamp,&sz));
     }
     else
@@ -117,7 +92,7 @@ ProductReview returnRegister(int n)
         cout << "Não foi possível abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void getReview(int i)" << endl;
     }
-
+    binaryArchive.close();
     return productReview;
 }
 
@@ -159,39 +134,43 @@ void createBinary(string& path)
 
 }
 
-void getReview(int i) 
+void getReview(int i)
 {
     // correção do índice a ser buscado
     int x = i - 1;
 
-    std::ifstream binaryArchive;
+    fstream binaryArchive;
 
-    binaryArchive.open("test.bin",ios::binary);
+    binaryArchive.open("test.bin",ios::in);
 
     // char* buffer = new char[sizeOfArchive(binaryArchive)];
 
-    ProductReview productReview;
+    char registro[PRODUCT_REVIEW_SIZE];
+    string reg;
 
     if(binaryArchive.is_open())
     {
-        binaryArchive.seekg(x*sizeof(ProductReview), ios_base::beg);
+        binaryArchive.seekg(x*PRODUCT_REVIEW_SIZE, ios_base::beg);
         // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
-        binaryArchive.read((char *) &productReview, sizeof(ProductReview));
+        binaryArchive.read((char *) &registro, PRODUCT_REVIEW_SIZE);
     }
     else
     {
         cout << "Não foi possível abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void getReview(int i)" << endl;
     }
+    reg = registro;
+    binaryArchive.close();
+    cout<<"Registro encontrado="<<reg<<endl;
+    cout<<"cheguei"<<endl;
 }
 
 ProductReview *import(int n)
 {
-    ProductReview *productReview =  new ProductReview[n];
-    std::ifstream binaryArchive;
+    ProductReview* productReview =  new ProductReview[n];
+    ifstream binaryArchive;
 
     binaryArchive.open("test.bin");
-
     if(binaryArchive.is_open())
     {
         if(numberOfRegisters(binaryArchive) >= n)
@@ -201,7 +180,9 @@ ProductReview *import(int n)
 
             for(int i = 0; i < n ;i++)
             {
+                // cout<<"cheguei"<<endl;
                 random = rand() % numberOfRegisters(binaryArchive);
+                cout<<"numero aleatorio gerado= "<<random<<endl;
                 productReview[i] = returnRegister(random);
             }
         }
@@ -223,12 +204,12 @@ ProductReview *import(int n)
 
 int main(int argc, char** argv)
 {
+    cout << PRODUCT_REVIEW_SIZE<<endl;
     string path_teste(argv[1]);
     ProductReview productReview;
     createBinary(path_teste);
-
     getReview(8);
-    
+    cout<<"indo para o import"<<endl;
     ProductReview *teste = new ProductReview[5];
     teste = import(5);
 
