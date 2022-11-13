@@ -16,27 +16,27 @@ void ProductReview::print()
 {
     cout << "____________________" << endl;
 
-    cout <<"userId: " << this->userId << endl;
-    cout <<"productId: " << this->productId << endl;
-    cout <<"rating: " << this->rating << endl; 
-    cout <<"timestamp: " << this->timestamp << endl;
+    cout <<"userId: " << getUserId() << endl;
+    cout <<"productId: " << getProductId() << endl;
+    cout <<"rating: " << getRating() << endl; 
+    cout <<"timestamp: " << getTimestamp() << endl;
     cout << "____________________" << endl;
 }
 
 
-void ProductReview::setProductId(string usId)
+void ProductReview::setProductId(string product)
 {
-    this->userId = userId;
+    this->productId = product;
 }
-void ProductReview::setUserId(string prodId)
+void ProductReview::setUserId(string userid)
 {
-    this->productId = prodId;
+    this->userId = userid;
 }
-void ProductReview::setRating(float rat)
+void ProductReview::setRating(string rat)
 {
     this->rating = rat;
 }
-void ProductReview::setTimestamp(long time)
+void ProductReview::setTimestamp(string time)
 {
     this->timestamp = time;
 }

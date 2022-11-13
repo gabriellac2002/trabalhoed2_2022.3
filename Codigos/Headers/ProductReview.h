@@ -16,8 +16,8 @@ class ProductReview
         void print();
         void setProductId(string usId);
         void setUserId(string prodId);
-        void setRating(float rat);
-        void setTimestamp(long time);
+        void setRating(string rat);
+        void setTimestamp(string time);
         string getProductId();
         string getUserId();
         string getRating();

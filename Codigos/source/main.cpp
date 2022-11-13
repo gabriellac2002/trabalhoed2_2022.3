@@ -4,6 +4,8 @@
 #include <sstream>
 #include <cmath>
 #include <ctime>
+#include <algorithm>
+#include <array>
 #include "string.h"
 #include "../Headers/ProductReview.h"
 
@@ -75,14 +77,17 @@ void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[])
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)s
 
-int numberOfRegisters(ifstream &archive)
-{
+int numberOfRegisters(fstream& archive) 
+{   
     if (archive.is_open())
     {
-        archive.seekg(0, archive.end);
-        cout << "tamanho do arquivo =" << archive.tellg() << endl;
-        int number = int(archive.tellg() / PRODUCT_REVIEW_SIZE);
-        cout << "numero de registros = " << number << endl;
+        int number = 0;
+        string line;
+        while(!archive.eof())
+        {
+            getline(archive,line);
+            number++;
+        }
         return number;
     }
     else
@@ -96,6 +101,7 @@ int numberOfRegisters(ifstream &archive)
 
 ProductReview returnRegister(int n)
 {
+
     // correção do índice a ser buscado
     int x = n - 1;
 
@@ -109,44 +115,26 @@ ProductReview returnRegister(int n)
 
     ProductReview productReview;
 
-    string userId13;
-    string userId14;
+    string userId;
     string productId;
     string rating;
     string timestamp;
-    int sizeofId;
+
+    char review[PRODUCT_REVIEW_SIZE];
 
     if (binaryArchive.is_open())
     {
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        binaryArchive.read((char *)&userId13, 13 * sizeof(char));
-        binaryArchive.read((char *)&userId14, 14 * sizeof(char));
-        if (userId14.find(','))
-        {
-            productReview.setUserId(userId13);
-            sizeofId = 13;
-        }
-        else
-        {
-            productReview.setUserId(userId14);
-            sizeofId = 14;
-        }
         // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
-        binaryArchive.seekg(sizeofId + 1, ios::cur);
-        binaryArchive.read((char *)&productId, 10 * sizeof(char));
-        // getline( binaryArchive, productId, ',');
+        binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
+        userId = strtok(review, "?");
+        productReview.setUserId(userId);
+        productId = strtok(NULL, "?");
         productReview.setProductId(productId);
-        binaryArchive.seekg(sizeof(productId) + 1, ios::cur);
-        binaryArchive.read((char *)&rating, 3 * sizeof(char));
-        // productReview.setRating(stof(rating,&sz));
-        binaryArchive.seekg(sizeof(rating) + 1, ios::cur);
-        binaryArchive.read((char *)&timestamp, 10 * sizeof(char));
-        // productReview.setTimestamp(stold(timestamp,&sz));
-    }
-    else
-    {
-        cout << "Não foi possível abrir o arquivo!" << endl;
-        cout << "Erro encontrado na função void getReview(int i)" << endl;
+        rating = strtok(NULL, "?");
+        productReview.setRating(rating);
+        timestamp = strtok(NULL, "?");
+        productReview.setTimestamp(timestamp);
     }
     binaryArchive.close();
     return productReview;
@@ -216,23 +204,49 @@ void getReview(int i)
     binaryArchive.close();
 }
 
+bool exists(int ocurrences[], int number,int pos)
+{
+    for(int i = 0; i <=pos; i++)
+        if(ocurrences[i] == number)
+            return true;
+    return false;        
+}
+
 ProductReview *import(int n)
 {
     ProductReview *productReview = new ProductReview[n];
     ifstream binaryArchive;
+    fstream textArchive;
 
-    binaryArchive.open("test.bin");
-    if (binaryArchive.is_open())
+    int ocurrences [n];
+    int pos=0;
+    binaryArchive.open("test.bin",ios::in);
+    textArchive.open("test.csv",ios::in);
+    int size = numberOfRegisters(textArchive);
+    cout<<"numero total de registros no arquivo = "<<size<<endl;
+    if (binaryArchive.is_open() && textArchive.is_open())
     {
-        if (numberOfRegisters(binaryArchive) >= n)
+        if (size >= n)
         {
             srand(time(0));
             int random;
-
+            // bool exists = std::find(std::begin(a), std::end(a), x) != std::end(a);
             for (int i = 0; i < n; i++)
             {
                 // cout<<"cheguei"<<endl;
-                random = rand() % numberOfRegisters(binaryArchive);
+                random = rand() % size;
+                while(exists(ocurrences,random,pos))
+                {
+                    random = rand() % size;
+                }
+                ocurrences[pos] = random;
+                pos++;
+                if(pos == size)
+                {
+                    cout<<"coletou todos os registros"<<endl;
+                    return productReview;
+                }
+
                 cout << "numero aleatorio gerado= " << random << endl;
                 productReview[i] = returnRegister(random);
             }
@@ -258,13 +272,13 @@ int main(int argc, char **argv)
     ProductReview productReview;
     createBinary(path_teste);
     getReview(1);
-    // ProductReview *teste = new ProductReview[5];
-    // teste = import(5);
+    ProductReview *teste = new ProductReview[5];
+    teste = import(5);
 
-    // for (int i = 0; i < 5; i++)
-    // {
-    //     teste[i].print();
-    // }
+    for (int i = 0; i < 5; i++)
+    {
+        teste[i].print();
+    }
 
     return 0;
 }
