@@ -9,8 +9,8 @@ class ProductReview
     private:
         string userId;
         string productId;
-        float rating;
-        double timestamp;
+        string rating;
+        string timestamp;
 
     public:
         void print();
@@ -20,8 +20,8 @@ class ProductReview
         void setTimestamp(long time);
         string getProductId();
         string getUserId();
-        float getRating();
-        long getTimestamp();
+        string getRating();
+        string getTimestamp();
 
 };
 

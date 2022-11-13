@@ -6,7 +6,7 @@
 
 #include "../Headers/ProductReview.h"
 
-#define PRODUCT_REVIEW_SIZE (24*sizeof(char) + sizeof(float) + sizeof(double))
+#define PRODUCT_REVIEW_SIZE (44*sizeof(char))
 
 using namespace std;
 
@@ -49,11 +49,11 @@ string ProductReview::getUserId()
 {
     return this->productId;
 }
-float ProductReview::getRating()
+string ProductReview::getRating()
 {
     return this->rating;
 }
-long ProductReview::getTimestamp()
+string ProductReview::getTimestamp()
 {
     return this->timestamp;
 }
