@@ -1,21 +1,28 @@
 #ifndef ProductReview_H_INCLUDED
 #define ProductReview_H_INCLUDED
+#include "string"
 
 using namespace std;
 
 class ProductReview
 {
     private:
-        char userId[14];
-        char productId[10];
-        float rating;
-        long timestamp;
+        string userId;
+        string productId;
+        string rating;
+        string timestamp;
 
     public:
         void print();
-        // void createBinary(string& path);
-        // void getReview(int i);
-        // ProductReview* import(int n);
+        void setProductId(string usId);
+        void setUserId(string prodId);
+        void setRating(string rat);
+        void setTimestamp(string time);
+        string getProductId();
+        string getUserId();
+        string getRating();
+        string getTimestamp();
+
 };
 
 #endif // ProductReview_H_INCLUDED
