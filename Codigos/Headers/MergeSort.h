@@ -9,6 +9,6 @@ using namespace std;
 void merge(ProductReview* vet, int left, int mid, int right);
 void mergeSort(ProductReview* vet, int begin, int end);
 
-void mergeSortmetrics(string pathToFolder, string archiveName, int repetition);
+void mergeSortMetrics(string pathToFolder, string archiveName, int repetition);
 
 #endif // MergeSort_H_INCLUDED

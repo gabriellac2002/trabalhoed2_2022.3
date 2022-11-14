@@ -25,8 +25,8 @@ int partition(ProductReview* array, int low, int high)
   
     for (int j = low; j <= high - 1; j++) 
     {
-        // Se o elemento atual é menor do que o pivô
-        if (array[j] < pivot) 
+        // Se o elemento atual (userId do ProductReview) é menor do que o pivô
+        if (array[j].getUserId() < pivot.getUserId()) 
         {
             i++; // incrementa o índice do menor elemento
             swap(&array[i], &array[j]);
