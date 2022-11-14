@@ -5,6 +5,8 @@
 #include <vector>
 #include <bitset>
 
+#include "../Headers/ProductReview.h"
+
 using namespace std;
 
 #define Max_Size 130
