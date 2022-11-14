@@ -18,7 +18,7 @@ class HashTable
         int tamVetHash;
 
     public:
-        HashTable(unsigned int, string enderecoArqBin);
+        HashTable(unsigned int tam, string enderecoArqBin);
         ~HashTable();
 
         int get(int key);
