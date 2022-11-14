@@ -15,19 +15,19 @@ using namespace std;
 
 // calcula o tamanho do arquivo passado como parâmetro
 
-int sizeOfArchive(fstream& archive)
-{
-    archive.seekg(0, archive.end);
-    int size = archive.tellg();
-    archive.seekg(0);
-    return size;
-}
+// int sizeOfArchive(fstream& archive)
+// {
+//     archive.seekg(0, archive.end);
+//     int size = archive.tellg();
+//     archive.seekg(0);
+//     return size;
+// }
 
-
-void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[])
+void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[],int numberOfRegisters)
 {
     char trim[] = {',', '\n'};
-    for(int i=0;i<15;i++){
+    for(int i=0;i<numberOfRegisters;i++){
+        cout<<"cheguei"<<endl;
         char container [buffer[i].length() + 1];
         strcpy(container, buffer[i].c_str());
         char *separated = strtok(container, trim);
@@ -111,8 +111,6 @@ ProductReview returnRegister(int n)
 
     std::string::size_type sz;
 
-    // char* buffer = new char[sizeOfArchive(binaryArchive)];
-
     ProductReview productReview;
 
     string userId;
@@ -125,7 +123,6 @@ ProductReview returnRegister(int n)
     if (binaryArchive.is_open())
     {
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         userId = strtok(review, "?");
         productReview.setUserId(userId);
@@ -147,27 +144,28 @@ void createBinary(string &path)
     std::fstream csvArchive;
     csvArchive.open(path + "test.csv", ios::in | ios::binary);
     std::fstream binaryArchive;
-    binaryArchive.open("test.bin", ios::out | ios::binary);
-    int sizeofFile = sizeOfArchive(csvArchive);
-    string buffer[15],buffer1;
+    binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
+    int numberofRegisters = numberOfRegisters(csvArchive);
+    csvArchive.seekg(0,csvArchive.beg);
+    cout<<numberofRegisters<<endl;
+    string buffer[numberofRegisters],buffer1;
 
     if (csvArchive.is_open())
     {
         while (!csvArchive.eof())
         {
-            for(int i =0;i<15;i++){
+            for(int i =0;i<numberofRegisters;i++){
                 getline(csvArchive,buffer1);
                 buffer[i] = buffer1;
             }
             // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive,binaryArchive, buffer);
+            fixAndAddBuffer(csvArchive,binaryArchive, buffer,numberofRegisters);
         }
     }
     else
     {
         cout << "Erro encontrado na função void createBinary(string& path)" << endl;
     }
-
     csvArchive.close();
     binaryArchive.close();
 }
@@ -187,7 +185,6 @@ void getReview(int i)
     if (binaryArchive.is_open())
     {
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         separated = strtok(review, "?");
         for(int i = 0; i < 4;i++){
@@ -234,7 +231,7 @@ ProductReview *import(int n)
             for (int i = 0; i < n; i++)
             {
                 // cout<<"cheguei"<<endl;
-                random = rand() % size;
+                random = (rand() % size) + 1;
                 while(exists(ocurrences,random,pos))
                 {
                     random = rand() % size;
