@@ -9,28 +9,21 @@
 
 using namespace std;
 
-#define Max_Size 130
 
 class HashTable
 {
     private:
-        ProductReview **table;
-        unsigned int tamanho;
-        string enderecoArqBin;
-        int tamVetHash;
+        int tamanho; //tamanho da tabela
+        list<ProductReview> *table;  //Ponteiro para um array de listas Encadeadas
+        int funcaoHash(string& s, int tamanho);
+        int colisoes; //Número de Colisões
 
     public:
-        HashTable(unsigned int tam, string enderecoArqBin);
-        ~HashTable();
-
-        int get(int key);
-        void inserir(char *id);
-        void printHash();
-        int convertToInt(char *id);
-        int busca(char *id);
-        void maisFreq(int m, bool teste);
-        void quickHash(ProductReview **vet, int p, int r);
-        int particionamentoHash(ProductReview **vet, int p, int q);
+        HashTable(int tamanho, funcaoHash(string& s, int tamanho)); //construtor
+        ~HashTable(); // destrutor
+        void insertItem(); //Insere um valor na tabela Hash
+        void displayHash(); //Imprime a Tabela Hash
+        void imprimeColisoes(); //Imprime o Número de colisões 
 };
 
 #endif // HashTable_H_INCLUDED
