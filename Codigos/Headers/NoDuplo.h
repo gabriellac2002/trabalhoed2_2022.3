@@ -6,8 +6,8 @@ class NoDuplo
 public:
     NoDuplo()                { contador = 0; };
     ~NoDuplo()               { } ;
-    void setAnt(NoDuplo p)  { ant = p; };
-    void setProx(NoDuplop) { prox = p; };
+    void setAnt(NoDuplo *p)  { ant = p; };
+    void setProx(NoDuplo *p) { prox = p; };
     void setInfo(int val)    { info = val; };
     void incrementaContador()  { contador += 1;};
     void decrementaContador()  { contador -= 1;};
@@ -15,9 +15,9 @@ public:
     NoDuplo* getProx()       { return prox; };
     int getInfo()            { return info; };
 private:
-    NoDuplo ant;  /// ponteiro para anterior
+    NoDuplo *ant;  /// ponteiro para anterior
     int info;      /// informacao do no
     int contador; //contador
-    NoDuploprox; /// ponteiro para proximo
+    NoDuplo *prox; /// ponteiro para proximo
 };
 #endif

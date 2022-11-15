@@ -14,8 +14,8 @@ public:
     void removeInicio();
     void insereFinal(int val);
 private:
-    NoDuplo primeiro;
-    NoDuploultimo;
+    NoDuplo *primeiro;
+    NoDuplo *ultimo;
     int n;
 };
 #endif
