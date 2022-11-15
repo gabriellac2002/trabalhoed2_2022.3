@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include "ListaDupla.h"
+#include "../Headers/ListaDupla.h"
 
 using namespace std;
 
@@ -114,26 +114,4 @@ void ListaDupla::insereFinal(int val)
     n+=1;
 }
 
-NoDuplo ListaDupla::removeFinal()
-{
-	NoDuplo *p;
-    NoDuplo *aux;
 
-    if(primeiro == NULL)
-    {
-        p = ultimo;
-        aux = p;
-        ultimo = p->getAnt();
-        delete p;
-
-        if(ultimo == NULL)
-            primeiro = NULL;
-        else
-            ultimo->setProx(NULL);
-        n-=1;
-        return aux;
-    } else {
-        cout << "Lista vazia" << endl;
-        return NULL;
-    }
-}

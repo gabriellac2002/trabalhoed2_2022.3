@@ -6,10 +6,16 @@
 #include <ctime>
 #include <algorithm>
 #include <array>
+#include <cstdlib> ///rand()
+#include <ctime>   ///time()
 #include "string.h"
 #include "../Headers/ProductReview.h"
 #include "../Headers/HashTable.h"
 #include "../source/HashTable.cpp"
+#include "../Headers/ListaDupla.h"
+#include "../Headers/NoDuplo.h"
+#include "../source/ListaDupla.cpp"
+
 
 
 #define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
@@ -283,6 +289,11 @@ int funcaoHash(const string& string)
     return abs(hash_value);
 }
 
+int numAleatorio(int a, int b)
+{
+    return a + rand()%(b - a + 1); /// retorna um numero inteiro aleat�rio entre a e b
+}
+
 int main()
 {
     // string path_teste(argv[1]);
@@ -297,9 +308,32 @@ int main()
     //     teste[i].print();
     // }
 
-    const string s = "geeksforgeeks";
-    int hash = funcaoHash(s);
-    cout << "Hash of " << s << " is: " << hash << '\n';
+    // const string s = "geeksforgeeks";
+    // int hash = funcaoHash(s);
+    // cout << "Hash of " << s << " is: " << hash << '\n';
+
+    ListaDupla l; /// cria lista vazia
+    int NumNos = 10;
+
+    srand(time(NULL));
+
+    /// ATENCAO: os valores inseridos na lista sao gerados
+    /// aleatoriamente e mudam em cada execucao do programa!!!
+    cout << "Inserindo valores: ";
+    for(int i = 1; i <= NumNos; i++)
+    {
+        int val =  numAleatorio(0, 50); /// cria um valor aleat�rio entre 0 e 50
+        cout << val << ", ";
+        l.insereInicio(val);
+    }
+    cout << endl;
+
+    bool existe = l.busca(20);
+    cout << "O valor 20 esta na lista? ";
+    if(existe)
+        cout << "Sim" << endl;
+    else
+        cout << "Nao" << endl;
 
     return 0;
 }
