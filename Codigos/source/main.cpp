@@ -6,8 +6,8 @@
 #include <ctime>
 #include <algorithm>
 #include <array>
-#include <cstdlib> ///rand()
-#include <ctime>   ///time()
+#include <cstdlib> 
+#include <ctime>   
 #include "string.h"
 #include "../Headers/ProductReview.h"
 #include "../Headers/HashTable.h"
