@@ -8,6 +8,9 @@
 #include <array>
 #include "string.h"
 #include "../Headers/ProductReview.h"
+#include "../Headers/HashTable.h"
+#include "../source/HashTable.cpp"
+
 
 #define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
 
@@ -266,19 +269,37 @@ ProductReview *import(int n)
     return productReview;
 }
 
-int main(int argc, char **argv)
+int funcaoHash(const string& string)
 {
-    string path_teste(argv[1]);
-    ProductReview productReview;
-    createBinary(path_teste);
-    getReview(1);
-    ProductReview *teste = new ProductReview[5];
-    teste = import(5);
+    int p = 31, m = 1e9 + 7;
+    int tam_string = string.length();
 
-    for (int i = 0; i < 5; i++)
-    {
-        teste[i].print();
+    int hash_value = 0;
+    long p_pow = 1;
+    for(int i = 0; i < tam_string; i++) {
+        hash_value = (hash_value + (string[i] - 'a' + 1) * p_pow) % m;
+        p_pow = (p_pow * p) % m;
     }
+    return hash_value;
+}
+
+int main()
+{
+    // string path_teste(argv[1]);
+    // ProductReview productReview;
+    // createBinary(path_teste);
+    // getReview(1);
+    // ProductReview *teste = new ProductReview[5];
+    // teste = import(5);
+
+    // for (int i = 0; i < 5; i++)
+    // {
+    //     teste[i].print();
+    // }
+
+    const string s = "geeksforgeeks";
+    int hash = funcaoHash(s);
+    cout << "Hash of " << s << " is: " << hash << '\n';
 
     return 0;
 }
