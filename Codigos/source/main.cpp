@@ -293,6 +293,36 @@ int numAleatorio(int a, int b)
     return a + rand()%(b - a + 1); /// retorna um numero inteiro aleat�rio entre a e b
 }
 
+RegistroHash* createTable(int n)
+{
+    RegistroHash r1;
+    r1.productId = "A3J3BRHTDRFJ2G";
+    r1.qtdReviews = 2;
+
+    RegistroHash r2;
+    r2.productId = "A2TY0BTJOTENPG";
+    r2.qtdReviews = 3;
+
+    RegistroHash r3;
+    r3.productId = "2ATY0BTJOTENPG";
+    r3.qtdReviews = 3;
+
+    HashTable *tabela = new HashTable(n);
+    tabela->insert(r1);
+    tabela->insert(r2);
+    tabela->insert(r3);
+
+    RegistroHash *registro = new RegistroHash[n];
+
+    for(int i=0; i<n; i++)
+    {
+        registro[i] = tabela->getHashTable(i);
+    }
+
+
+    return registro;
+}
+
 int main()
 {
     // string path_teste(argv[1]);
@@ -334,15 +364,13 @@ int main()
     // else
     //     cout << "Nao" << endl;
 
-    RegistroHash r1;
-    r1.productId = "A3J3BRHTDRFJ2G";
-    r1.qtdReviews = 2;
+    
 
-    RegistroHash r2;
-    r2.productId = "A2TY0BTJOTENPG";
-    r2.qtdReviews = 3;
-
-    HashTable *tabela = new HashTable(10);
+    RegistroHash *registros = createTable(2);
+    for(int i=0; i<2; i++)
+    {
+        cout << registros[i].qtdReviews << "," ;
+    }
     
 
     return 0;

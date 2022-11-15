@@ -8,7 +8,7 @@
 #include "../Headers/ProductReview.h"
 #include "../Headers/RegistroHash.h"
 
-#define MAX_SIZE 1000000111
+#define MAX_SIZE 1000
 
 using namespace std;
 
@@ -23,9 +23,9 @@ class HashTable
     void __setSieve()
     {
         isPrime[0] = isPrime[1] = 1;
-        for(long long i = 2; i*i <= MAX_SIZE; i++)
+        for(long i = 2; i*i <= MAX_SIZE; i++)
             if(isPrime[i] == 0)
-                for(long long j = i*i; j <= MAX_SIZE; j += i)
+                for(long j = i*i; j <= MAX_SIZE; j += i)
                     isPrime[j] = 1;
  
     }
@@ -60,16 +60,17 @@ class HashTable
     public:
 
     HashTable(int n){
+        cout << "a" << endl;
         __setSieve();
         tamanho_tabela = n;
- 
+        cout << "b" << endl;
         n_primo = tamanho_tabela - 1;
         while(isPrime[n_primo] == 1)
             n_primo--;
- 
+        cout << "c" << endl;
         quant_chaves = 0;
 
-        
+        cout << "d" << endl;
 
         for(int i = 0; i < tamanho_tabela; i++){
             RegistroHash r1;
@@ -77,6 +78,7 @@ class HashTable
             r1.qtdReviews = -1;
             hashTable.push_back(r1);
         }
+        cout << "e" << endl;
     }
 
     void __printPrime(long long n){
@@ -92,11 +94,11 @@ class HashTable
         int valor = converterInteiro(registro.productId);
  
         if(valor == -1 || valor == -2){
-            cout<<("ERROR : -1 and -2 can't be inserted in the table\n"); 
+            cout<<"ERROR : -1 and -2 can't be inserted in the table\n" << endl;
         }
  
         if(estaCheio()){
-            cout<<("ERROR : Hash Table Full\n");
+            cout<<"ERROR : Hash Table Full\n" <<endl;
             return;
         }
          
@@ -138,6 +140,11 @@ class HashTable
         for(int i = 0; i < tamanho_tabela; i++)
             cout<<hashTable[i].productId<<", ";
         cout<<"\n";
+    }
+
+    RegistroHash getHashTable(int i)
+    {
+        return hashTable[i];
     }
 };
 
