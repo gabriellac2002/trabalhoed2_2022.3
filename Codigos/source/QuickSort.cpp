@@ -39,7 +39,7 @@ int partition(ProductReview* array, int low, int high, int comparisons, int move
 
 int* quickSort(ProductReview* array, int low, int high, int comparisons, int movements)
 {
-    int metrics[2];
+    int aux[2];
 
     if (low < high) 
     {
@@ -51,8 +51,10 @@ int* quickSort(ProductReview* array, int low, int high, int comparisons, int mov
         quickSort(array, pi + 1, high, comparisons, movements);
     }
 
-    metrics[0] = comparisons;
-    metrics[1] = movements;
+   aux[0] = comparisons;
+   aux[1] = movements;
 
-    return metrics;
+   int* metrics  = aux;
+
+   return metrics;
 }

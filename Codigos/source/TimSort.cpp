@@ -27,7 +27,7 @@ void insertionSort(ProductReview* array, int left, int right, int comparisons, i
     }
 }
  
-void merge(ProductReview* array, int l, int m, int r, int comparisons, int movements)
+void mergeTim(ProductReview* array, int l, int m, int r, int comparisons, int movements)
 {
     int len1 = m - l + 1;
     int len2 = r - m;
@@ -84,7 +84,7 @@ int* timSort(ProductReview* array, int comparisons, int movements)
 {
     int n = sizeof(array);
 
-    int metrics[2];
+    int aux[2];
      
     for (int i = 0; i < n; i+=RUN)
     {
@@ -100,11 +100,15 @@ int* timSort(ProductReview* array, int comparisons, int movements)
  
             if(mid < right)
             {
-                merge(array, left, mid, right, comparisons, movements);
+                mergeTim(array, left, mid, right, comparisons, movements);
             }    
         }
     }
 
-    metrics[0] = comparisons;
-    metrics[1] = movements;
+    aux[0] = comparisons;
+    aux[1] = movements;
+    
+    int* metrics = aux;
+
+    return metrics;
 }

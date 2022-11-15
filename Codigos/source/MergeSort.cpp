@@ -72,18 +72,20 @@ void merge(ProductReview* array, int left, int mid, int right, int comparisons, 
 
 int* mergeSort(ProductReview* array, int begin, int end, int comparisons, int movements)
 {
-    int metrics[2];
+    int aux[2];
 
     if (begin >= end)
-        return; // Retorna recursivamente
+        return 0;
  
     int mid = begin + (end - begin) / 2;
     mergeSort(array, begin, mid, comparisons, movements);
     mergeSort(array, mid + 1, end, comparisons, movements);
     merge(array, begin, mid, end, comparisons, movements);
 
-    comparisons = metrics[0];
-    movements = metrics[1];
+    comparisons = aux[0];
+    movements = aux[1];
+
+    int* metrics = aux;
 
     return metrics;
 }

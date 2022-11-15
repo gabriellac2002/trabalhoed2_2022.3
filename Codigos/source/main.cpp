@@ -17,35 +17,25 @@
 
 using namespace std;
 
-// calcula o tamanho do arquivo passado como parâmetro
-
-int sizeOfArchive(fstream& archive) 
-{
-    archive.seekg(0, archive.end);
-    int size = archive.tellg();
-    archive.seekg(0);
-    return size;
-}
-
-void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[], int numberOfRegisters)
+void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int numberOfRegisters)
 {
     char trim[] = {',', '\n'};
-    for(int i = 0; i < 15; i++)
+    for (int i = 0; i < numberOfRegisters; i++)
     {
-        char container [buffer[i].length() + 1];
+        // cout<<"cheguei"<<endl;
+        char container[buffer[i].length() + 1];
         strcpy(container, buffer[i].c_str());
         char *separated = strtok(container, trim);
-        int counter = 0, size, total = 0;
+        int counter = 0, tam, total = 0;
         string line;
-
         while (separated)
         {
             line = separated;
             switch (counter)
             {
             case 0: // userId
-                size = 21 - line.length();
-                for (int i = 0; i < size; i++)
+                tam = 21 - line.length();
+                for (int i = 0; i < tam; i++)
                 {
                     line += "?";
                 }
@@ -63,8 +53,8 @@ void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[], int numb
                 counter++;
                 break;
             case 3: // timestamp
-                size = 10 - line.length();
-                for (int i = 0; i < size; i++)
+                tam = 10 - line.length();
+                for (int i = 0; i < tam; i++)
                 {
                     line += "?";
                 }
@@ -77,20 +67,20 @@ void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[], int numb
             }
             separated = strtok(NULL, trim);
         }
-    }    
+    }
 }
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)
 
-int numberOfRegisters(fstream& archive) 
+int numberOfRegisters(fstream &archive)
 {
     if (archive.is_open())
     {
         int number = 0;
         string line;
-        while(!archive.eof())
+        while (!archive.eof())
         {
-            getline(archive,line);
+            getline(archive, line);
             number++;
         }
         return number;
@@ -106,16 +96,15 @@ int numberOfRegisters(fstream& archive)
 
 ProductReview returnRegister(int n)
 {
+
     // correção do índice a ser buscado
     int x = n - 1;
 
     fstream binaryArchive;
 
-    binaryArchive.open("test.bin", ios::in);
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
 
     std::string::size_type sz;
-
-    // char* buffer = new char[sizeOfArchive(binaryArchive)];
 
     ProductReview productReview;
 
@@ -129,7 +118,6 @@ ProductReview returnRegister(int n)
     if (binaryArchive.is_open())
     {
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         userId = strtok(review, "?");
         productReview.setUserId(userId);
@@ -153,20 +141,21 @@ void createBinary(string &path)
     std::fstream binaryArchive;
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = numberOfRegisters(csvArchive);
-    csvArchive.seekg(0,csvArchive.beg);
-    cout<<numberofRegisters<<endl;
-    string buffer[numberofRegisters],buffer1;
+    csvArchive.seekg(0, csvArchive.beg);
+    cout << numberofRegisters << endl;
+    string buffer[numberofRegisters], buffer1;
 
     if (csvArchive.is_open())
     {
         while (!csvArchive.eof())
         {
-            for(int i =0;i<numberofRegisters;i++){
-                getline(csvArchive,buffer1);
+            for (int i = 0; i < numberofRegisters; i++)
+            {
+                getline(csvArchive, buffer1);
                 buffer[i] = buffer1;
             }
             // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive,binaryArchive, buffer, numberofRegisters);
+            fixAndAddBuffer(csvArchive, binaryArchive, buffer, numberofRegisters);
         }
     }
     else
@@ -184,7 +173,7 @@ void getReview(int i)
 
     fstream binaryArchive;
 
-    binaryArchive.open("test.bin", ios::in);
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
 
     char review[PRODUCT_REVIEW_SIZE];
     char *separated;
@@ -192,10 +181,9 @@ void getReview(int i)
     if (binaryArchive.is_open())
     {
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        // binaryArchive.read((char*) buffer, sizeOfArchive(binaryArchive));
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         separated = strtok(review, "?");
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             cout << separated << endl;
             separated = strtok(NULL, "?");
@@ -224,12 +212,12 @@ ProductReview *import(int n)
     ifstream binaryArchive;
     fstream textArchive;
 
-    int ocurrences [n];
-    int position = 0;
-    binaryArchive.open("test.bin",ios::in);
-    textArchive.open("test.csv",ios::in);
+    int ocurrences[n];
+    int pos = 0;
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
+    textArchive.open("test.csv", ios::in);
     int size = numberOfRegisters(textArchive);
-    cout<< "Número total de registros no arquivo = " << size <<endl;
+    // cout<<"numero total de registros no arquivo = "<<size<<endl;
     if (binaryArchive.is_open() && textArchive.is_open())
     {
         if (size >= n)
@@ -240,20 +228,20 @@ ProductReview *import(int n)
             for (int i = 0; i < n; i++)
             {
                 // cout<<"cheguei"<<endl;
-                random = rand() % size;
-                while(exists(ocurrences, random, position))
+                random = (rand() % size) + 1;
+                while (exists(ocurrences, random, pos))
                 {
                     random = rand() % size;
                 }
-                ocurrences[position] = random;
-                position++;
-                if(position == size)
+                ocurrences[pos] = random;
+                pos++;
+                if (pos == size)
                 {
-                    cout<< "Coletou todos os registros!" <<endl;
+                    cout << "coletou todos os registros" << endl;
                     return productReview;
                 }
 
-                cout << "Número aleatório gerado = " << random << endl;
+                // cout << "numero aleatorio gerado= " << random << endl;
                 productReview[i] = returnRegister(random);
             }
         }
@@ -276,20 +264,25 @@ ProductReview *import(int n)
 
 int* sort(ProductReview *vet, int n, int methodId)
 {
+    int* metrics;
+
     switch(methodId)
     {
         case 0:
-            mergeSort(vet, 0, n-1, 0, 0);
+            metrics = mergeSort(vet, 0, n-1, 0, 0);
             break;
         case 1:
-            quickSort(vet, 0, n-1, 0, 0);
+            metrics = quickSort(vet, 0, n-1, 0, 0);
             break;
         case 2:
-            timSort(vet, 0, 0);
+            metrics = timSort(vet, 0, 0);
             break;  
         default:
-            cout <<"Método de organização não encontrado!";              
+            cout <<"Método de organização não encontrado!";
+            break;              
     }
+
+    return metrics;
 }
 
 // Função para criar as Métricas de desempenho dos algoritmos de sorting
@@ -335,6 +328,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
         getline(inputArchive, strN, ',');
         n = stoi(strN);
 
+        resultArchive << "\n______________\n" << "\n";
         resultArchive << "\nResultados para N = " << n <<"\n";
 
         for(int j = 0; j < m; j++)
@@ -342,7 +336,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
             ProductReview *array = import(n);
             auto begin = chrono::high_resolution_clock::now();
 
-            // chamando o merge sort para o array
+            // chamando o sort para o array
             int* metrics = sort(array, n, methodId);
             auto final = chrono::high_resolution_clock::now() - begin;
             time = chrono::duration_cast<chrono::microseconds>(final).count();
@@ -353,7 +347,8 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
             delete[] array;
 
             //ESCREVENDO NO OUTFILE
-            resultArchive << "\nMovimentações: " << movements << " Comparações: " << comparisons <<" Tempo de Execução(s): "<< time/1000000.0 << "\n";
+            resultArchive << "Para o " << (j+1) << "° conjunto" << "\n";
+            resultArchive << "\nMovimentações: " << movements << " Comparações: " << comparisons <<" Tempo de Execução(s): "<< time << "\n";
 
             //INCREMENTO DAS MEDIAS
             averageComparisons += comparisons; 
@@ -369,9 +364,9 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
 
         // escrevendo as informações no arquivo saida.txt
         if(repetition>1)
-        resultArchive << "____________________\n";
-        resultArchive << "\nMédia das Movimentações: " << averageMovements << " Média das Comparações: " << averageComparisons <<" Média do tempo de execução: "<< averageTime/1000000.0 <<"\n\n";
-        resultArchive << "____________________\n";
+        resultArchive << "MÉDIAS\n";
+        resultArchive << "\nMédia das Movimentações: " << averageMovements << " Média das Comparações: " << averageComparisons <<" Média do tempo de execução: "<< averageTime <<"\n\n";
+        resultArchive << "\n______________\n" << "\n";
 
         // zerando as médias
         averageComparisons = 0;
@@ -399,4 +394,6 @@ int main(int argc, char** argv)
     {
         teste[i].print();
     }
+
+    metricsFunction(path_teste, 5, 0);
 }
