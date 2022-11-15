@@ -15,11 +15,11 @@ class HashTable
     private:
         int tamanho; //tamanho da tabela
         list<ProductReview> *table;  //Ponteiro para um array de listas Encadeadas
-        int funcaoHash(string& s, int tamanho);
+        int funcaoHash(ProductReview product, int tamanho, int* colisoes);
         int colisoes; //Número de Colisões
 
     public:
-        HashTable(int tamanho, funcaoHash(string& s, int tamanho)); //construtor
+        HashTable(int tamanho); //construtor
         ~HashTable(); // destrutor
         void insertItem(); //Insere um valor na tabela Hash
         void displayHash(); //Imprime a Tabela Hash
