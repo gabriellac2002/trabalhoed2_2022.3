@@ -286,6 +286,7 @@ void sort(ProductReview *vet, int n, int methodId, int* comparisons, int* moveme
 
 void metricsFunction(string pathToFolder, int repetition, int methodId)
 {
+    cout << "Entrei na metricsFunction" << endl;
     ifstream inputArchive(pathToFolder + "input.txt");
     ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
 
@@ -319,6 +320,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     int i = 0;
     while (inputArchive.good() && i < repetition)
     {
+        cout << "Entrei no while" << endl;
         // obtemos os valores de N do input.txt
         i++;
         getline(inputArchive, strN, ',');
@@ -329,8 +331,11 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
 
         ProductReview *array = import(n);
 
+        cout << "Indo para o for" << endl;
+
         for(int j = 0; j < m; j++)
         {
+            cout << "Entrei no for" << endl;
             int comparisons = 0;
             int movements = 0;
             // ProductReview *array = import(n);
@@ -385,15 +390,17 @@ int main(int argc, char** argv)
     createBinary(path_teste);
     getReview(1);
     cout << "-------------------------" << endl;
-    ProductReview *teste = new ProductReview[5];
-    teste = import(5);
+    ProductReview *teste  = import(10000);
+    cout << "Terminei de importar 10.000 registros..." << endl;
 
     for (int i = 0; i < 5; i++)
     {
         teste[i].print();
     }
 
-    metricsFunction(path_teste, 5, 0);
-    metricsFunction(path_teste, 5, 1);
-    metricsFunction(path_teste, 5, 2);
+    // cout << "Chamando 3 vezes as métricas" << endl;
+    // metricsFunction(path_teste, 5, 0);
+    // metricsFunction(path_teste, 5, 1);
+    // metricsFunction(path_teste, 5, 2);
+    // cout << "Terminei de chamar as métricas" << endl;
 }
