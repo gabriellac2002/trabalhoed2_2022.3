@@ -101,17 +101,11 @@ int numberOfRegisters(fstream &archive)
 
 // acessa o i-ésimo registro do arquivo binário e o retorna
 
-ProductReview returnRegister(int n)
+ProductReview returnRegister(int n,fstream& binaryArchive)
 {
 
     // correção do índice a ser buscado
     int x = n - 1;
-
-    fstream binaryArchive;
-
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
-
-    std::string::size_type sz;
 
     ProductReview productReview;
 
@@ -135,7 +129,6 @@ ProductReview returnRegister(int n)
         timestamp = strtok(NULL, "?");
         productReview.setTimestamp(timestamp);
     }
-    binaryArchive.close();
     return productReview;
 }
 
@@ -204,51 +197,28 @@ void getReview(int i)
     binaryArchive.close();
 }
 
-bool exists(int ocurrences[], int number, int pos)
-{
-    for (int i = 0; i <= pos; i++)
-        if (ocurrences[i] == number)
-            return true;
-    return false;
-}
-
 ProductReview *import(int n)
 {
     ProductReview *productReview = new ProductReview[n];
-    ifstream binaryArchive;
+    fstream binaryArchive;
     fstream textArchive;
 
-    int ocurrences[n];
-    int pos = 0;
     binaryArchive.open("ratings_Electronics.bin", ios::in);
     textArchive.open("test.csv", ios::in);
     int size = numberOfRegisters(textArchive);
-    // cout<<"numero total de registros no arquivo = "<<size<<endl;
-    if (binaryArchive.is_open() && textArchive.is_open())
+    if (binaryArchive.is_open())
     {
         if (size >= n)
         {
-            srand(time(0));
             int random;
-            // bool exists = std::find(std::begin(a), std::end(a), x) != std::end(a);
+            srand( (unsigned)time(NULL) );
             for (int i = 0; i < n; i++)
             {
-                // cout<<"cheguei"<<endl;
                 random = (rand() % size) + 1;
-                while (exists(ocurrences, random, pos))
-                {
-                    random = rand() % size;
+                productReview[i] = returnRegister(random,binaryArchive);
+                if(i == n-1){
+                    cout <<"cabo o for"<<endl;
                 }
-                ocurrences[pos] = random;
-                pos++;
-                if (pos == size)
-                {
-                    cout << "coletou todos os registros" << endl;
-                    return productReview;
-                }
-
-                // cout << "numero aleatorio gerado= " << random << endl;
-                productReview[i] = returnRegister(random);
             }
         }
         else
@@ -272,8 +242,8 @@ int main(int argc, char **argv)
     ProductReview productReview;
     createBinary(path_teste);
     getReview(1);
-    ProductReview *teste = new ProductReview[5];
-    teste = import(5);
+    ProductReview *teste = new ProductReview[10000];
+    teste = import(100000);
 
     for (int i = 0; i < 5; i++)
     {
