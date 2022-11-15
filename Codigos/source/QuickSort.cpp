@@ -34,6 +34,7 @@ int partition(ProductReview* array, int low, int high, int comparisons, int move
 
     swap(&array[i + 1], &array[high]);
     (movements)++;
+
     return (i + 1);
 }
 
@@ -55,6 +56,9 @@ int* quickSort(ProductReview* array, int low, int high, int comparisons, int mov
    aux[1] = movements;
 
    int* metrics  = aux;
+
+   cout << "Comparações QuickSort: " << comparisons << endl;
+   cout << "Movimentações QuickSort: " << movements << endl;
 
    return metrics;
 }

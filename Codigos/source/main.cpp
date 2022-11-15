@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cmath>
 #include <ctime>
+#include "time.h"
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -264,23 +265,27 @@ ProductReview *import(int n)
 
 int* sort(ProductReview *vet, int n, int methodId)
 {
+    int comparisons = 0;
+    int movements = 0;
     int* metrics;
 
     switch(methodId)
     {
         case 0:
-            metrics = mergeSort(vet, 0, n-1, 0, 0);
+            metrics = mergeSort(vet, 0, n-1, comparisons, movements);
             break;
         case 1:
-            metrics = quickSort(vet, 0, n-1, 0, 0);
+            metrics = quickSort(vet, 0, n-1, comparisons, movements);
             break;
         case 2:
-            metrics = timSort(vet, 0, 0);
+            metrics = timSort(vet, comparisons, movements);
             break;  
         default:
             cout <<"Método de organização não encontrado!";
             break;              
     }
+
+    int* metricsSort = metrics;
 
     return metrics;
 }
@@ -315,15 +320,14 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     int comparisons = 0;
     int movements = 0;
 
-    long long time = 0;
-    long long averageTime = 0;
+    clock_t averageTime = 0;
     float averageMovements = 0;
     float averageComparisons = 0;
 
     int i = 0;
     while (inputArchive.good() && i < repetition)
     {
-        // obtemos os valores M e N do input.txt
+        // obtemos os valores de N do input.txt
         i++;
         getline(inputArchive, strN, ',');
         n = stoi(strN);
@@ -334,26 +338,25 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
         for(int j = 0; j < m; j++)
         {
             ProductReview *array = import(n);
-            auto begin = chrono::high_resolution_clock::now();
-
-            // chamando o sort para o array
+            // auto start = chrono::high_resolution_clock::now();
+            clock_t start_time = clock();
             int* metrics = sort(array, n, methodId);
-            auto final = chrono::high_resolution_clock::now() - begin;
-            time = chrono::duration_cast<chrono::microseconds>(final).count();
+            clock_t end_time = clock();
+            clock_t result  = end_time - start_time;
+            // auto stop = chrono::high_resolution_clock::now();
+            // auto time = chrono::duration_cast<chrono::microseconds>(stop - start);
 
             int comparisons = metrics[0];
             int movements = metrics[1];
 
             delete[] array;
 
-            //ESCREVENDO NO OUTFILE
-            resultArchive << "Para o " << (j+1) << "° conjunto" << "\n";
-            resultArchive << "\nMovimentações: " << movements << " Comparações: " << comparisons <<" Tempo de Execução(s): "<< time << "\n";
+            resultArchive << "\nPara o " << (j+1) << "° conjunto" << "\n";
+            resultArchive << "Movimentações: " << movements << " --- Comparações: " << comparisons <<" --- Tempo de Execução(microsegundos): "<< result << "\n";
 
-            //INCREMENTO DAS MEDIAS
             averageComparisons += comparisons; 
             averageMovements += movements; 
-            averageTime += time;
+            averageTime += result;
             
         }
 
@@ -365,7 +368,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
         // escrevendo as informações no arquivo saida.txt
         if(repetition>1)
         resultArchive << "MÉDIAS\n";
-        resultArchive << "\nMédia das Movimentações: " << averageMovements << " Média das Comparações: " << averageComparisons <<" Média do tempo de execução: "<< averageTime <<"\n\n";
+        resultArchive << "\nMédia das Movimentações: " << (float)averageMovements << " --- Média das Comparações: " << (float)averageComparisons << " --- Média do tempo de execução: "<< (float)averageTime <<"\n\n";
         resultArchive << "\n______________\n" << "\n";
 
         // zerando as médias
@@ -395,5 +398,5 @@ int main(int argc, char** argv)
         teste[i].print();
     }
 
-    metricsFunction(path_teste, 5, 0);
+    metricsFunction(path_teste, 5, 1);
 }
