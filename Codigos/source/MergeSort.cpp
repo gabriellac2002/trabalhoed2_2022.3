@@ -3,8 +3,8 @@
 #include <math.h>
 #include <chrono>
 
-#include "Headers/ProductReview.h"
-#include "Headers/MergeSort.h"
+#include "../Headers/ProductReview.h"
+#include "../Headers/MergeSort.h"
 
 using namespace std;
 
