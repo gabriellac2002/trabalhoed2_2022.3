@@ -11,8 +11,8 @@
 #include "string.h"
 #include "../Headers/ProductReview.h"
 #include "../Headers/HashTable.h"
-#include "../Headers/ListaDupla.h"
-#include "../Headers/NoDuplo.h"
+#include "../Headers/RegistroHash.h"
+
 // #include "../source/ListaDupla.cpp"
 
 
@@ -334,5 +334,16 @@ int main()
     // else
     //     cout << "Nao" << endl;
 
-    // return 0;
+    RegistroHash r1;
+    r1.productId = "A3J3BRHTDRFJ2G";
+    r1.qtdReviews = 2;
+
+    RegistroHash r2;
+    r2.productId = "A2TY0BTJOTENPG";
+    r2.qtdReviews = 3;
+
+    HashTable *tabela = new HashTable(10);
+    
+
+    return 0;
 }

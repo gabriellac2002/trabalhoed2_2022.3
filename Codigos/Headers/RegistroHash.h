@@ -13,7 +13,7 @@ typedef struct
     int qtdReviews;
 } RegistroHash;
 
-RegistroHash SetRegistro(string& productId, int qtdReviews)
+RegistroHash SetRegistro(string productId, int qtdReviews)
 {
     RegistroHash registro;
     registro.productId = productId;
