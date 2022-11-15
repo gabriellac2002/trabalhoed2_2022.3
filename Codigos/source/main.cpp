@@ -134,15 +134,15 @@ ProductReview returnRegister(int n,fstream& binaryArchive)
 
 // Funções Obrigatórias da 1ª Etapa
 
-void createBinary(string &path)
+void createBinary(string &path, char **argv)
 {
     std::fstream csvArchive;
-    csvArchive.open(path + "test.csv", ios::in | ios::binary);
+    csvArchive.open(argv[1], ios::in | ios::binary);
     std::fstream binaryArchive;
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = numberOfRegisters(csvArchive);
-    csvArchive.seekg(0, csvArchive.beg);
     cout << "numero de registros = " << numberofRegisters << endl;
+    csvArchive.seekg(0, csvArchive.beg);
     string buffer[10000], buffer1;
     if (csvArchive.is_open())
     {
@@ -159,7 +159,7 @@ void createBinary(string &path)
     }
     else
     {
-        cout << "Erro encontrado na função void createBinary(string& path)" << endl;
+        cout << "Erro encontrado na funcao void createBinary(string& path)" << endl;
     }
     csvArchive.close();
     binaryArchive.close();
@@ -190,7 +190,7 @@ void getReview(int i)
     }
     else
     {
-        cout << "Não foi possível abrir o arquivo!" << endl;
+        cout << "Nao foi possivel abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void getReview(int i)" << endl;
     }
 
@@ -223,14 +223,15 @@ ProductReview *import(int n)
         }
         else
         {
-            cout << "O número passado excede a quantidade de registros disponíveis a serem acessados!" << endl;
+            cout << "O numero passado excede a quantidade de registros disponiveis a serem acessados!" << endl;
             return productReview;
         }
     }
+
     else
     {
-        cout << "Não foi possível abrir o arquivo!" << endl;
-        cout << "Erro encontrado na função ProductReview *import(int n)" << endl;
+        cout << "Nao foi possivel abrir o arquivo!" << endl;
+        cout << "Erro encontrado na funcao ProductReview *import(int n)" << endl;
     }
 
     return productReview;
@@ -240,7 +241,7 @@ int main(int argc, char **argv)
 {
     string path_teste(argv[1]);
     ProductReview productReview;
-    createBinary(path_teste);
+    createBinary(path_teste, argv);
     getReview(1);
     ProductReview *teste = new ProductReview[10000];
     teste = import(100000);
