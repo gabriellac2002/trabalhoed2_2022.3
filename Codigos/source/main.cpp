@@ -141,10 +141,10 @@ void createBinary(string &path)
     csvArchive.open(path + "ratings_Electronics.csv", ios::in | ios::binary);
     std::fstream binaryArchive;
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
-    int numberofRegisters = numberOfRegisters(csvArchive);
-    csvArchive.seekg(0, csvArchive.beg);
-    cout << numberofRegisters << endl;
-    string buffer[numberofRegisters], buffer1;
+    int numberofRegisters = 1000;
+    csvArchive.seekg(0, csvArchive.beg);    
+    string buffer[numberofRegisters];
+    string buffer1;
 
     if (csvArchive.is_open())
     {
