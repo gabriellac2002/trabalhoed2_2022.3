@@ -280,7 +280,7 @@ int funcaoHash(const string& string)
         hash_value = (hash_value + (string[i] - 'a' + 1) * p_pow) % m;
         p_pow = (p_pow * p) % m;
     }
-    return hash_value;
+    return abs(hash_value);
 }
 
 int main()

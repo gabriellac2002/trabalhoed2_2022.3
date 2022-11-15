@@ -23,16 +23,16 @@ using namespace std;
 //a função hash escolhida foi a função de hash de rolamento polinomial, tirada do site geekforgeeks
 // int HashTable::funcaoHash(string& string, int tamanho)
 // {
-//     int p = 31, m = 1e9 + 7;
-//     int tam_string = string.length();
+//   int p = 31, m = 1e9 + 7;
+    // int tam_string = string.length();
 
-//     int hash_value = 0;
-//     long p_pow = 1;
-//     for(int i = 0; i < tam_string; i++) {
-//         hash_value = (hash_value + (string[i] - 'a' + 1) * p_pow) % m;
-//         p_pow = (p_pow * p) % m;
-//     }
-//     return hash_value;
+    // int hash_value = 0;
+    // long p_pow = 1;
+    // for(int i = 0; i < tam_string; i++) {
+    //     hash_value = (hash_value + (string[i] - 'a' + 1) * p_pow) % m;
+    //     p_pow = (p_pow * p) % m;
+    // }
+    // return abs(hash_value);
 // }
 
 // void HashTable::insertItem(ProductReview product)
