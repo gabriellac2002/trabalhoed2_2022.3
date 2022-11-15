@@ -11,6 +11,7 @@
 #include "../Headers/ProductReview.h"
 #include "../Headers/MergeSort.h"
 #include "../Headers/QuickSort.h"
+#include "../Headers/TimSort.h"
 
 #define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
 
@@ -26,7 +27,7 @@ int sizeOfArchive(fstream& archive)
     return size;
 }
 
-void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[])
+void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[], int numberOfRegisters)
 {
     char trim[] = {',', '\n'};
     for(int i = 0; i < 15; i++)
@@ -81,7 +82,7 @@ void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[])
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)
 
-int numberOfRegisters(ifstream& archive) 
+int numberOfRegisters(fstream& archive) 
 {
     if (archive.is_open())
     {
@@ -149,32 +150,29 @@ void createBinary(string &path)
 {
     std::fstream csvArchive;
     csvArchive.open(path + "test.csv", ios::in | ios::binary);
-
     std::fstream binaryArchive;
-    binaryArchive.open("test.bin", ios::out | ios::binary);
-
-    int sizeofFile = sizeOfArchive(csvArchive);
-    string buffer[15], bufferAux;
+    binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
+    int numberofRegisters = numberOfRegisters(csvArchive);
+    csvArchive.seekg(0,csvArchive.beg);
+    cout<<numberofRegisters<<endl;
+    string buffer[numberofRegisters],buffer1;
 
     if (csvArchive.is_open())
     {
         while (!csvArchive.eof())
         {
-            for(int i = 0; i < 15; i++)
-            {
-                getline(csvArchive, bufferAux);
-                buffer[i] = bufferAux;
+            for(int i =0;i<numberofRegisters;i++){
+                getline(csvArchive,buffer1);
+                buffer[i] = buffer1;
             }
             // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive, binaryArchive, buffer);
+            fixAndAddBuffer(csvArchive,binaryArchive, buffer, numberofRegisters);
         }
     }
     else
     {
-        cout << "Não foi possível abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void createBinary(string& path)" << endl;
     }
-
     csvArchive.close();
     binaryArchive.close();
 }
@@ -224,7 +222,7 @@ ProductReview *import(int n)
 {
     ProductReview *productReview = new ProductReview[n];
     ifstream binaryArchive;
-    ifstream textArchive;
+    fstream textArchive;
 
     int ocurrences [n];
     int position = 0;
@@ -287,7 +285,7 @@ int* sort(ProductReview *vet, int n, int methodId)
             quickSort(vet, 0, n-1, 0, 0);
             break;
         case 2:
-            // espaço para a chamada 
+            timSort(vet, 0, 0);
             break;  
         default:
             cout <<"Método de organização não encontrado!";              
