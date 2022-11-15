@@ -5,6 +5,7 @@
 #include <vector>
 #include <bitset>
 
+#include "../Headers/ListaDupla.h"
 #include "../Headers/ProductReview.h"
 
 using namespace std;
@@ -14,14 +15,14 @@ class HashTable
 {
     private:
         int tamanho; //tamanho da tabela
-        // list<ProductReview> *table;  //Ponteiro para um array de listas Encadeadas
-        int funcaoHash(ProductReview product, int tamanho, int* colisoes);
+        ProductReview **table;  //Ponteiro para um array de listas Encadeadas
+        int funcaoHash(const string& string);
         int colisoes; //Número de Colisões
 
     public:
         HashTable(int tamanho); //construtor
         ~HashTable(); // destrutor
-        void insertItem(); //Insere um valor na tabela Hash
+        void insertItem(ProductReview product); //Insere um valor na tabela Hash
         void displayHash(); //Imprime a Tabela Hash
         void imprimeColisoes(); //Imprime o Número de colisões 
 };
