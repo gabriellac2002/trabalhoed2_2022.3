@@ -15,7 +15,7 @@ void swap(ProductReview* a, ProductReview* b)
     *b = aux;
 }
 
-int partition(ProductReview* array, int low, int high, int comparisons, int movements)
+int partition(ProductReview* array, int low, int high, int* comparisons, int* movements)
 {
     ProductReview pivot = array[high]; // pivot
     int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
@@ -23,25 +23,23 @@ int partition(ProductReview* array, int low, int high, int comparisons, int move
     for (int j = low; j <= high - 1; j++) 
     {
         // Se o elemento atual (userId do ProductReview) é menor do que o pivô
-        (comparisons)++;
+        (*comparisons)++;
         if (array[j].getUserId() < pivot.getUserId()) 
         {
             i++; // incrementa o índice do menor elemento
             swap(&array[i], &array[j]);
-            (movements)++;
+            (*movements)++;
         }
     }
 
     swap(&array[i + 1], &array[high]);
-    (movements)++;
+    (*movements)++;
 
     return (i + 1);
 }
 
-int* quickSort(ProductReview* array, int low, int high, int comparisons, int movements)
+void quickSort(ProductReview* array, int low, int high, int* comparisons, int* movements)
 {
-    int aux[2];
-
     if (low < high) 
     {
         // pi é o índice de particionamento
@@ -51,14 +49,4 @@ int* quickSort(ProductReview* array, int low, int high, int comparisons, int mov
         quickSort(array, low, pi - 1, comparisons, movements);
         quickSort(array, pi + 1, high, comparisons, movements);
     }
-
-   aux[0] = comparisons;
-   aux[1] = movements;
-
-   int* metrics  = aux;
-
-   cout << "Comparações QuickSort: " << comparisons << endl;
-   cout << "Movimentações QuickSort: " << movements << endl;
-
-   return metrics;
 }

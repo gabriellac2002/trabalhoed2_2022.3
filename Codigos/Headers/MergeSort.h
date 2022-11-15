@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void merge(ProductReview* vet, int left, int mid, int right, int comparisons, int movements);
-int* mergeSort(ProductReview* vet, int begin, int end, int comparisons, int movements);
+void merge(ProductReview* vet, int left, int mid, int right, int* comparisons, int* movements);
+void mergeSort(ProductReview* vet, int begin, int end, int* comparisons, int* movements);
 
 #endif // MergeSort_H_INCLUDED

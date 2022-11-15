@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void merge(ProductReview* array, int left, int mid, int right, int comparisons, int movements)
+void merge(ProductReview* array, int left, int mid, int right, int* comparisons, int* movements)
 {
     int subArrayOne = mid - left + 1;
     int subArrayTwo = right - mid;
@@ -30,19 +30,19 @@ void merge(ProductReview* array, int left, int mid, int right, int comparisons, 
     // Faz o Merge das arrays temporárias de volta na array[left..right]
     while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo) 
     {
-        comparisons++;
+        (*comparisons)++;
 
         if (leftArray[indexOfSubArrayOne].getUserId() <= rightArray[indexOfSubArrayTwo].getUserId())
         {
             array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
             indexOfSubArrayOne++;
-            movements++;
+            (*movements)++;
         }
         else 
         {
             array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
             indexOfSubArrayTwo++;
-            movements++;
+            (*movements)++;
         }
 
         indexOfMergedArray++;
@@ -54,7 +54,7 @@ void merge(ProductReview* array, int left, int mid, int right, int comparisons, 
         array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
         indexOfSubArrayOne++;
         indexOfMergedArray++;
-        movements++;
+        (*movements)++;
     }
 
     // Copia os elementos restantes de right[] se houver algum
@@ -63,29 +63,23 @@ void merge(ProductReview* array, int left, int mid, int right, int comparisons, 
         array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
         indexOfSubArrayTwo++;
         indexOfMergedArray++;
-        movements++;
+        (*movements)++;
     }
 
     delete[] leftArray;
     delete[] rightArray;
 }
 
-int* mergeSort(ProductReview* array, int begin, int end, int comparisons, int movements)
+void mergeSort(ProductReview* array, int begin, int end, int* comparisons, int* movements)
 {
     int aux[2];
 
     if (begin >= end)
-        return 0;
+        return;
  
     int mid = begin + (end - begin) / 2;
     mergeSort(array, begin, mid, comparisons, movements);
     mergeSort(array, mid + 1, end, comparisons, movements);
     merge(array, begin, mid, end, comparisons, movements);
 
-    comparisons = aux[0];
-    movements = aux[1];
-
-    int* metrics = aux;
-
-    return metrics;
 }

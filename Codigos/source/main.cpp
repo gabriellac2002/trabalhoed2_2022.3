@@ -138,7 +138,7 @@ ProductReview returnRegister(int n)
 void createBinary(string &path)
 {
     std::fstream csvArchive;
-    csvArchive.open(path + "test.csv", ios::in | ios::binary);
+    csvArchive.open(path + "ratings_Electronics.csv", ios::in | ios::binary);
     std::fstream binaryArchive;
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = numberOfRegisters(csvArchive);
@@ -216,7 +216,7 @@ ProductReview *import(int n)
     int ocurrences[n];
     int pos = 0;
     binaryArchive.open("ratings_Electronics.bin", ios::in);
-    textArchive.open("test.csv", ios::in);
+    textArchive.open("ratings_Electronics.csv", ios::in);
     int size = numberOfRegisters(textArchive);
     // cout<<"numero total de registros no arquivo = "<<size<<endl;
     if (binaryArchive.is_open() && textArchive.is_open())
@@ -263,31 +263,23 @@ ProductReview *import(int n)
 
 // Funções Obrigatórias da 2ª Etapa
 
-int* sort(ProductReview *vet, int n, int methodId)
+void sort(ProductReview *vet, int n, int methodId, int* comparisons, int* movements)
 {
-    int comparisons = 0;
-    int movements = 0;
-    int* metrics;
-
     switch(methodId)
     {
         case 0:
-            metrics = mergeSort(vet, 0, n-1, comparisons, movements);
+            mergeSort(vet, 0, n-1, comparisons, movements);
             break;
         case 1:
-            metrics = quickSort(vet, 0, n-1, comparisons, movements);
+            quickSort(vet, 0, n-1, comparisons, movements);
             break;
         case 2:
-            metrics = timSort(vet, comparisons, movements);
+            timSort(vet, comparisons, movements);
             break;  
         default:
             cout <<"Método de organização não encontrado!";
             break;              
     }
-
-    int* metricsSort = metrics;
-
-    return metrics;
 }
 
 // Função para criar as Métricas de desempenho dos algoritmos de sorting
@@ -335,21 +327,22 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
         resultArchive << "\n______________\n" << "\n";
         resultArchive << "\nResultados para N = " << n <<"\n";
 
+        ProductReview *array = import(n);
+
         for(int j = 0; j < m; j++)
         {
-            ProductReview *array = import(n);
+            int comparisons = 0;
+            int movements = 0;
+            // ProductReview *array = import(n);
             // auto start = chrono::high_resolution_clock::now();
             clock_t start_time = clock();
-            int* metrics = sort(array, n, methodId);
+            sort(array, n, methodId, &comparisons, &movements);
             clock_t end_time = clock();
             clock_t result  = end_time - start_time;
             // auto stop = chrono::high_resolution_clock::now();
             // auto time = chrono::duration_cast<chrono::microseconds>(stop - start);
 
-            int comparisons = metrics[0];
-            int movements = metrics[1];
-
-            delete[] array;
+            // delete[] array;
 
             resultArchive << "\nPara o " << (j+1) << "° conjunto" << "\n";
             resultArchive << "Movimentações: " << movements << " --- Comparações: " << comparisons <<" --- Tempo de Execução(microsegundos): "<< result << "\n";
@@ -359,6 +352,8 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
             averageTime += result;
             
         }
+
+        delete[] array;
 
         // calculando as médias
         averageComparisons /= m;
@@ -398,5 +393,7 @@ int main(int argc, char** argv)
         teste[i].print();
     }
 
+    metricsFunction(path_teste, 5, 0);
     metricsFunction(path_teste, 5, 1);
+    metricsFunction(path_teste, 5, 2);
 }

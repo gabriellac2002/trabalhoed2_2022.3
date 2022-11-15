@@ -10,7 +10,7 @@ using namespace std;
 
 const int RUN = 32;
  
-void insertionSort(ProductReview* array, int left, int right, int comparisons, int movements)
+void insertionSort(ProductReview* array, int left, int right, int* comparisons, int* movements)
 {
     for (int i = left + 1; i <= right; i++)
     {
@@ -20,14 +20,14 @@ void insertionSort(ProductReview* array, int left, int right, int comparisons, i
         {
             array[j+1] = array[j];
             j--;
-            comparisons++;
+            (*comparisons)++;
         }
         array[j+1] = aux;
-        movements++;
+        (*movements)++;
     }
 }
  
-void mergeTim(ProductReview* array, int l, int m, int r, int comparisons, int movements)
+void mergeTim(ProductReview* array, int l, int m, int r, int* comparisons, int* movements)
 {
     int len1 = m - l + 1;
     int len2 = r - m;
@@ -49,18 +49,18 @@ void mergeTim(ProductReview* array, int l, int m, int r, int comparisons, int mo
  
     while (i < len1 && j < len2)
     {
+        (*comparisons)++;
         if (left[i].getUserId() <= right[j].getUserId())
         {
             array[k] = left[i];
             i++;
-            comparisons++;
-            movements++;
+            (*movements)++;
         }
         else 
         {
             array[k] = right[j];
             j++;
-            movements++;
+            (*movements)++;
         }
         k++;
     }
@@ -80,11 +80,9 @@ void mergeTim(ProductReview* array, int l, int m, int r, int comparisons, int mo
     }
 }
  
-int* timSort(ProductReview* array, int comparisons, int movements)
+void timSort(ProductReview* array, int* comparisons, int* movements)
 {
     int n = sizeof(array);
-
-    int aux[2];
      
     for (int i = 0; i < n; i+=RUN)
     {
@@ -105,10 +103,4 @@ int* timSort(ProductReview* array, int comparisons, int movements)
         }
     }
 
-    aux[0] = comparisons;
-    aux[1] = movements;
-    
-    int* metrics = aux;
-
-    return metrics;
 }
