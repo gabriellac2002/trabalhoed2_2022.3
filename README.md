@@ -34,7 +34,7 @@
 
 \* E Para compilar: `g++ *.cpp -o main`;
 
-\* Para rodar o programa (Windows): `./main diretorio/do/arquivo/entrada.csv`;
+\* Para rodar o programa (Windows): `./main arquivo_de_entrada.csv`;
 
 * O arquivo `ratings_Eletronics.csv` deve ser incluido na pasta do código, o usuário deve [baixá-lo aqui](https://www.kaggle.com/datasets/saurav9786/amazon-product-reviews) e copiá-lo na pasta Source do projeto.
 
