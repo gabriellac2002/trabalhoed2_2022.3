@@ -6,8 +6,11 @@
 #include <ctime>
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include "string.h"
 #include "../Headers/ProductReview.h"
+#include "../Headers/MergeSort.h"
+#include "../Headers/QuickSort.h"
 
 #define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
 
@@ -273,18 +276,18 @@ ProductReview *import(int n)
 
 // Funções Obrigatórias da 2ª Etapa
 
-void sort(ProductReview *vet, int n, int methodId)
+int* sort(ProductReview *vet, int n, int methodId)
 {
     switch(methodId)
     {
         case 0:
-            // espaço para a chamada do MergeSort
+            mergeSort(vet, 0, n-1, 0, 0);
             break;
         case 1:
-            // espaço para a chamada do QuickSort
+            quickSort(vet, 0, n-1, 0, 0);
             break;
         case 2:
-            // espaço para a chamada do CountingSort
+            // espaço para a chamada 
             break;  
         default:
             cout <<"Método de organização não encontrado!";              
@@ -293,9 +296,94 @@ void sort(ProductReview *vet, int n, int methodId)
 
 // Função para criar as Métricas de desempenho dos algoritmos de sorting
 
-void metricsFunction()
+void metricsFunction(string pathToFolder, int repetition, int methodId)
 {
-    
+    ifstream inputArchive(pathToFolder + "input.txt");
+    ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
+
+    switch(methodId)
+    {
+        case 0:
+            resultArchive << "Resultados das métricas para o MergeSort:\n";
+            break;
+        case 1:
+            resultArchive << "Resultados das métricas para o QuickSort:\n";
+            break;
+        case 2:
+            resultArchive << "Resultados das métricas para o TimSort:\n";
+            break;  
+        default:
+            cout << "Método de organização não encontrado!" << endl;            
+    }
+
+    string strN;
+    int n;
+
+    int m = 3;
+
+    int comparisons = 0;
+    int movements = 0;
+
+    long long time = 0;
+    long long averageTime = 0;
+    float averageMovements = 0;
+    float averageComparisons = 0;
+
+    int i = 0;
+    while (inputArchive.good() && i < repetition)
+    {
+        // obtemos os valores M e N do input.txt
+        i++;
+        getline(inputArchive, strN, ',');
+        n = stoi(strN);
+
+        resultArchive << "\nResultados para N = " << n <<"\n";
+
+        for(int j = 0; j < m; j++)
+        {
+            ProductReview *array = import(n);
+            auto begin = chrono::high_resolution_clock::now();
+
+            // chamando o merge sort para o array
+            int* metrics = sort(array, n, methodId);
+            auto final = chrono::high_resolution_clock::now() - begin;
+            time = chrono::duration_cast<chrono::microseconds>(final).count();
+
+            int comparisons = metrics[0];
+            int movements = metrics[1];
+
+            delete[] array;
+
+            //ESCREVENDO NO OUTFILE
+            resultArchive << "\nMovimentações: " << movements << " Comparações: " << comparisons <<" Tempo de Execução(s): "<< time/1000000.0 << "\n";
+
+            //INCREMENTO DAS MEDIAS
+            averageComparisons += comparisons; 
+            averageMovements += movements; 
+            averageTime += time;
+            
+        }
+
+        // calculando as médias
+        averageComparisons /= m;
+        averageTime /= m;
+        averageMovements /= m;
+
+        // escrevendo as informações no arquivo saida.txt
+        if(repetition>1)
+        resultArchive << "____________________\n";
+        resultArchive << "\nMédia das Movimentações: " << averageMovements << " Média das Comparações: " << averageComparisons <<" Média do tempo de execução: "<< averageTime/1000000.0 <<"\n\n";
+        resultArchive << "____________________\n";
+
+        // zerando as médias
+        averageComparisons = 0;
+        averageMovements = 0;
+        averageTime = 0;
+
+    }   
+
+    inputArchive.close();
+    resultArchive.close();
 }
 
 int main(int argc, char** argv)

@@ -8,10 +8,7 @@
 
 using namespace std;
 
-int mergeSortMovements = 0;
-int mergeSortComparisons = 0;
-
-void merge(ProductReview* array, int left, int mid, int right)
+void merge(ProductReview* array, int left, int mid, int right, int comparisons, int movements)
 {
     int subArrayOne = mid - left + 1;
     int subArrayTwo = right - mid;
@@ -33,19 +30,19 @@ void merge(ProductReview* array, int left, int mid, int right)
     // Faz o Merge das arrays temporárias de volta na array[left..right]
     while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo) 
     {
-        mergeSortComparisons++;
+        comparisons++;
 
         if (leftArray[indexOfSubArrayOne].getUserId() <= rightArray[indexOfSubArrayTwo].getUserId())
         {
             array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
             indexOfSubArrayOne++;
-            mergeSortMovements++;
+            movements++;
         }
         else 
         {
             array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
             indexOfSubArrayTwo++;
-            mergeSortMovements++;
+            movements++;
         }
 
         indexOfMergedArray++;
@@ -57,7 +54,7 @@ void merge(ProductReview* array, int left, int mid, int right)
         array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
         indexOfSubArrayOne++;
         indexOfMergedArray++;
-        mergeSortMovements++
+        movements++;
     }
 
     // Copia os elementos restantes de right[] se houver algum
@@ -66,99 +63,27 @@ void merge(ProductReview* array, int left, int mid, int right)
         array[indexOfMergedArray] = rightArray[indexOfSubArrayTwo];
         indexOfSubArrayTwo++;
         indexOfMergedArray++;
-        mergeSortMovements++
+        movements++;
     }
 
     delete[] leftArray;
     delete[] rightArray;
 }
 
-void mergeSort(ProductReview* array, int begin, int end)
+int* mergeSort(ProductReview* array, int begin, int end, int comparisons, int movements)
 {
+    int metrics[2];
+
     if (begin >= end)
         return; // Retorna recursivamente
  
     int mid = begin + (end - begin) / 2;
-    mergeSort(array, begin, mid);
-    mergeSort(array, mid + 1, end);
-    merge(array, begin, mid, end);
+    mergeSort(array, begin, mid, comparisons, movements);
+    mergeSort(array, mid + 1, end, comparisons, movements);
+    merge(array, begin, mid, end, comparisons, movements);
 
-}
+    comparisons = metrics[0];
+    movements = metrics[1];
 
-void mergeSortMetrics(string pathToFolder, string archiveName, int repetition)
-{
-    ifstream inputArchive(pathToFolder + "input.dat");
-    ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
-
-    resultArchive << "Resultados das métricas para o MergeSort:\n";
-
-    string strN, strM;
-    int n, m;
-
-    long long time = 0;
-    long long averageTime = 0;
-    float averageMergeSortMovements = 0;
-    float averageMergeSortComparisons = 0;
-
-    int i = 0;
-    while (inputArchive.good() && i < repetition)
-    {
-        // obtemos os valores M e N do input.dat
-        i++;
-        getline(inputArchive, strN, ',');
-        getline(inputArchive, strM);
-        n = stoi(strN);
-        m = stoi(strM);
-
-        resultArchive << "\nResultados para N = " << n <<"\n";
-
-        for(int j = 0; j < m; j++)
-        {
-            ProductReview *array = import(n);
-            auto begin = chrono::high_resolution_clock::now();
-
-            // chamando o merge sort para o array
-            mergeSort(array, 0, n-1);
-            auto final = chrono::high_resolution_clock::now() - begin;
-            time = chrono::duration_cast<chrono::microseconds>(final).count();
-
-            delete[] array;
-
-            //ESCREVENDO NO OUTFILE
-            resultArchive << "\nMovimentações: " << mergeSortMovements << " Comparações: " << mergeSortComparisons <<" Tempo de Execução(s): "<< time/1000000.0 << "\n";
-
-            //INCREMENTO DAS MEDIAS
-            averageMergeSortComparisons += mergeSortComparisons; 
-            averageMergeSortMovements += mergeSortMovements; 
-            averageTime += time;
-            
-            // zerando as movimentações e comparações
-            mergeSortMovements = 0;
-            mergeSortComparisons = 0;
-            
-        }
-
-        // calculando as médias
-        averageMergeSortComparisons /= m;
-        averageTime /= m;
-        averageMergeSortMovements /= m;
-
-        // escrevendo as informações no arquivo saida.txt
-        if(repetition>1)
-        resultArchive << "____________________\n";
-        resultArchive << "\nMédia das Movimentações: " << averageMergeSortMovements << " Média das Comparações: " << averageMergeSortComparisons <<" Média do tempo de execução: "<< averageTime/1000000.0 <<"\n\n";
-        resultArchive << "____________________\n";
-
-        // zerando as médias
-        averageMergeSortComparisons = 0;
-        averageMergeSortMovements = 0;
-        averageTime = 0;
-
-    }   
-
-
-
-    inputArchive.close();
-    resultArchive.close();
-    
+    return metrics;
 }

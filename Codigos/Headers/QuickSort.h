@@ -7,9 +7,7 @@
 using namespace std;
 
 void swap(ProductReview* a, ProductReview* b);
-int partition(ProductReview* array, int low, int high);
-void quickSort(ProductReview* array, int low, int high);
-
-void quickSortmetrics(string quick, string archiveName);
+int partition(ProductReview* array, int low, int high, int comparisons, int movements);
+int* quickSort(ProductReview* array, int low, int high, int comparisons, int movements);
 
 #endif // QuickSort_H_INCLUDED
