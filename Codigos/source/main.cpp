@@ -23,10 +23,10 @@ using namespace std;
 //     return size;
 // }
 
-void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int numberOfRegisters)
+void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int sizeOfBuffer)
 {
     char trim[] = {',', '\n'};
-    for (int i = 0; i < numberOfRegisters; i++)
+    for (int i = 0; i < sizeOfBuffer; i++)
     {
         // cout<<"cheguei"<<endl;
         char container[buffer[i].length() + 1];
@@ -64,6 +64,7 @@ void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int num
                 {
                     line += "?";
                 }
+                line += "?";
                 pointer.write((char *)line.c_str(), 10);
                 counter++;
                 break;
@@ -148,20 +149,19 @@ void createBinary(string &path)
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = numberOfRegisters(csvArchive);
     csvArchive.seekg(0, csvArchive.beg);
-    cout << numberofRegisters << endl;
-    string buffer[numberofRegisters], buffer1;
-
+    cout << "numero de registros = " << numberofRegisters << endl;
+    string buffer[10000], buffer1;
     if (csvArchive.is_open())
     {
         while (!csvArchive.eof())
         {
-            for (int i = 0; i < numberofRegisters; i++)
+            for (int j = 0; j < 1000 && !csvArchive.eof(); j++)
             {
                 getline(csvArchive, buffer1);
-                buffer[i] = buffer1;
+                buffer[j] = buffer1;
             }
             // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive, binaryArchive, buffer, numberofRegisters);
+            fixAndAddBuffer(csvArchive, binaryArchive, buffer, 10000);
         }
     }
     else
