@@ -16,10 +16,10 @@ void ProductReview::print()
 {
     cout << "____________________" << endl;
 
-    cout <<"userId: " << getUserId() << endl;
-    cout <<"productId: " << getProductId() << endl;
-    cout <<"rating: " << getRating() << endl; 
-    cout <<"timestamp: " << getTimestamp() << endl;
+    cout <<"userId: " << this->getUserId() << endl;
+    cout <<"productId: " << this->getProductId() << endl;
+    cout <<"rating: " << this->getRating() << endl; 
+    cout <<"timestamp: " << this->getTimestamp() << endl;
     cout << "____________________" << endl;
 }
 

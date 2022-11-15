@@ -23,15 +23,16 @@ using namespace std;
 //     return size;
 // }
 
-void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[],int numberOfRegisters)
+void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int numberOfRegisters)
 {
     char trim[] = {',', '\n'};
-    for(int i=0;i<numberOfRegisters;i++){
-        cout<<"cheguei"<<endl;
-        char container [buffer[i].length() + 1];
+    for (int i = 0; i < numberOfRegisters; i++)
+    {
+        // cout<<"cheguei"<<endl;
+        char container[buffer[i].length() + 1];
         strcpy(container, buffer[i].c_str());
         char *separated = strtok(container, trim);
-        int counter = 0, tam,total = 0;
+        int counter = 0, tam, total = 0;
         string line;
         while (separated)
         {
@@ -72,20 +73,20 @@ void fixAndAddBuffer(fstream &reader,fstream &pointer, string buffer[],int numbe
             }
             separated = strtok(NULL, trim);
         }
-    }    
+    }
 }
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)s
 
-int numberOfRegisters(fstream& archive) 
-{   
+int numberOfRegisters(fstream &archive)
+{
     if (archive.is_open())
     {
         int number = 0;
         string line;
-        while(!archive.eof())
+        while (!archive.eof())
         {
-            getline(archive,line);
+            getline(archive, line);
             number++;
         }
         return number;
@@ -107,7 +108,7 @@ ProductReview returnRegister(int n)
 
     fstream binaryArchive;
 
-    binaryArchive.open("test.bin", ios::in);
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
 
     std::string::size_type sz;
 
@@ -146,20 +147,21 @@ void createBinary(string &path)
     std::fstream binaryArchive;
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = numberOfRegisters(csvArchive);
-    csvArchive.seekg(0,csvArchive.beg);
-    cout<<numberofRegisters<<endl;
-    string buffer[numberofRegisters],buffer1;
+    csvArchive.seekg(0, csvArchive.beg);
+    cout << numberofRegisters << endl;
+    string buffer[numberofRegisters], buffer1;
 
     if (csvArchive.is_open())
     {
         while (!csvArchive.eof())
         {
-            for(int i =0;i<numberofRegisters;i++){
-                getline(csvArchive,buffer1);
+            for (int i = 0; i < numberofRegisters; i++)
+            {
+                getline(csvArchive, buffer1);
                 buffer[i] = buffer1;
             }
             // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive,binaryArchive, buffer,numberofRegisters);
+            fixAndAddBuffer(csvArchive, binaryArchive, buffer, numberofRegisters);
         }
     }
     else
@@ -177,7 +179,7 @@ void getReview(int i)
 
     fstream binaryArchive;
 
-    binaryArchive.open("test.bin", ios::in);
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
 
     char review[PRODUCT_REVIEW_SIZE];
     char *separated;
@@ -187,8 +189,9 @@ void getReview(int i)
         binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         separated = strtok(review, "?");
-        for(int i = 0; i < 4;i++){
-            cout<<separated<<endl;
+        for (int i = 0; i < 4; i++)
+        {
+            cout << separated << endl;
             separated = strtok(NULL, "?");
         }
     }
@@ -201,12 +204,12 @@ void getReview(int i)
     binaryArchive.close();
 }
 
-bool exists(int ocurrences[], int number,int pos)
+bool exists(int ocurrences[], int number, int pos)
 {
-    for(int i = 0; i <=pos; i++)
-        if(ocurrences[i] == number)
+    for (int i = 0; i <= pos; i++)
+        if (ocurrences[i] == number)
             return true;
-    return false;        
+    return false;
 }
 
 ProductReview *import(int n)
@@ -215,12 +218,12 @@ ProductReview *import(int n)
     ifstream binaryArchive;
     fstream textArchive;
 
-    int ocurrences [n];
-    int pos=0;
-    binaryArchive.open("test.bin",ios::in);
-    textArchive.open("test.csv",ios::in);
+    int ocurrences[n];
+    int pos = 0;
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
+    textArchive.open("test.csv", ios::in);
     int size = numberOfRegisters(textArchive);
-    cout<<"numero total de registros no arquivo = "<<size<<endl;
+    // cout<<"numero total de registros no arquivo = "<<size<<endl;
     if (binaryArchive.is_open() && textArchive.is_open())
     {
         if (size >= n)
@@ -232,19 +235,19 @@ ProductReview *import(int n)
             {
                 // cout<<"cheguei"<<endl;
                 random = (rand() % size) + 1;
-                while(exists(ocurrences,random,pos))
+                while (exists(ocurrences, random, pos))
                 {
                     random = rand() % size;
                 }
                 ocurrences[pos] = random;
                 pos++;
-                if(pos == size)
+                if (pos == size)
                 {
-                    cout<<"coletou todos os registros"<<endl;
+                    cout << "coletou todos os registros" << endl;
                     return productReview;
                 }
 
-                cout << "numero aleatorio gerado= " << random << endl;
+                // cout << "numero aleatorio gerado= " << random << endl;
                 productReview[i] = returnRegister(random);
             }
         }
