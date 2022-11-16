@@ -104,13 +104,13 @@ ProductReview returnRegister(int n)
 
     if (binaryArchive.is_open())
     {
-        binaryArchive.seekg(x *PRODUCT_REVIEW_SIZE, ios_base::beg);
+        binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         separated = strtok(review, "?");
         productReview.setUserId(separated);
         separated = strtok(NULL, "?");
         productReview.setProductId(separated);
-        separated = strtok(NULL, "?");      
+        separated = strtok(NULL, "?");
         productReview.setRating(separated);
         separated = strtok(NULL, "?");
         productReview.setTimestamp(separated);
@@ -126,7 +126,7 @@ ProductReview returnRegister(int n)
 
 // Funções Obrigatórias da 1ª Etapa
 
-void createBinary(string &path)
+void createBinary(string &path, char **argv)
 {
     std::fstream csvArchive;
     csvArchive.open(path + "ratings_Electronics.csv", ios::in | ios::binary);
@@ -134,12 +134,13 @@ void createBinary(string &path)
     binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
     int numberofRegisters = 7824483;
     cout << "numero de registros = " << numberofRegisters << endl;
+    csvArchive.seekg(0, csvArchive.beg);
     string buffer[10000], buffer1;
     if (csvArchive.is_open())
     {
         for (int j = 0; j < 10000 && !csvArchive.eof(); j++)
         {
-            getline(csvArchive, buffer1,'\n');
+            getline(csvArchive, buffer1, '\n');
             buffer1.erase(std::remove(buffer1.begin(), buffer1.end(), '\n'), buffer1.cend());
             buffer[j] = buffer1;
         }
@@ -147,7 +148,7 @@ void createBinary(string &path)
     }
     else
     {
-        cout << "Erro encontrado na função void createBinary(string& path)" << endl;
+        cout << "Erro encontrado na funcao void createBinary(string& path)" << endl;
     }
     csvArchive.close();
     binaryArchive.close();
@@ -167,7 +168,7 @@ void getReview(int i)
 
     if (binaryArchive.is_open())
     {
-        binaryArchive.seekg(x *PRODUCT_REVIEW_SIZE, ios_base::beg);
+        binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
         binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
         separated = strtok(review, "?");
         for (int i = 0; i < 4; i++)
@@ -178,7 +179,7 @@ void getReview(int i)
     }
     else
     {
-        cout << "Não foi possível abrir o arquivo!" << endl;
+        cout << "Nao foi possivel abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void getReview(int i)" << endl;
     }
 
@@ -199,16 +200,26 @@ ProductReview *import(int n)
         cout << "chegou no import" << endl;
         for (int i = 0; i < n; i++)
         {
-            random = (rand() % size);
-            cout << "chegou " << i << "/random=" << random << endl;
-            productReview[i] = returnRegister(random);
-            binaryArchive.seekg(0, ios_base::beg);
+            int random;
+            srand((unsigned)time(NULL));
+            for (int i = 0; i < n; i++)
+            {
+                random = (rand() % size) + 1;
+                productReview[i] = returnRegister(random);
+                if (i == n - 1)
+                {
+                    cout << "cabo o for" << endl;
+                }
+            }
         }
     }
+
     else
     {
         cout << "O número passado excede a quantidade de registros disponíveis a serem acessados!" << endl;
         return productReview;
+        cout << "Nao foi possivel abrir o arquivo!" << endl;
+        cout << "Erro encontrado na funcao ProductReview *import(int n)" << endl;
     }
 
     return productReview;
@@ -218,8 +229,8 @@ int main(int argc, char **argv)
 {
     string path_teste(argv[1]);
     ProductReview productReview;
-    createBinary(path_teste);
-    getReview(10000);
+    createBinary(path_teste, argv);
+    getReview(1);
     ProductReview *teste = new ProductReview[10000];
     teste = import(50000);
 
