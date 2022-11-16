@@ -73,25 +73,25 @@ void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int num
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)
 
-int numberOfRegisters(fstream &archive)
-{
-    if (archive.is_open())
-    {
-        int number = 0;
-        string line;
-        while (!archive.eof())
-        {
-            getline(archive, line);
-            number++;
-        }
-        return number;
-    }
-    else
-    {
-        cout << "Não foi possível abrir o arquivo!" << endl;
-        return 0;
-    }
-}
+// int numberOfRegisters(fstream &archive)
+// {
+//     if (archive.is_open())
+//     {
+//         int number = 0;
+//         string line;
+//         while (!archive.eof())
+//         {
+//             getline(archive, line);
+//             number++;
+//         }
+//         return number;
+//     }
+//     else
+//     {
+//         cout << "Não foi possível abrir o arquivo!" << endl;
+//         return 0;
+//     }
+// }
 
 // acessa o i-ésimo registro do arquivo binário e o retorna
 
@@ -211,29 +211,29 @@ ProductReview *import(int n)
 {
     ProductReview *productReview = new ProductReview[n];
     ifstream binaryArchive;
-    fstream textArchive;
+    // fstream textArchive;
 
     int ocurrences[n];
     int pos = 0;
     binaryArchive.open("ratings_Electronics.bin", ios::in);
-    textArchive.open("ratings_Electronics.csv", ios::in);
-    int size = numberOfRegisters(textArchive);
+    // textArchive.open("ratings_Electronics.csv", ios::in);
+    int size = 7824483;
     // cout<<"numero total de registros no arquivo = "<<size<<endl;
-    if (binaryArchive.is_open() && textArchive.is_open())
+    if (binaryArchive.is_open())
     {
         if (size >= n)
         {
-            srand(time(0));
             int random;
             // bool exists = std::find(std::begin(a), std::end(a), x) != std::end(a);
             for (int i = 0; i < n; i++)
             {
+                srand(time(NULL));
                 // cout<<"cheguei"<<endl;
                 random = (rand() % size) + 1;
-                while (exists(ocurrences, random, pos))
-                {
-                    random = rand() % size;
-                }
+                // while (exists(ocurrences, random, pos))
+                // {
+                //     random = rand() % size;
+                // }
                 ocurrences[pos] = random;
                 pos++;
                 if (pos == size)
@@ -286,7 +286,6 @@ void sort(ProductReview *vet, int n, int methodId, int* comparisons, int* moveme
 
 void metricsFunction(string pathToFolder, int repetition, int methodId)
 {
-    cout << "Entrei na metricsFunction" << endl;
     ifstream inputArchive(pathToFolder + "input.txt");
     ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
 
@@ -320,7 +319,6 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     int i = 0;
     while (inputArchive.good() && i < repetition)
     {
-        cout << "Entrei no while" << endl;
         // obtemos os valores de N do input.txt
         i++;
         getline(inputArchive, strN, ',');
@@ -331,11 +329,8 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
 
         ProductReview *array = import(n);
 
-        cout << "Indo para o for" << endl;
-
         for(int j = 0; j < m; j++)
         {
-            cout << "Entrei no for" << endl;
             int comparisons = 0;
             int movements = 0;
             // ProductReview *array = import(n);
@@ -390,7 +385,7 @@ int main(int argc, char** argv)
     createBinary(path_teste);
     getReview(1);
     cout << "-------------------------" << endl;
-    ProductReview *teste  = import(10000);
+    ProductReview *teste  = import(100000);
     cout << "Terminei de importar 10.000 registros..." << endl;
 
     for (int i = 0; i < 5; i++)
@@ -398,9 +393,9 @@ int main(int argc, char** argv)
         teste[i].print();
     }
 
-    // cout << "Chamando 3 vezes as métricas" << endl;
-    // metricsFunction(path_teste, 5, 0);
-    // metricsFunction(path_teste, 5, 1);
-    // metricsFunction(path_teste, 5, 2);
-    // cout << "Terminei de chamar as métricas" << endl;
+    cout << "Chamando 3 vezes as métricas" << endl;
+    metricsFunction(path_teste, 5, 0);
+    metricsFunction(path_teste, 5, 1);
+    metricsFunction(path_teste, 5, 2);
+    cout << "Terminei de chamar as métricas" << endl;
 }
