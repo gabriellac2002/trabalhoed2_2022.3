@@ -75,25 +75,25 @@ void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int num
 
 // calcula o número de registros no arquivo passado como parâmetro (número de reviews)
 
-// int numberOfRegisters(fstream &archive)
-// {
-//     if (archive.is_open())
-//     {
-//         int number = 0;
-//         string line;
-//         while (!archive.eof())
-//         {
-//             getline(archive, line);
-//             number++;
-//         }
-//         return number;
-//     }
-//     else
-//     {
-//         cout << "Não foi possível abrir o arquivo!" << endl;
-//         return 0;
-//     }
-// }
+int numberOfRegisters(fstream &archive)
+{
+    if (archive.is_open())
+    {
+        int number = 0;
+        string line;
+        while (!archive.eof())
+        {
+            getline(archive, line);
+            number++;
+        }
+        return number;
+    }
+    else
+    {
+        cout << "Não foi possível abrir o arquivo!" << endl;
+        return 0;
+    }
+}
 
 // acessa o i-ésimo registro do arquivo binário e o retorna
 
@@ -396,6 +396,20 @@ int funcaoHash(const string& string)
 int numAleatorio(int a, int b)
 {
     return a + rand()%(b - a + 1); /// retorna um numero inteiro aleat�rio entre a e b
+}
+
+int quantReviewsRepetidos()
+{
+    fstream binaryArchive;
+    binaryArchive.open("ratings_Electronics.bin", ios::in);
+
+    for(int i=0; i<numberOfRegisters(binaryArchive); i++)
+    {
+        
+    }
+
+
+    
 }
 
 RegistroHash* createTable(int n)
