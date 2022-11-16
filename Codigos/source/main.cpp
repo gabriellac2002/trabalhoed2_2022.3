@@ -13,6 +13,8 @@
 #include "../Headers/MergeSort.h"
 #include "../Headers/QuickSort.h"
 #include "../Headers/TimSort.h"
+#include "../Headers/HashTable.h"
+#include "../Headers/RegistroHash.h"
 
 #define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
 
@@ -377,6 +379,49 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     resultArchive.close();
 }
 
+int funcaoHash(const string& string)
+{
+    int p = 31, m = 1e9 + 7;
+    int tam_string = string.length();
+
+    int hash_value = 0;
+    long p_pow = 1;
+    for(int i = 0; i < tam_string; i++) {
+        hash_value = (hash_value + (string[i] - 'a' + 1) * p_pow) % m;
+        p_pow = (p_pow * p) % m;
+    }
+    return abs(hash_value);
+}
+
+int numAleatorio(int a, int b)
+{
+    return a + rand()%(b - a + 1); /// retorna um numero inteiro aleat�rio entre a e b
+}
+
+RegistroHash* createTable(int n)
+{
+    ProductReview* productReviews = import(n);
+    HashTable *tabela = new HashTable(n);
+
+    for(int i = 0; i < n; i++)
+    {
+        RegistroHash r;
+        r.productId = productReviews[i].getProductId();
+        r.qtdReviews = 2;
+        tabela->insert(r);
+    }
+
+    RegistroHash *registro = new RegistroHash[n];
+
+    for(int i=0; i<n; i++)
+    {
+        registro[i] = tabela->getHashTable(i);
+    }
+
+
+    return registro;
+}
+
 int main(int argc, char** argv)
 {
     string path_teste(argv[1]);
@@ -398,4 +443,10 @@ int main(int argc, char** argv)
     metricsFunction(path_teste, 5, 1);
     metricsFunction(path_teste, 5, 2);
     cout << "Terminei de chamar as métricas" << endl;
+
+    RegistroHash *registros = createTable(2);
+    for(int i=0; i<2; i++)
+    {
+        cout << registros[i].qtdReviews << "," ;
+    }
 }
