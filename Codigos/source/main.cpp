@@ -169,14 +169,10 @@ void createBinary(string &path)
     binaryArchive.close();
 }
 
-void getReview(int i)
+void getReview(int i, fstream binaryArchive)
 {
     // correção do índice a ser buscado
-    int x = i - 1;
-
-    fstream binaryArchive;
-
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
+    int x = i;
 
     char review[PRODUCT_REVIEW_SIZE];
     char *separated;
@@ -197,8 +193,6 @@ void getReview(int i)
         cout << "Não foi possível abrir o arquivo!" << endl;
         cout << "Erro encontrado na função void getReview(int i)" << endl;
     }
-
-    binaryArchive.close();
 }
 
 bool exists(int ocurrences[], int number, int position)
@@ -405,11 +399,10 @@ int quantReviewsRepetidos()
 
     for(int i=0; i<numberOfRegisters(binaryArchive); i++)
     {
-        
+        getReview(i, binaryArchive);
     }
 
-
-    
+    binaryArchive.close();
 }
 
 RegistroHash* createTable(int n)
@@ -442,7 +435,7 @@ int main(int argc, char** argv)
     ProductReview productReview;
 
     createBinary(path_teste);
-    getReview(1);
+    //getReview(1);
     cout << "-------------------------" << endl;
     ProductReview *teste  = import(100000);
     cout << "Terminei de importar 10.000 registros..." << endl;
