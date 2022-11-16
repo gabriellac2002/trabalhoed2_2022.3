@@ -238,7 +238,7 @@ ProductReview *import(int n)
                 pos++;
                 if (pos == size)
                 {
-                    cout << "coletou todos os registros" << endl;
+                    cout << "Collected all registers!" << endl;
                     return productReview;
                 }
 
@@ -254,8 +254,8 @@ ProductReview *import(int n)
     }
     else
     {
-        cout << "Não foi possível abrir o arquivo!" << endl;
-        cout << "Erro encontrado na função ProductReview *import(int n)" << endl;
+        cout << "Could not open the file!" << endl;
+        cout << "Error foud on function ProductReview *import(int n)" << endl;
     }
 
     return productReview;
@@ -277,7 +277,7 @@ void sort(ProductReview *vet, int n, int methodId, int* comparisons, int* moveme
             timSort(vet, comparisons, movements);
             break;  
         default:
-            cout <<"Método de organização não encontrado!";
+            cout <<"Sorting method not found!";
             break;              
     }
 }
@@ -319,9 +319,10 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     int i = 0;
     while (inputArchive.good() && i < repetition)
     {
+        cout << "chegamos no while " << endl;
         // obtemos os valores de N do input.txt
         i++;
-        getline(inputArchive, strN, ',');
+        getline(inputArchive, strN);
         n = stoi(strN);
 
         resultArchive << "\n______________\n" << "\n";
@@ -331,10 +332,15 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
 
         for(int j = 0; j < m; j++)
         {
-            int comparisons = 0;
-            int movements = 0;
+            cout << "chegando no for loop" << endl;
+            int comparisons;
+            int movements;
+
+            comparisons = 0;
+            movements = 0;
             // ProductReview *array = import(n);
             // auto start = chrono::high_resolution_clock::now();
+
             clock_t start_time = clock();
             sort(array, n, methodId, &comparisons, &movements);
             clock_t end_time = clock();
@@ -377,6 +383,25 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     resultArchive.close();
 }
 
+void doSorting(string pathToFolder)
+{
+    cout << "_____________________________________________" << endl;
+    cout << "Select which method you would like to use: " << endl;
+    cout << "0) Merge Sort" << endl;
+    cout << "1) Quick Sort" << endl;
+    cout << "2) Tim Sort" << endl;
+    cout << "_____________________________________________" << endl;
+
+    int sortingOption;
+    cin >> sortingOption;
+
+    string path = pathToFolder;
+
+    cout << "Initializing..." << endl;
+    metricsFunction(path, 5, sortingOption);
+    cout << "It's done!" << endl;
+}
+
 int main(int argc, char** argv)
 {
     string path_teste(argv[1]);
@@ -388,14 +413,43 @@ int main(int argc, char** argv)
     ProductReview *teste  = import(100000);
     cout << "Terminei de importar 10.000 registros..." << endl;
 
-    for (int i = 0; i < 5; i++)
-    {
-        teste[i].print();
-    }
+    // for (int i = 0; i < 5; i++)
+    // {
+    //     teste[i].print();
+    // }
 
-    cout << "Chamando 3 vezes as métricas" << endl;
-    metricsFunction(path_teste, 5, 0);
-    metricsFunction(path_teste, 5, 1);
-    metricsFunction(path_teste, 5, 2);
-    cout << "Terminei de chamar as métricas" << endl;
+    // cout << "Chamando 3 vezes as métricas" << endl;
+    // metricsFunction(path_teste, 5, 0);
+    // metricsFunction(path_teste, 5, 1);
+    // metricsFunction(path_teste, 5, 2);
+    // cout << "Terminei de chamar as métricas" << endl;
+
+    metricsFunction(path_teste, 1, 2);
+
+    // cout << "Converting cvs file to binary..." << endl;
+    // createBinary(path_teste);
+    // cout << "Binary file ready!" << endl;
+
+    // cout << "_____________________________________________" << endl;
+    // cout << "Pick one of the following options:" << endl;
+    // cout << "1) Sorting" << endl;
+    // cout << "2) Hashing" << endl;
+    // cout << "_____________________________________________" << endl;
+
+    // int mainOption;
+    // cin >> mainOption;
+
+    // switch (mainOption)
+    // {
+    // case 1: 
+    //     doSorting(path_teste);
+    //     break;
+    // // case 2:
+    // //     doHashing();
+    // //     break;
+    // default:
+    //     cout << "This is not a valid option!" << endl;
+    //     break;
+    // }
+
 }
