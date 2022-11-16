@@ -110,8 +110,13 @@ class HashTable
         // -1 -> quando não tem valor
         while(hashTable[probe].qtdReviews != -1){
             if(-2 == hashTable[probe].qtdReviews)                 
-                break;                                  
+                break; 
+            if(hashTable[probe].productId == registro.productId){
+                hashTable[probe].qtdReviews +=1;
+                break;
+            }                                 
             probe = (probe+offset) % tamanho_tabela;
+
         }
  
         hashTable[probe] = registro;

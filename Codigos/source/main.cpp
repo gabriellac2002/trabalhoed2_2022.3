@@ -398,19 +398,23 @@ int numAleatorio(int a, int b)
     return a + rand()%(b - a + 1); /// retorna um numero inteiro aleat�rio entre a e b
 }
 
-int quantReviewsRepetidos()
-{
-    fstream binaryArchive;
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
 
-    for(int i=0; i<numberOfRegisters(binaryArchive); i++)
-    {
-        
-    }
+// int quantReviewsRepetidos(string id)
+// {
+//     fstream binaryArchive;
+//     binaryArchive.open("ratings_Electronics.bin", ios::in);
+
+//     int x = 0;
+
+//     for(int i=0; i<numberOfRegisters(binaryArchive); i++)
+//     {
+//         if(getReview[i] == )
+//     }
 
 
-    
-}
+//     binaryArchive.close();
+//     return x;
+// }
 
 RegistroHash* createTable(int n)
 {
@@ -421,7 +425,7 @@ RegistroHash* createTable(int n)
     {
         RegistroHash r;
         r.productId = productReviews[i].getProductId();
-        r.qtdReviews = 2;
+        r.qtdReviews = 1;
         tabela->insert(r);
     }
 
