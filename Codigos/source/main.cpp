@@ -13,252 +13,153 @@
 #include "../Headers/MergeSort.h"
 #include "../Headers/QuickSort.h"
 #include "../Headers/TimSort.h"
+#include "../Headers/HashTable.h"
+#include "../Headers/RegistroHash.h"
 
-#define PRODUCT_REVIEW_SIZE (46 * sizeof(char))
+#define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
 using namespace std;
+using namespace chrono;
 
-void fixAndAddBuffer(fstream &reader, fstream &pointer, string buffer[], int numberOfRegisters)
+// função para gerar um número aleatório do intervalo entre a e b
+
+int randomNumber(int a, int b)
 {
-    char trim[] = {',', '\n'};
-    for (int i = 0; i < numberOfRegisters; i++)
-    {
-        // cout<<"cheguei"<<endl;
-        char container[buffer[i].length() + 1];
-        strcpy(container, buffer[i].c_str());
-        char *separated = strtok(container, trim);
-        int counter = 0, tam, total = 0;
-        string line;
-        while (separated)
-        {
-            line = separated;
-            switch (counter)
-            {
-            case 0: // userId
-                tam = 21 - line.length();
-                for (int i = 0; i < tam; i++)
-                {
-                    line += "?";
-                }
-                pointer.write((char *)line.c_str(), 21);
-                counter++;
-                break;
-            case 1: // productId
-                line += "?";
-                pointer.write((char *)line.c_str(), 11);
-                counter++;
-                break;
-            case 2: // rating
-                line += "?";
-                pointer.write((char *)line.c_str(), 4);
-                counter++;
-                break;
-            case 3: // timestamp
-                tam = 10 - line.length();
-                for (int i = 0; i < tam; i++)
-                {
-                    line += "?";
-                }
-                pointer.write((char *)line.c_str(), 10);
-                counter++;
-                break;
-            default:
-                counter = 0;
-                break;
-            }
-            separated = strtok(NULL, trim);
-        }
-    }
-}
-
-// calcula o número de registros no arquivo passado como parâmetro (número de reviews)
-
-// int numberOfRegisters(fstream &archive)
-// {
-//     if (archive.is_open())
-//     {
-//         int number = 0;
-//         string line;
-//         while (!archive.eof())
-//         {
-//             getline(archive, line);
-//             number++;
-//         }
-//         return number;
-//     }
-//     else
-//     {
-//         cout << "Não foi possível abrir o arquivo!" << endl;
-//         return 0;
-//     }
-// }
-
-// acessa o i-ésimo registro do arquivo binário e o retorna
-
-ProductReview returnRegister(int n)
-{
-
-    // correção do índice a ser buscado
-    int x = n - 1;
-
-    fstream binaryArchive;
-
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
-
-    std::string::size_type sz;
-
-    ProductReview productReview;
-
-    string userId;
-    string productId;
-    string rating;
-    string timestamp;
-
-    char review[PRODUCT_REVIEW_SIZE];
-
-    if (binaryArchive.is_open())
-    {
-        binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
-        userId = strtok(review, "?");
-        productReview.setUserId(userId);
-        productId = strtok(NULL, "?");
-        productReview.setProductId(productId);
-        rating = strtok(NULL, "?");
-        productReview.setRating(rating);
-        timestamp = strtok(NULL, "?");
-        productReview.setTimestamp(timestamp);
-    }
-    binaryArchive.close();
-    return productReview;
+    return a + rand()%(b - a + 1); 
 }
 
 // Funções Obrigatórias da 1ª Etapa (createBinary, getReview, import)
 
 void createBinary(string &path)
 {
-    std::fstream csvArchive;
-    csvArchive.open(path + "ratings_Electronics.csv", ios::in | ios::binary);
-    std::fstream binaryArchive;
-    binaryArchive.open("ratings_Electronics.bin", ios::out | ios::binary);
-    int numberofRegisters = 1000;
-    csvArchive.seekg(0, csvArchive.beg);    
-    string buffer[numberofRegisters];
-    string buffer1;
+    ifstream csvArchive(path + "/ratings_Electronics.csv");
+
+    int size = 7824483;
+    int userIdSize = 21;
+    int productIdSize = 10;
+    int timestampSize = 10;
 
     if (csvArchive.is_open())
     {
-        while (!csvArchive.eof())
+        ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
+        string strUserId, strProductId, strRating, strTimestamp;
+        float rating;
+
+        for (int i = 0; i < size; i++)
         {
-            for (int i = 0; i < numberofRegisters; i++)
-            {
-                getline(csvArchive, buffer1);
-                buffer[i] = buffer1;
-            }
-            // csvArchive.read((char *)buffer, size);
-            fixAndAddBuffer(csvArchive, binaryArchive, buffer, numberofRegisters);
+            getline(csvArchive, strUserId, ',');
+            getline(csvArchive, strProductId, ',');
+            getline(csvArchive, strRating, ',');
+            getline(csvArchive, strTimestamp, '\n');
+            rating = stof(strRating);
+            binaryArchive.write(reinterpret_cast<const char*>(strUserId.c_str()), userIdSize);
+            binaryArchive.write(reinterpret_cast<const char*>(strProductId.c_str()), productIdSize);
+            binaryArchive.write(reinterpret_cast<const char*>(&rating), sizeof(float));
+            binaryArchive.write(reinterpret_cast<const char*>(strTimestamp.c_str()), timestampSize);
         }
+
+        binaryArchive.close();
+        csvArchive.close();
     }
     else
     {
-        cout << "Erro encontrado na função void createBinary(string& path)" << endl;
+        cout << "Error! Could not open cvs file!" << endl;
     }
-    csvArchive.close();
-    binaryArchive.close();
 }
 
-void getReview(int i)
+void getReview(int i, string &path)
 {
-    // correção do índice a ser buscado
-    int x = i - 1;
+    ifstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
 
-    fstream binaryArchive;
+    int userIdSize = 21;
+    int productIdSize = 10;
+    int timestampSize = 10;
 
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
+    binaryArchive.seekg((i-1) * PRODUCT_REVIEW_SIZE);
+    ProductReview productReview;
 
-    char review[PRODUCT_REVIEW_SIZE];
-    char *separated;
+    char *userId = new char[userIdSize];
+    userId[21] = '\0';
+    char *productId = new char[productIdSize];
+    productId[10] = '\0';
+    char *timestamp = new char[timestampSize];
+    timestamp[10] = '\0';
+    float rating;
 
-    if (binaryArchive.is_open())
-    {
-        binaryArchive.seekg(x * PRODUCT_REVIEW_SIZE, ios_base::beg);
-        binaryArchive.read((char *)&review, PRODUCT_REVIEW_SIZE);
-        separated = strtok(review, "?");
-        for (int i = 0; i < 4; i++)
-        {
-            cout << separated << endl;
-            separated = strtok(NULL, "?");
-        }
-    }
-    else
-    {
-        cout << "Não foi possível abrir o arquivo!" << endl;
-        cout << "Erro encontrado na função void getReview(int i)" << endl;
-    }
+    binaryArchive.read(reinterpret_cast<char *>(userId), userIdSize);
+    binaryArchive.read(reinterpret_cast<char *>(productId), productIdSize);
+    binaryArchive.read(reinterpret_cast<char *>(&rating), sizeof(float));
+    binaryArchive.read(reinterpret_cast<char *>(timestamp), timestampSize);
+
+    productReview.setUserId(userId);
+    productReview.setProductId(productId);
+    productReview.setRating(rating);
+    productReview.setTimestamp(timestamp);
+
+    delete[] userId;
+    delete[] productId;
+    delete[] timestamp;
 
     binaryArchive.close();
+
+    productReview.print();
 }
 
-bool exists(int ocurrences[], int number, int position)
+ProductReview returnRegister(ifstream *file, int i)
 {
-    for(int i = 0; i <=position; i++)
-        if(ocurrences[i] == number)
-            return true;
-    return false;        
+    int userIdSize = 21;
+    int productIdSize = 10;
+    int timestampSize = 10;
+
+    file->seekg(i * PRODUCT_REVIEW_SIZE);
+    ProductReview *productReview = new ProductReview();
+
+    char *userId = new char[userIdSize];
+    userId[21] = '\0';
+    char *productId = new char[productIdSize];
+    productId[10] = '\0';
+    char *timestamp = new char[timestampSize];
+    timestamp[10] = '\0';
+    float rating;
+
+    file->read(reinterpret_cast<char *>(userId), userIdSize);
+    file->read(reinterpret_cast<char *>(productId), productIdSize);
+    file->read(reinterpret_cast<char *>(&rating), sizeof(float));
+    file->read(reinterpret_cast<char *>(timestamp), timestampSize);
+
+    productReview->setUserId(userId);
+    productReview->setProductId(productId);
+    productReview->setRating(rating);
+    productReview->setTimestamp(timestamp);
+
+    delete[] userId;
+    delete[] productId;
+    delete[] timestamp;
+
+    return *productReview;
 }
 
 ProductReview *import(int n)
 {
-    ProductReview *productReview = new ProductReview[n];
-    ifstream binaryArchive;
-    // fstream textArchive;
-
-    int ocurrences[n];
-    int pos = 0;
-    binaryArchive.open("ratings_Electronics.bin", ios::in);
-    // textArchive.open("ratings_Electronics.csv", ios::in);
     int size = 7824483;
-    // cout<<"numero total de registros no arquivo = "<<size<<endl;
-    if (binaryArchive.is_open())
+    ifstream binaryArchive;
+    binaryArchive.open("ratings_Electronics.bin", ios::in | ios::binary);
+    if (!binaryArchive.is_open())
     {
-        if (size >= n)
-        {
-            int random;
-            // bool exists = std::find(std::begin(a), std::end(a), x) != std::end(a);
-            for (int i = 0; i < n; i++)
-            {
-                srand(time(NULL));
-                // cout<<"cheguei"<<endl;
-                random = (rand() % size) + 1;
-                // while (exists(ocurrences, random, pos))
-                // {
-                //     random = rand() % size;
-                // }
-                ocurrences[pos] = random;
-                pos++;
-                if (pos == size)
-                {
-                    cout << "Collected all registers!" << endl;
-                    return productReview;
-                }
-
-                // cout << "numero aleatorio gerado= " << random << endl;
-                productReview[i] = returnRegister(random);
-            }
-        }
-        else
-        {
-            cout << "O número passado excede a quantidade de registros disponíveis a serem acessados!" << endl;
-            return productReview;
-        }
-    }
-    else
-    {
-        cout << "Could not open the file!" << endl;
-        cout << "Error foud on function ProductReview *import(int n)" << endl;
+        cout << "Erro: Arquivo de entrada nao encontrado." << endl;
+        return NULL;
     }
 
-    return productReview;
+    ProductReview* productReviews = new ProductReview[n];
+    for (int i = 0; i < n; i++)
+    {
+        productReviews[i] = returnRegister(&binaryArchive, i+1);
+        // productReviews[i].print();
+    }
+
+    binaryArchive.close();
+
+    return productReviews;
 }
 
 // Funções Obrigatórias da 2ª Etapa
@@ -312,54 +213,52 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     int comparisons = 0;
     int movements = 0;
 
-    clock_t averageTime = 0;
-    float averageMovements = 0;
-    float averageComparisons = 0;
+    double averageTime = 0;
+    int averageMovements = 0;
+    int averageComparisons = 0;
 
     int i = 0;
     while (inputArchive.good() && i < repetition)
     {
-        cout << "chegamos no while " << endl;
         // obtemos os valores de N do input.txt
-        i++;
         getline(inputArchive, strN);
         n = stoi(strN);
 
         resultArchive << "\n______________\n" << "\n";
         resultArchive << "\nResultados para N = " << n <<"\n";
 
-        ProductReview *array = import(n);
+        // ProductReview *array = import(n);
 
         for(int j = 0; j < m; j++)
         {
-            cout << "chegando no for loop" << endl;
             int comparisons;
             int movements;
+            double time = 0;
 
             comparisons = 0;
             movements = 0;
-            // ProductReview *array = import(n);
-            // auto start = chrono::high_resolution_clock::now();
 
-            clock_t start_time = clock();
+            ProductReview *array = import(n);
+            high_resolution_clock::time_point start = high_resolution_clock::now();
+            // clock_t start_time = clock();
             sort(array, n, methodId, &comparisons, &movements);
-            clock_t end_time = clock();
-            clock_t result  = end_time - start_time;
-            // auto stop = chrono::high_resolution_clock::now();
-            // auto time = chrono::duration_cast<chrono::microseconds>(stop - start);
+            // clock_t end_time = clock();
+            // clock_t result  = end_time - start_time;
+            high_resolution_clock::time_point stop = high_resolution_clock::now();
+            time = duration_cast<duration<double>>(stop - start).count();
 
-            // delete[] array;
+            delete[] array;
 
             resultArchive << "\nPara o " << (j+1) << "° conjunto" << "\n";
-            resultArchive << "Movimentações: " << movements << " --- Comparações: " << comparisons <<" --- Tempo de Execução(microsegundos): "<< result << "\n";
+            resultArchive << "Movimentações: " << movements << " --- Comparações: " << comparisons <<" --- Tempo de Execução(segundos): "<< time << "\n";
 
             averageComparisons += comparisons; 
             averageMovements += movements; 
-            averageTime += result;
+            averageTime += time;
             
         }
 
-        delete[] array;
+        // delete[] array;
 
         // calculando as médias
         averageComparisons /= m;
@@ -377,11 +276,85 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
         averageMovements = 0;
         averageTime = 0;
 
+        i++;
+
     }   
 
     inputArchive.close();
     resultArchive.close();
 }
+
+// quicksort para o hashing
+
+void swap(RegistroHash* a, RegistroHash* b)
+{
+    RegistroHash aux = *a;
+    *a = *b;
+    *b = aux;
+}
+
+int partition(RegistroHash* array, int low, int high)
+{
+    RegistroHash pivot = array[high]; // pivot
+    int i = (low - 1); // Index of smaller element and indicates the right position of pivot found so far
+  
+    for (int j = low; j <= high - 1; j++) 
+    {
+        if (array[j].qtdReviews >= pivot.qtdReviews) 
+        {
+            i++; // incrementa o índice do menor elemento
+            swap(&array[i], &array[j]);
+        }
+    }
+
+    swap(&array[i + 1], &array[high]);
+    return (i + 1);
+}
+
+void quickSort(RegistroHash* array, int low, int high)
+{
+    if (low < high) 
+    {
+        // pi é o índice de particionamento
+        int pi = partition(array, low, high);
+  
+        // Separadamente ordena os elementos anteriores partição após partição
+        quickSort(array, low, pi - 1);
+        quickSort(array, pi + 1, high);
+    }
+}
+
+RegistroHash* createTable(int n)
+{
+    ProductReview* productReviews = import(n);
+    HashTable *tabela = new HashTable(n);
+
+    for(int i = 0; i < n; i++)
+    {
+        RegistroHash r;
+        r.productId = productReviews[i].getProductId();
+        r.qtdReviews = 1;
+        tabela->insert(r);
+    }
+
+    RegistroHash *registro = new RegistroHash[n];
+
+    for(int i=0; i<n; i++)
+    {
+        registro[i] = tabela->getHashTable(i);
+    }
+
+
+    return registro;
+}
+
+ void orderByRating(RegistroHash *registro, int p, int n)
+ {
+    // int c = sizeof(registro);
+    quickSort(registro, 0, n-1);
+    for(int i = 0; i < p; i++)
+            cout<< "ID do produto: " << registro[i].productId << " --- Reviews: " << registro[i].qtdReviews << endl;
+ }
 
 void doSorting(string pathToFolder)
 {
@@ -402,54 +375,67 @@ void doSorting(string pathToFolder)
     cout << "It's done!" << endl;
 }
 
+void doHashing(string pathToFolder)
+{
+    cout << "_____________________________________________" << endl;
+    cout << "How many registers do you want to hash?" << endl;
+    cout << "_____________________________________________" << endl;
+
+    int n;
+    cin >> n;
+
+    RegistroHash *registro = createTable(n);
+
+    cout << "Generating table..." << endl;
+
+    cout << "_____________________________________________" << endl;
+    cout << "How many do you want to order by number of reviews?" << endl;
+    cout << "_____________________________________________" << endl;
+
+    int p;
+    cin >> p;
+
+    orderByRating(registro, p, n);
+
+    delete[] registro;
+
+}
+
 int main(int argc, char** argv)
 {
+    srand(time(NULL));
+    
+    if(argc < 2)
+    {
+        return 0;
+    }
+
     string path_teste(argv[1]);
-    ProductReview productReview;
 
-    createBinary(path_teste);
-    getReview(1);
-    cout << "-------------------------" << endl;
-    ProductReview *teste  = import(100000);
-    cout << "Terminei de importar 10.000 registros..." << endl;
+    cout << "Converting cvs file to binary..." << endl;
+    //createBinary(path_teste);
+    cout << "Binary file ready!" << endl;
 
-    // for (int i = 0; i < 5; i++)
-    // {
-    //     teste[i].print();
-    // }
+    cout << "_____________________________________________" << endl;
+    cout << "Pick one of the following options:" << endl;
+    cout << "1) Sorting" << endl;
+    cout << "2) Hashing" << endl;
+    cout << "_____________________________________________" << endl;
 
-    // cout << "Chamando 3 vezes as métricas" << endl;
-    // metricsFunction(path_teste, 5, 0);
-    // metricsFunction(path_teste, 5, 1);
-    // metricsFunction(path_teste, 5, 2);
-    // cout << "Terminei de chamar as métricas" << endl;
+    int mainOption;
+    cin >> mainOption;
 
-    metricsFunction(path_teste, 1, 2);
-
-    // cout << "Converting cvs file to binary..." << endl;
-    // createBinary(path_teste);
-    // cout << "Binary file ready!" << endl;
-
-    // cout << "_____________________________________________" << endl;
-    // cout << "Pick one of the following options:" << endl;
-    // cout << "1) Sorting" << endl;
-    // cout << "2) Hashing" << endl;
-    // cout << "_____________________________________________" << endl;
-
-    // int mainOption;
-    // cin >> mainOption;
-
-    // switch (mainOption)
-    // {
-    // case 1: 
-    //     doSorting(path_teste);
-    //     break;
-    // // case 2:
-    // //     doHashing();
-    // //     break;
-    // default:
-    //     cout << "This is not a valid option!" << endl;
-    //     break;
-    // }
+    switch (mainOption)
+    {
+    case 1: 
+        doSorting(path_teste);
+        break;
+    case 2:
+        doHashing(path_teste);
+        break;
+    default:
+        cout << "This is not a valid option!" << endl;
+        break;
+    }
 
 }

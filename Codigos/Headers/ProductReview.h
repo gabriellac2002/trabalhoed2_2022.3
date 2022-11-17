@@ -9,18 +9,18 @@ class ProductReview
     private:
         string userId;
         string productId;
-        string rating;
+        float rating;
         string timestamp;
 
     public:
         void print();
         void setProductId(string userId);
         void setUserId(string productId);
-        void setRating(string rating);
+        void setRating(float rating);
         void setTimestamp(string timestamp);
         string getProductId();
         string getUserId();
-        string getRating();
+        float getRating();
         string getTimestamp();
 
 };
