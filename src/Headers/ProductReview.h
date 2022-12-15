@@ -13,13 +13,6 @@ class ProductReview
         string timestamp;
 
     public:
-<<<<<<< HEAD:src/Headers/ProductReview.h
-        ProductReview(int n);
-
-        void print(Product product, fstream &file);
-        void createBinary(string& path);
-        void getReview(int i);
-=======
         void print();
         void setProductId(string userId);
         void setUserId(string productId);
@@ -29,7 +22,6 @@ class ProductReview
         string getUserId();
         float getRating();
         string getTimestamp();
->>>>>>> firstStage/allremake:Codigos/Headers/ProductReview.h
 
 };
 
