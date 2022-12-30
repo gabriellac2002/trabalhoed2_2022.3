@@ -9,15 +9,11 @@
 
 #define PRODUCT_REVIEW_SIZE (44*sizeof(char))
 
-<<<<<<< HEAD:src/Source/ProductReview.cpp
-ProductReview::ProductReview(int n)
-=======
 using namespace std;
 
 // Função Obrigatória da 1ª Etapa (print)
 
 void ProductReview::print()
->>>>>>> firstStage/allremake:Codigos/source/ProductReview.cpp
 {
     cout << "____________________" << endl;
     cout <<"userId: " << this->getUserId() << endl;
@@ -27,7 +23,6 @@ void ProductReview::print()
     cout << "____________________" << endl;
 }
 
-<<<<<<< HEAD:src/Source/ProductReview.cpp
 void ProductReview::print(Product product, fstream &file)
 {
     product.LerDoArquivoBinario(file);
@@ -95,7 +90,7 @@ void ProductReview::createBinary(string &path)
     // produto2.Imprimir();
     escrever.close();
     // std::fstream escrever2("ratings_Electronics.bin", ios::out | ios::in | ios::ate | ios::binary);
-=======
+}    
 // getters  e setters do TAD
 
 void ProductReview::setUserId(string userId)
@@ -130,5 +125,4 @@ float ProductReview::getRating()
 string ProductReview::getTimestamp()
 {
     return this->timestamp;
->>>>>>> firstStage/allremake:Codigos/source/ProductReview.cpp
 }
