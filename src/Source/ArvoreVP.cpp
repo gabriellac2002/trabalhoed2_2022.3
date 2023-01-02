@@ -165,17 +165,8 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
     node1->setColor(0);
 }
 
-Node ArvoreVP::insertHelp(Node raiz, int data)
+void ArvoreVP::insere(ProductReview *pr)
 {
-    // f is true when RED RED conflict is there.
-    boolean rr = false;
-
-    //recursive calls to insert at proper position according to BST properties.
-    if(raiz == NULL)
-     return(new Node(data));
-    else if(data < raiz->data)
-    {
-        raiz->setLeft(insertHelp(raiz->getLeft(),data));
-        raiz->
-    }
+    string concatenacao = pr->getUserId.append(pr->getProductId);
+    NodeAvp* p = new NodeAvp(concatenacao,)
 }

@@ -13,15 +13,15 @@ class NodeAvp
 {
     public:
 
-    NodeAvp(int id);
+    NodeAvp(string id, int endMemory);
     ~NodeAvp();
-    void setId(int id);
+    void setId(string id);
     void setParent(NodeAvp *parent);
     void setLeft(NodeAvp *left);
     void setRigth(NodeAvp *right);
     void setColor(int color);
     void setEndMemory(int endMemory);
-    int getId();
+    string getId();
     NodeAvp* getParent();
     NodeAvp* getLeft();
     NodeAvp* getRigth();

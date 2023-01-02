@@ -8,13 +8,14 @@
 
 using namespace std;
 
-NodeAvp::NodeAvp(int id) //constructor
+NodeAvp::NodeAvp(string id, int endMemory) //constructor
 {
     this->id = id;
     this->parent = NULL;
     this->left = NULL;
     this->right = NULL;
     this->color = 1; // Em uma arvore vermelho e preto, o nó sempre começa com a cor vermelha
+    this->endMemory =  endMemory;
 }
 
 NodeAvp::~NodeAvp() //destrutor
@@ -22,7 +23,7 @@ NodeAvp::~NodeAvp() //destrutor
 
 }
 
-NodeAvp::setId(int id)
+NodeAvp::setId(string id)
 {
     this->id = id;
 }
@@ -47,7 +48,7 @@ NodeAvp::setEndMemory(int endMemory)
     this->endMemory = endMemory;
 }
 
-int NodeAvp::getId()
+string NodeAvp::getId()
 {
     return this->id;  
 }
