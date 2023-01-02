@@ -17,12 +17,12 @@ class ArvoreVP
     public:
         ArvoreVP();
         ~ArvoreVP();
-        Node libera(Node* node);
-        Node rotateLeft(Node* node);
-        Node rotateRight(Node* node);
-        Node insertHelp(Node* raiz, int data);
+        Node libera(NodeAvp* node);
+        Node rotateLeft(NodeAvp* node);
+        Node rotateRight(NodeAvp* node);
+        Node insertHelp(NodeAvp* raiz, int data);
         void insert(int data);
-        void printTreeHelper(Node* root, int space);
+       
 
 
     private:

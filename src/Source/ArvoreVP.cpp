@@ -4,6 +4,8 @@
 #include <bitset>
 #include "string.h"
 
+#include "../Headers/NodeAvp.h"
+#include "./NodeAvp.cpp"
 #include "../Headers/ArvoreVP.h"
 
 using namespace std;
@@ -18,7 +20,7 @@ ArvoreVP::~ArvoreVP()
     this->raiz = libera(raiz);
 }
 
-Node ArvoreVP::libera(Node* node)
+Node ArvoreVP::libera(NodeAvp* node)
 {
     if(node != NULL)
     {
@@ -32,19 +34,24 @@ Node ArvoreVP::libera(Node* node)
 }
 
 // this function performs left rotation
-Node ArvoreVP::rotateLeft(Node* node)
+Node ArvoreVP::rotateLeft(NodeAvp* node)
 {
-    Node x = node->getRigth();
-    Node y = x->getLeft();
+    NodeAvp* p_rigth = node->getRigth();
+    node->setRigth(p_rigth->getLeft());
 
-    x->setLeft(node);
+    if(node->getRigth() != NULL)
+        node->getRigth()->setParent(node);
+    p_rigth->setParent(node->getParent());
 
-    node->setRigth(y);
-    node->setParent(x);
-
-    if( y != NULL)
-        y->setParent(node);
-    return(x);
+    if(node->getParent() == NULL)
+        raiz = p_rigth;
+    else if( node == node->getParent()->getLeft())
+        node->getParent()->setLeft(p_rigth);
+    else
+        node->getParent()->setRigth(p_rigth);
+    
+    p_rigth->setLeft(node);
+    node->setParent(p_rigth);
 }
 
 Node ArvoreVP::rotateRight(Node* node)
