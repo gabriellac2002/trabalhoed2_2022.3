@@ -20,6 +20,7 @@ class ArvoreVP
         NodeAvp libera(NodeAvp* node);
         void rotateLeft(NodeAvp* node);
         void rotateRight(NodeAvp* node);
+        void repair(NodeAvp* node1, NodeAvp* node2);
         Node insertHelp(NodeAvp* raiz, int data);
         void insert(int data);
        
