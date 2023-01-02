@@ -17,9 +17,9 @@ class ArvoreVP
     public:
         ArvoreVP();
         ~ArvoreVP();
-        Node libera(NodeAvp* node);
-        Node rotateLeft(NodeAvp* node);
-        Node rotateRight(NodeAvp* node);
+        NodeAvp libera(NodeAvp* node);
+        void rotateLeft(NodeAvp* node);
+        void rotateRight(NodeAvp* node);
         Node insertHelp(NodeAvp* raiz, int data);
         void insert(int data);
        

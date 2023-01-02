@@ -20,7 +20,7 @@ ArvoreVP::~ArvoreVP()
     this->raiz = libera(raiz);
 }
 
-Node ArvoreVP::libera(NodeAvp* node)
+NodeAvp ArvoreVP::libera(NodeAvp* node)
 {
     if(node != NULL)
     {
@@ -34,7 +34,7 @@ Node ArvoreVP::libera(NodeAvp* node)
 }
 
 // this function performs left rotation
-Node ArvoreVP::rotateLeft(NodeAvp* node)
+void ArvoreVP::rotateLeft(NodeAvp* node)
 {
     NodeAvp* p_rigth = node->getRigth();
     node->setRigth(p_rigth->getLeft());
@@ -54,16 +54,24 @@ Node ArvoreVP::rotateLeft(NodeAvp* node)
     node->setParent(p_rigth);
 }
 
-Node ArvoreVP::rotateRight(Node* node)
+void ArvoreVP::rotateRight(NodeAvp* node)
 {
-    Node x = node.left;
-    Node y = x.right;
-    x.right = node;
-    node.left = y;
-    node.parent = x;
-    if(y!=null)
-        y.parent = node;
-    return(x);
+    NodeAvp* p_left = node->getLeft();
+    node->setLeft(p_left->getRigth());
+
+    if(node->getLeft() != NULL)
+        node->getLeft()->setParent(node);
+    p_left->setParent(node->getParent());
+
+    if(node->getParent() == NULL)
+        raiz = p_left;
+    else if(node == node->getParent()->getLeft())
+        node->getParent()->setLeft(p_left);
+    else
+        node->getParent()->setRigth(p_left);
+    
+    p_left->setRigth(node);
+    node->setParent(p_left);
 }
 
 Node ArvoreVP::insertHelp(Node raiz, int data)
