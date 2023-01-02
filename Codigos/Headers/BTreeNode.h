@@ -14,7 +14,13 @@ class BTreeNode
         bool leaf; //É verdadeiro quando o nó é folha. Caso contrário, é falso
 
     public:
+        BTreeNode(int _t, bool _leaf); //Construtor
         
+        //Uma função para percorrer todos os nós em uma subárvore com raiz enraizada com este nó
+        void traverse();
+
+        //Uma função para pesquisar uma chave na subárvore com raiz enraizada com este nó
+        BTreeNode *search(int k); //retorna NULL se a chave não for encontrada
 };
 
 #endif // BTreeNode_H_INCLUDED
