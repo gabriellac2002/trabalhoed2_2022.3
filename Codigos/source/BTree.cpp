@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-#include "BTree.h";
-#include "BTreeNode.h";
+#include "BTree.h"
+#include "BTreeNode.h"
 
 using namespace std;
 
@@ -10,4 +10,11 @@ BTree::BTree(int _t)
 {
     root = NULL;
     t = _t;
+}
+
+//Função para percorrer a árvore
+void BTree::traverse()
+{
+    if (root != NULL)
+        root->traverse();
 }
