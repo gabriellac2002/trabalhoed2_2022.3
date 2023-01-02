@@ -10,17 +10,20 @@ using namespace std;
 class LZW
 {
     private:
-    string mensagem;
-    char *buffer;//o cursos aponta para a primeira casa do buffer
-    //dicionario é a tabela ascii
+    char *mensagem;
+    string buffer;//o cursos aponta para a primeira casa do buffer
+    string *dicionario;//parte da tabela ascii
     char *pointer;
+    string nextoadd;
     string *sequencia;//pega apenas os items que nao estao na ascii = com mais de 1 char
     int *codigo;
 
     public:
-    LZW(string str);
-    string comprime();
-    string descomprime();
+    LZW();
+    int existDicio(string str);
+    void adicionaDicio(string str);
+    string comprime(string str);
+    string descomprime(string str);
 };
 
 #endif // LZW_H_INCLUDED
