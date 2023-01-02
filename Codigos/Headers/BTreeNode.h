@@ -15,6 +15,9 @@ class BTreeNode
 
     public:
         BTreeNode(int _t, bool _leaf); //Construtor
+
+        //Uma função para percorrer todos os nós em uma subárvore com raiz enraizada com este nó
+        void traverse();
 };
 
 #endif // BTreeNode_H_INCLUDED
