@@ -15,16 +15,16 @@ class LZ77
     private:
     int Nd;
     int Nb; 
-    string mensagem;
+    char* mensagem;
     char *buffer;//o cursos aponta para a primeira casa do buffer
     char *dicio;
     char *pointer;
     CodigoLZ77 *Cod;
 
     public:
-    LZ77(int ND,int NB,string str);
-    string comprime();
-    string descomprime();
+    LZ77(string str);
+    string comprime(string str);
+    string descomprime(string str);
 };
 
 #endif // LZ77_H_INCLUDED

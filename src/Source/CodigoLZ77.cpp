@@ -9,11 +9,6 @@ using namespace std;
 
 CodigoLZ77::CodigoLZ77(){}
 
-int CodigoLZ77::setId(int n)
-{
-    this->id = n;
-}
-
 int CodigoLZ77::setP(int P)
 {
     this->p = P;
@@ -27,11 +22,6 @@ int CodigoLZ77::setL(int L)
 char CodigoLZ77::setC(char C)
 {
     this->c = C;
-}
-
-int CodigoLZ77::getId()
-{
-    return this->id;
 }
 
 int CodigoLZ77::getP()

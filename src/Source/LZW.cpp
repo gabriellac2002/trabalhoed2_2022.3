@@ -16,8 +16,10 @@ using namespace std;
     // this->codigo = new int [size*0.6]; //compressao de 40% do tamanho da string
 LZW::LZW()
 {    
-    this->dicionario = new string [91]; //parte usada da tabela ascii
+    this->dicionariobase = new string [91]; //parte usada da tabela ascii
+    this->dicionario = new string [91];
     for (int i =0;i<91;i++){//preenchendo o dicionario
+        this->dicionariobase[i] = char(i);
         this->dicionario[i] = char(i);
     }
 }
@@ -65,10 +67,28 @@ string LZW::comprime(string str)
         }
     }
     return ret;
-    
 }
 
 string LZW::descomprime(string str)
 {
-
+    this->dicionario = this->dicionariobase;//retorna o dicionario para o estado inicial
+    this->mensagem = new char [str.size() + 1];
+    strcpy(mensagem, str.c_str());
+    string ret;
+    for (int i = 0; i < sizeof(this->mensagem); i++)
+    {
+        if (this->mensagem[i] == '(')
+        {
+            int j = i + 1;
+            string num = "";
+            while (this->mensagem[j] != ')')
+            {
+                num = num + this->mensagem[j];
+                j++;
+            }
+            int pos = stoi(num);
+            ret = ret + this->dicionario[pos];
+        }
+    }
+    return ret;
 }
