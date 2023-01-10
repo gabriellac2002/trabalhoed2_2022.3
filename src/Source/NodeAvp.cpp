@@ -23,27 +23,27 @@ NodeAvp::~NodeAvp() //destrutor
 
 }
 
-NodeAvp::setId(string id)
+void NodeAvp::setId(string id)
 {
     this->id = id;
 }
 
-NodeAvp::setParent(NodeAvp *parent)
+void NodeAvp::setParent(NodeAvp *parent)
 {
     this->parent = parent;
 }
 
-NodeAvp::setLeft(NodeAvp *left)
+ void NodeAvp::setLeft(NodeAvp *left)
 {
     this->left = left;
 }
 
-NodeAvp::setRigth(NodeAvp *right)
+void NodeAvp::setRigth(NodeAvp *right)
 {
     this->right = right;
 }
 
-NodeAvp::setEndMemory(int endMemory)
+void NodeAvp::setEndMemory(int endMemory)
 {
     this->endMemory = endMemory;
 }
@@ -58,12 +58,12 @@ NodeAvp *NodeAvp::getParent()
     return this->parent;
 }
 
-NodeAvp *NodeAvp::getLeft()
+NodeAvp *NodeAvp::getLeft() //esquerda
 {
     return this->left;
 }
 
-NodeAvp *NodeAvp::getRigth()
+NodeAvp *NodeAvp::getRigth() //direita
 {
     return this->right;
 }

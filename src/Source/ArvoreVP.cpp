@@ -20,6 +20,16 @@ ArvoreVP::~ArvoreVP()
     this->raiz = libera(raiz);
 }
 
+void ArvoreVP::setRaiz(NodeAvp* raiz)
+{
+    this->raiz = raiz
+}
+
+NodeAvp ArvoreVP::getRaiz()
+{
+    return this->raiz;
+}
+
 NodeAvp ArvoreVP::libera(NodeAvp* node)
 {
     if(node != NULL)
@@ -72,6 +82,45 @@ void ArvoreVP::rotateRight(NodeAvp* node)
     
     p_left->setRigth(node);
     node->setParent(p_left);
+}
+
+void ArvoreVP::insere(ProductReview *pr, int* comparacoes)
+{
+    string concatenacao = pr->getUserId.append(pr->getProductId);
+    NodeAvp* p = new NodeAvp(concatenacao,"aaaaaa");
+
+    //inserção usando busca binaria
+    raiz = insereAux(getRaiz(), p, comparacoes);
+    repair(raiz); // conserta os erros
+    
+}
+
+NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
+{
+    //caso a arvore esteja vazia
+    if(raiz == NULL)
+    {
+       (*comparacoes)++;
+       return raiz;
+    }
+    else
+    {
+        //Caso contrario, faz uma busca binaria recursiva pela arvore para inserir o No no lugar certo
+        if(no->getId() < raiz->getId())
+        {
+            (*comparacoes)++;
+            raiz->setLeft(insereAux(raiz->getLeft(), no, comparacoes));
+            raiz->getLeft()->setParent(raiz);
+        }
+        else
+        {
+            (*comparacoes)++;
+            raiz->setRigth(insereAux(raiz->getRigth(), no, comparacoes));
+            raiz->getRigth()->setParent(raiz);
+        }
+
+        return raiz;
+    }
 }
 
 void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
@@ -165,8 +214,5 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
     node1->setColor(0);
 }
 
-void ArvoreVP::insere(ProductReview *pr)
-{
-    string concatenacao = pr->getUserId.append(pr->getProductId);
-    NodeAvp* p = new NodeAvp(concatenacao,)
-}
+
+
