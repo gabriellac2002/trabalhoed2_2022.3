@@ -403,39 +403,41 @@ void doHashing(string pathToFolder)
 
 int main(int argc, char** argv)
 {
-    srand(time(NULL));
+    // srand(time(NULL));
     
-    if(argc < 2)
-    {
-        return 0;
-    }
+    // if(argc < 2)
+    // {
+    //     return 0;
+    // }
 
-    string path_teste(argv[1]);
+    // string path_teste(argv[1]);
 
-    cout << "Converting cvs file to binary..." << endl;
-    //createBinary(path_teste);
-    cout << "Binary file ready!" << endl;
+    // cout << "Converting cvs file to binary..." << endl;
+    // //createBinary(path_teste);
+    // cout << "Binary file ready!" << endl;
 
-    cout << "_____________________________________________" << endl;
-    cout << "Pick one of the following options:" << endl;
-    cout << "1) Sorting" << endl;
-    cout << "2) Hashing" << endl;
-    cout << "_____________________________________________" << endl;
+    // cout << "_____________________________________________" << endl;
+    // cout << "Pick one of the following options:" << endl;
+    // cout << "1) Sorting" << endl;
+    // cout << "2) Hashing" << endl;
+    // cout << "_____________________________________________" << endl;
 
-    int mainOption;
-    cin >> mainOption;
+    // int mainOption;
+    // cin >> mainOption;
 
-    switch (mainOption)
-    {
-    case 1: 
-        doSorting(path_teste);
-        break;
-    case 2:
-        doHashing(path_teste);
-        break;
-    default:
-        cout << "This is not a valid option!" << endl;
-        break;
-    }
+    // switch (mainOption)
+    // {
+    // case 1: 
+    //     doSorting(path_teste);
+    //     break;
+    // case 2:
+    //     doHashing(path_teste);
+    //     break;
+    // default:
+    //     cout << "This is not a valid option!" << endl;
+    //     break;
+    // }
+
+    
 
 }

@@ -214,5 +214,20 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
     node1->setColor(0);
 }
 
+void ArvoreVP::print()
+{
+    if(this->raiz == null)
+        cout << "Arvore vazia!" << endl;
+    else
+        printAux(this->raiz);
+}
 
+void ArvoreVP::printAux(NodeAvp* p)
+{
+    printAux(p->getLeft());
+    cout << "---------- No --------" << endl;
+    cout << "ID: " << p->getId() << endl;
+    cout << "----------------------" << endl;
+    printAux(p->getLeft());
+}
 

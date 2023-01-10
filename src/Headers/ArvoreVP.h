@@ -29,6 +29,7 @@ class ArvoreVP
         NodeAvp* insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes);
         ProductReview* busca(string userId, string productId); // funcao obrigatoria
         void print(); // funcao obrigatoria
+        void printAux(NodeAvp* p);
 
     private:
         NodeAvp raiz;
