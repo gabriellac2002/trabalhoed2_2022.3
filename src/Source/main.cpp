@@ -21,7 +21,11 @@
 using namespace std;
 using namespace chrono;
 
-// função para gerar um número aleatório do intervalo entre a e b
+// COMANDOS PARA RODAR O PROGRAMA:
+// g++ *.cpp -o final
+// .\final.exe .\ 
+
+// Função para gerar um número aleatório do intervalo entre a e b
 
 int randomNumber(int a, int b)
 {
@@ -63,7 +67,7 @@ void createBinary(string &path)
     }
     else
     {
-        cout << "Error! Could not open cvs file!" << endl;
+        cout << "Error! Could not open cvs file! (Error at createBinary)" << endl;
     }
 }
 
@@ -105,6 +109,8 @@ void getReview(int i, string &path)
     productReview.print();
 }
 
+// Função para retornar um registro x
+
 ProductReview returnRegister(ifstream *file, int i)
 {
     int userIdSize = 21;
@@ -139,6 +145,8 @@ ProductReview returnRegister(ifstream *file, int i)
     return *productReview;
 }
 
+// Função para importar um vetor de n registros aleatórios
+
 ProductReview *import(int n)
 {
     int size = 7824483;
@@ -146,7 +154,7 @@ ProductReview *import(int n)
     binaryArchive.open("ratings_Electronics.bin", ios::in | ios::binary);
     if (!binaryArchive.is_open())
     {
-        cout << "Erro: Arquivo de entrada nao encontrado." << endl;
+        cout << "Error! Could not open binary file! (Error at import)" << endl;
         return NULL;
     }
 
@@ -344,7 +352,6 @@ RegistroHash* createTable(int n)
         registro[i] = tabela->getHashTable(i);
     }
 
-
     return registro;
 }
 
@@ -405,15 +412,15 @@ int main(int argc, char** argv)
 {
     srand(time(NULL));
     
-    if(argc < 2)
-    {
-        return 0;
-    }
+    // if(argc < 2)
+    // {
+    //     return 0;
+    // }
 
     string path_teste(argv[1]);
 
     cout << "Converting cvs file to binary..." << endl;
-    //createBinary(path_teste);
+    createBinary(path_teste);
     cout << "Binary file ready!" << endl;
 
     cout << "_____________________________________________" << endl;
