@@ -15,6 +15,8 @@
 #include "../Headers/TimSort.h"
 #include "../Headers/HashTable.h"
 #include "../Headers/RegistroHash.h"
+#include "../Headers/LZ77.h"
+#include "../Headers/LZW.h"
 
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
@@ -400,6 +402,55 @@ void doHashing(string pathToFolder)
     delete[] registro;
 
 }
+
+string comprime(string str, int metodo){
+
+    string ret;
+    switch (metodo)
+    {
+    case 1:
+        break;
+
+    case 2:
+        LZ77 *lz77 = new LZ77();
+        ret = lz77->comprime(str);
+        break;
+
+    case 3:
+        LZW *lzw = new LZW();
+        ret = lzw->comprime(str);    
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+string descomprime(string str, int metodo){
+    string ret;
+    switch (metodo)
+    {
+    case 1:
+        break;
+
+    case 2:
+        LZ77 *lz77 = new LZ77();
+        ret = lz77->descomprime(str);
+        break;
+
+    case 3:
+        LZW *lzw = new LZW();
+        ret = lzw->descomprime(str);    
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+void comprime(int metodo){}
+
+void descomprime(int metodo){}
 
 int main(int argc, char** argv)
 {

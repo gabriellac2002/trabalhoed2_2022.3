@@ -47,14 +47,11 @@ int LZW::existDicio(string str){
 
 string LZW::comprime(string str)
 {
-    this->mensagem = new char [str.size() + 1];
-    strcpy(mensagem, str.c_str());
-    this->pointer = &mensagem[0];//pointer recebe o endereco do item da mensagem
-    string ret,teste;
+    string ret;
     char c;
     int add;
     this->buffer = "";
-    for(int i =0;i<sizeof(this->mensagem);i++){
+    for(int i =0;i<str.size();i++){
         c = this->mensagem[i];
         add = existDicio(this->buffer + c);
         if(buffer.size()==0 || add!=-1)
@@ -72,22 +69,23 @@ string LZW::comprime(string str)
 string LZW::descomprime(string str)
 {
     this->dicionario = this->dicionariobase;//retorna o dicionario para o estado inicial
-    this->mensagem = new char [str.size() + 1];
-    strcpy(mensagem, str.c_str());
-    string ret;
-    for (int i = 0; i < sizeof(this->mensagem); i++)
+    string ret,ant ="";
+    for (int i = 0; i < str.size(); i++)
     {
-        if (this->mensagem[i] == '(')
+        if (str[i] == '(')
         {
             int j = i + 1;
             string num = "";
-            while (this->mensagem[j] != ')')
+            while (str[j] != ')')
             {
-                num = num + this->mensagem[j];
+                num = num + str[j];
                 j++;
             }
-            int pos = stoi(num);
+            int pos = stoi(num);//aponta o numero correto da posicao do dicionario a ser resgatada
             ret = ret + this->dicionario[pos];
+            ant = ant + this->dicionario[pos][0];
+            adicionaDicio(ant);
+            ant = this->dicionario[pos];
         }
     }
     return ret;

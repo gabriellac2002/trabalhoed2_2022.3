@@ -10,15 +10,18 @@ class CodigoLZ77
     int p;//posicao do inicio da sequencia antes do ponteiro no dicionario
     int l;//tamanho da sequencia, que pode ir do dicionario ao buffer
     char c;//caractere apos o fim da sequencia
+    int confirma =0;
 
     public:
     CodigoLZ77();
-    int setP(int P);
-    int setL(int L);
-    char setC(char c);
+    void setP(int P);
+    void setL(int L);
+    void setC(char c);
+    void setConfirma();
     int getP();
     int getL();
     char getC();
+    int getConfirma();
 };
 
 

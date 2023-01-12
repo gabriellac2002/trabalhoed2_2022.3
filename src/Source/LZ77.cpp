@@ -8,33 +8,25 @@
 
 using namespace std;
 
-LZ77::LZ77(string str)
+LZ77::LZ77()
 {
     this->Nd = 4096;
-    this->Nb = 18;
-    
-    this->buffer = new char [Nb];
-    this->dicio = new char [Nd];
+    this->Nb = 50;
     //o vetor de codificação é inicializado com um tamanho equivalente a menor taxa de compressao
-    int size = str.size();
-
-    this->Cod = new CodigoLZ77 [size*0.6]; //compressao de 40% do tamanho da string
 }
 
 string LZ77::comprime(string str)
 {
     string ret;
     this->Cod = new CodigoLZ77 [str.size()*0.6];
-    int buffer_size = 0, dicio_size = 0,pos=0;
-    this->mensagem = new char [str.size() + 1];
-    strcpy(mensagem, str.c_str());
-    for(int i =0;i<str.size();i++){
-        this->buffer[buffer_size] = this->mensagem[i];
+    int inicioDicioMen = 0,pos=0;
+    int i = 0;
+    while(i<str.size()){//ate o fim da mensagem
         int offset = 0,length = 0;
-        for (int j = 0; j < dicio_size; j++) {
-            if(buffer[0] == dicio[j] ){
+        for (int j = 0; j < i || j<this->Nd; j++) {//verifica cada item do inicio da mensagem ate onde o buffer inicia
+            if(str[i] == str[j] ){//se encontra alguma repeticao entre o inicio do buffer e em algum ponto do dicionario
                 int k = 0;
-                while (buffer[k] == dicio[j+k] && k < buffer_size) {
+                while (str[i+k] == str[j+k] && k < this->Nb) {//verifica ate onde vai a sequencia
                     k++;
                 }
                 if(k > length){
@@ -47,17 +39,23 @@ string LZ77::comprime(string str)
         CodigoLZ77 cod;
         cod.setP(offset);
         cod.setL(length);
-        cod.setC(buffer[length]);
+        cod.setC(str[i+length+1]);
+        cod.setConfirma();
         this->Cod[pos] = cod;
 
-        buffer_size -= length;
+        i += length + 1;//adianta o inicio do buffer para o fim da sequencia + 1 para encobrir a letra que finaliza
+    }
 
-        // std::memmove(buffer, buffer + length, buffer_size);
-
-        // // Shift the matching substring and the next character into the sliding window
-        // std::memmove(window + length + 1, window, WINDOW_SIZE - length - 1);
-        // std::memcpy(window, input.c_str() + i - offset, length + 1);
-        // window_size = std::min(window_size + length + 1, WINDOW_SIZE); AAAAAAAAAA REVER ESSA PARTE COMEENTADA AAAAAAAAA
+    for(int i =0;i<str.size()*0.6;i++){
+        if(this->Cod[i].getConfirma() == 1){
+            ret += "(";
+            ret += to_string(this->Cod[i].getP());
+            ret += ",";
+            ret += to_string(this->Cod[i].getL());
+            ret += ",";
+            ret += this->Cod[i].getC();
+            ret += ")";
+        }
     }
 
     // Return the compressed output as a string
@@ -66,5 +64,39 @@ string LZ77::comprime(string str)
 
 string LZ77::descomprime(string str)
 {
-    
+    string ret,aux;
+    int i = 0;
+    while(i<str.size()){
+        if(str[i] == '('){
+            int j = i+1;
+            while(str[j] != ','){
+                aux += str[j];
+                j++;
+            }
+            int p = stoi(aux);//posicao atras do atual inicio do buffer
+            aux = "";
+            j++;
+            while(str[j] != ','){
+                aux += str[j];
+                j++;
+            }
+            int l = stoi(aux);//tamanho da sequencia 
+            aux = "";
+            j++;
+            char c = str[j];//char a ser adicionado ao final da sequencia
+            j++;
+            i = j;
+            for(int k = 0;k<l;k++){
+                ret += ret[p+k];
+            }
+            ret += c;
+        }
+        else{
+            ret += str[i];
+            i++;
+        }
+    }
+
+    return ret;
+
 }

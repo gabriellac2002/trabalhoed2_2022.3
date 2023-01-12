@@ -9,19 +9,24 @@ using namespace std;
 
 CodigoLZ77::CodigoLZ77(){}
 
-int CodigoLZ77::setP(int P)
+void CodigoLZ77::setP(int P)
 {
     this->p = P;
 }
 
-int CodigoLZ77::setL(int L)
+void CodigoLZ77::setL(int L)
 {
     this->l = L;
 }
 
-char CodigoLZ77::setC(char C)
+void CodigoLZ77::setC(char C)
 {
     this->c = C;
+}
+
+void CodigoLZ77::setConfirma()
+{
+    this->confirma = 1;
 }
 
 int CodigoLZ77::getP()
@@ -37,4 +42,9 @@ int CodigoLZ77::getL()
 char CodigoLZ77::getC()
 {
     return this->c;
+}
+
+int CodigoLZ77::getConfirma()
+{
+    return this->confirma;
 }
