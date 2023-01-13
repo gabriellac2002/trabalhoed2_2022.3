@@ -15,6 +15,7 @@ class LZ77
     private:
     int Nd;
     int Nb; 
+    string ant;
     CodigoLZ77 *Cod;
 
     public:

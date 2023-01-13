@@ -455,8 +455,8 @@ void comprime(int metodo){
     reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
     if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
         while(getline(reviewsOriginP, str)){
-            ret ="";
-            ret =comprime(str, metodo);
+            ret = "";
+            ret = comprime(str, metodo);
             reviewsComprimedP.write(ret.c_str(), ret.size());
         }
     }

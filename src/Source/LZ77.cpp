@@ -12,6 +12,7 @@ LZ77::LZ77()
 {
     this->Nd = 4096;
     this->Nb = 50;
+    this->ant = "";
     //o vetor de codificação é inicializado com um tamanho equivalente a menor taxa de compressao
 }
 
@@ -81,15 +82,16 @@ string LZ77::descomprime(string str)
                 j++;
             }
             int l = stoi(aux);//tamanho da sequencia 
-            aux = "";
+            aux = this->ant + str;
             j++;
             char c = str[j];//char a ser adicionado ao final da sequencia
             j++;
             i = j;
             for(int k = 0;k<l;k++){
-                ret += ret[p+k];
+                ret += aux[this->ant.size()-p+k];
             }
             ret += c;
+            aux = "";
         }
         else{
             ret += str[i];
@@ -97,6 +99,7 @@ string LZ77::descomprime(string str)
         }
     }
 
+    this->ant = ret;
     return ret;
 
 }

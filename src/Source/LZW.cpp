@@ -22,6 +22,7 @@ LZW::LZW()
         this->dicionariobase[i] = char(i);
         this->dicionario[i] = char(i);
     }
+    this->ver = 0;
 }
 
 void LZW::adicionaDicio(string str){
@@ -68,7 +69,10 @@ string LZW::comprime(string str)
 
 string LZW::descomprime(string str)
 {
-    this->dicionario = this->dicionariobase;//retorna o dicionario para o estado inicial
+    if(this->ver == 0){
+        this->dicionario = this->dicionariobase;//retorna o dicionario para o estado inicial
+        this->ver = 1;
+    }
     string ret,ant ="";
     for (int i = 0; i < str.size(); i++)
     {
