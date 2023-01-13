@@ -448,9 +448,37 @@ string descomprime(string str, int metodo){
     return ret;
 }
 
-void comprime(int metodo){}
+void comprime(int metodo){
+    fstream reviewsOriginP, reviewsComprimedP;
+    string str,ret;
+    reviewsOriginP.open("reviewsOrig.txt", ios::in);
+    reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
+    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
+        while(getline(reviewsOriginP, str)){
+            ret ="";
+            ret =comprime(str, metodo);
+            reviewsComprimedP.write(ret.c_str(), ret.size());
+        }
+    }
+    reviewsOriginP.close();
+    reviewsComprimedP.close();
+}
 
-void descomprime(int metodo){}
+void descomprime(int metodo){
+    fstream reviewsComprimedP, reviewsDescomprimedP;
+    string str,ret;
+    reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
+    reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
+    if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
+        while(getline(reviewsComprimedP, str)){
+            ret ="";
+            ret =descomprime(str, metodo);
+            reviewsDescomprimedP.write(ret.c_str(), ret.size());
+        }
+    }
+    reviewsComprimedP.close();
+    reviewsDescomprimedP.close();/////REVER ESSA PARTE DE IMEDIATO
+}
 
 int main(int argc, char** argv)
 {
