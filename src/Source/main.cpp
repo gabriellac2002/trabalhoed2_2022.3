@@ -471,13 +471,13 @@ void descomprime(int metodo){
     reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
     if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
         while(getline(reviewsComprimedP, str)){
-            ret ="";
-            ret =descomprime(str, metodo);
+            ret = "";
+            ret = descomprime(str, metodo);
             reviewsDescomprimedP.write(ret.c_str(), ret.size());
         }
     }
     reviewsComprimedP.close();
-    reviewsDescomprimedP.close();/////REVER ESSA PARTE DE IMEDIATO
+    reviewsDescomprimedP.close();
 }
 
 int main(int argc, char** argv)
