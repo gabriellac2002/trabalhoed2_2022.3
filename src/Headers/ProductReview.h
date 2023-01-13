@@ -1,7 +1,6 @@
 #ifndef ProductReview_H_INCLUDED
 #define ProductReview_H_INCLUDED
 #include "string"
-#include "../Headers/Product.h"
 
 using namespace std;
 
@@ -14,10 +13,6 @@ class ProductReview
         string timestamp;
 
     public:
-        ProductReview();
-        void print(Product product, fstream &file);
-        void createBinary(string& path);
-        void getReview(int i);
         void print();
         void setProductId(string userId);
         void setUserId(string productId);
