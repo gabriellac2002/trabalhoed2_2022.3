@@ -286,6 +286,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     resultArchive.close();
 }
 
+
 // quicksort para o hashing
 
 void swap(RegistroHash* a, RegistroHash* b)

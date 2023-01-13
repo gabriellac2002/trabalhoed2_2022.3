@@ -10,7 +10,7 @@ using namespace std;
 
 LZ77::LZ77()
 {
-    this->Nd = 4096;
+    this->Nd = 400;
     this->Nb = 50;
     this->ant = "";
     //o vetor de codificação é inicializado com um tamanho equivalente a menor taxa de compressao
@@ -18,16 +18,17 @@ LZ77::LZ77()
 
 string LZ77::comprime(string str)
 {
-    string ret;
+    string ret,aux;
+    aux = this->ant + str;
     this->Cod = new CodigoLZ77 [str.size()*0.6];
     int inicioDicioMen = 0,pos=0;
     int i = 0;
     while(i<str.size()){//ate o fim da mensagem
         int offset = 0,length = 0;
-        for (int j = 0; j < i || j<this->Nd; j++) {//verifica cada item do inicio da mensagem ate onde o buffer inicia
-            if(str[i] == str[j] ){//se encontra alguma repeticao entre o inicio do buffer e em algum ponto do dicionario
+        for (int j = 0; j < i+ant.size() || j<this->Nd; j++) {//verifica cada item do inicio da mensagem ate onde o buffer inicia
+            if(str[i] == aux[j] ){//se encontra alguma repeticao entre o inicio do buffer e em algum ponto do dicionario
                 int k = 0;
-                while (str[i+k] == str[j+k] && k < this->Nb) {//verifica ate onde vai a sequencia
+                while (str[i+k] == aux[j+k] && k < this->Nb) {//verifica ate onde vai a sequencia
                     k++;
                 }
                 if(k > length){
@@ -59,6 +60,7 @@ string LZ77::comprime(string str)
         }
     }
 
+    this->ant = ret;
     // Return the compressed output as a string
     return ret;
 }
