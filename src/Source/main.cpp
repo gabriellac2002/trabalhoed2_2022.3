@@ -363,6 +363,57 @@ RegistroHash* createTable(int n)
             cout<< "ID do produto: " << registro[i].productId << " --- Reviews: " << registro[i].qtdReviews << endl;
  }
 
+ //  Funções Auxiliares daSegundaEtapa
+
+ string concatRegisters(ProductReview *vet, int n)
+ {
+    string str = " ";
+    for(int i = 0; i<n; i++)
+    {
+        string aux = vet[i].getProductId() + vet[i].getUserId() + to_string(vet[i].getRating()) + vet[i].getTimestamp();
+        str += aux;
+    }
+
+    return str;
+
+ }
+
+ char* returnContent (string str)
+ {
+    
+ }
+
+ long* returnFrequence (string str)
+ {
+
+ }
+
+ // Funções de Compresssão
+
+ string comprime(string str, int metodo)
+ {
+    //
+ }
+
+ string descomprime(string str, int metodo)
+ {
+    //
+ }
+
+void comprime(int metodo) 
+{
+    //
+}
+
+void descomprime(int metodo) 
+{
+    //
+}
+
+// Função de Métricas para a Segunda Etapa
+
+ // Funções de Chamada
+
 void doSorting(string pathToFolder)
 {
     cout << "_____________________________________________" << endl;
