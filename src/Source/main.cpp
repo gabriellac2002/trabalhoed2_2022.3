@@ -15,6 +15,7 @@
 #include "../Headers/TimSort.h"
 #include "../Headers/HashTable.h"
 #include "../Headers/RegistroHash.h"
+#include "../Headers/ArvoreVp.h"
 
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
@@ -44,6 +45,7 @@ void createBinary(string &path)
         ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
         string strUserId, strProductId, strRating, strTimestamp;
         float rating;
+        int pos;
 
         for (int i = 0; i < size; i++)
         {
@@ -52,6 +54,7 @@ void createBinary(string &path)
             getline(csvArchive, strRating, ',');
             getline(csvArchive, strTimestamp, '\n');
             rating = stof(strRating);
+            pos = binaryArchive.tellp();
             binaryArchive.write(reinterpret_cast<const char*>(strUserId.c_str()), userIdSize);
             binaryArchive.write(reinterpret_cast<const char*>(strProductId.c_str()), productIdSize);
             binaryArchive.write(reinterpret_cast<const char*>(&rating), sizeof(float));
@@ -112,6 +115,7 @@ ProductReview returnRegister(ifstream *file, int i)
     int timestampSize = 10;
 
     file->seekg(i * PRODUCT_REVIEW_SIZE);
+    int pos = file->tellp();
     ProductReview *productReview = new ProductReview();
 
     char *userId = new char[userIdSize];
@@ -126,11 +130,13 @@ ProductReview returnRegister(ifstream *file, int i)
     file->read(reinterpret_cast<char *>(productId), productIdSize);
     file->read(reinterpret_cast<char *>(&rating), sizeof(float));
     file->read(reinterpret_cast<char *>(timestamp), timestampSize);
+    file->read(reinterpret_cast<char *>(&pos), sizeof(int));
 
     productReview->setUserId(userId);
     productReview->setProductId(productId);
     productReview->setRating(rating);
     productReview->setTimestamp(timestamp);
+    productReview->setPos(pos);
 
     delete[] userId;
     delete[] productId;
@@ -438,6 +444,10 @@ int main(int argc, char** argv)
     //     break;
     // }
 
-    
+    //testes
+    int* comparacoes = 0;
+
+    ArvoreVP* arv1 = new ArvoreVP();
+    ProductReview* p1 = new ProductReview();
 
 }

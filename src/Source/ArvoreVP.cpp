@@ -86,11 +86,11 @@ void ArvoreVP::rotateRight(NodeAvp* node)
 
 void ArvoreVP::insere(ProductReview *pr, int* comparacoes)
 {
-    string concatenacao = pr->getUserId.append(pr->getProductId);
-    NodeAvp* p = new NodeAvp(concatenacao,"aaaaaa");
+    string concatenacao = pr->getUserId() + pr->getProductId();
+    NodeAvp* p = new NodeAvp(concatenacao,pr->getPos());
 
     //inserção usando busca binaria
-    raiz = insereAux(getRaiz(), p, comparacoes);
+    NodeAvp* raiz = insereAux(getRaiz(), p, comparacoes);
     repair(raiz); // conserta os erros
     
 }
@@ -106,7 +106,8 @@ NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
     else
     {
         //Caso contrario, faz uma busca binaria recursiva pela arvore para inserir o No no lugar certo
-        if(no->getId() < raiz->getId())
+        //caso a raiz seja maior
+        if(compararId(raiz->getId(),no->getId()))
         {
             (*comparacoes)++;
             raiz->setLeft(insereAux(raiz->getLeft(), no, comparacoes));
@@ -231,3 +232,57 @@ void ArvoreVP::printAux(NodeAvp* p)
     printAux(p->getLeft());
 }
 
+ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes, string pathToFolder)
+{
+    string id = userId + productId;
+    if(this->raiz != NULL)
+    {
+        NodeAvp* no = buscarAux(raiz, id, comparacoes);
+        if(node != NULL)
+        {
+            int pos = no->getEndMemory();
+            return returnRegister(pathToFolder,pos);
+        }
+        else
+        {
+            cout << " == ID NÃO ENCONTRADO ==" << endl;
+            return NULL;
+        }
+    }
+}
+
+NodeAvp* ArvoreVP::buscaAux(NodeAvp * no, string id, int* comparacoes)
+{
+    //caso o no seja nulo ou com o valor compativel
+    if(node == NULL || idIgual(no->getId(), id))
+    {
+        (*comparacoes++);
+        return node;
+    }
+
+    //caso o id seja maior que o atual
+    if( !compararId(id, no->getId()))
+    {
+        (*comparacoes++);
+        return buscaAux(node->getRigth(), id, comparacoes);
+    } 
+    else 
+    {
+        //caso o id seja menor que o atual
+        (*comparacoes++);
+        return buscaAux(node->getLeft(), id, comparacoes);
+    }
+}
+
+bool ArvoreVP::compararId(char* id1, char* id2)
+{
+    int i = 0;
+    for(i = 0; id1[i] != '\0' && id1[i] == id2[i]; i++);
+    return id1[i] > id2[i];
+}
+
+bool RedBlackTree::idIgual(char* id1, char* id2){
+    int i = 0;
+    for(i = 0; id1[i] != '\0' && id1[i] == id2[i]; i++);
+    return id1[i] == id2[i];
+}

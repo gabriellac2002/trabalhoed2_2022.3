@@ -11,6 +11,7 @@ class ProductReview
         string productId;
         float rating;
         string timestamp;
+        int pos;
 
     public:
         void print();
@@ -18,10 +19,12 @@ class ProductReview
         void setUserId(string productId);
         void setRating(float rating);
         void setTimestamp(string timestamp);
+        void setPos(int pos);
         string getProductId();
         string getUserId();
         float getRating();
         string getTimestamp();
+        int getPos();
 
 };
 

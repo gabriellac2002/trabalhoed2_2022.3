@@ -42,6 +42,11 @@ void ProductReview::setTimestamp(string timestamp)
     this->timestamp = timestamp;
 }
 
+void ProductReview::setPos(int pos)
+{
+    this->pos = pos;
+}
+
 string ProductReview::getProductId()
 {
     return this->productId;
@@ -57,4 +62,8 @@ float ProductReview::getRating()
 string ProductReview::getTimestamp()
 {
     return this->timestamp;
+}
+int ProductReview::getPos()
+{
+    return this->pos;
 }
