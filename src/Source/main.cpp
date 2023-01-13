@@ -17,6 +17,7 @@
 #include "../Headers/RegistroHash.h"
 #include "../Headers/LZ77.h"
 #include "../Headers/LZW.h"
+#include "../Headers/Huffman.h"
 
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
@@ -393,24 +394,83 @@ RegistroHash* createTable(int n)
 
  // Funções de Compresssão
 
- string comprime(string str, int metodo)
- {
-    //
- }
+ string comprime(string str, int metodo){
 
- string descomprime(string str, int metodo)
- {
-    //
- }
+    string ret;
+    switch (metodo)
+    {
+    case 1:
+        Huffman *huffman = new Huffman();
+        break;
 
-void comprime(int metodo) 
-{
-    //
+    case 2:
+        LZ77 *lz77 = new LZ77();
+        ret = lz77->comprime(str);
+        break;
+
+    case 3:
+        LZW *lzw = new LZW();
+        ret = lzw->comprime(str);    
+    default:
+        break;
+    }
+
+    return ret;
 }
 
-void descomprime(int metodo) 
-{
-    //
+string descomprime(string str, int metodo){
+    string ret;
+    switch (metodo)
+    {
+    case 1:
+        Huffman *huffman = new Huffman();//arrumar o huffman
+        break;
+
+    case 2:
+        LZ77 *lz77 = new LZ77();
+        ret = lz77->descomprime(str);
+        break;
+
+    case 3:
+        LZW *lzw = new LZW();
+        ret = lzw->descomprime(str);    
+    default:
+        break;
+    }
+
+    return ret;
+}
+
+void comprime(int metodo){
+    fstream reviewsOriginP, reviewsComprimedP;
+    string str,ret;
+    reviewsOriginP.open("reviewsOrig.txt", ios::in);
+    reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
+    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
+        while(getline(reviewsOriginP, str)){
+            ret = "";
+            ret = comprime(str, metodo);
+            reviewsComprimedP.write(ret.c_str(), ret.size());
+        }
+    }
+    reviewsOriginP.close();
+    reviewsComprimedP.close();
+}
+
+void descomprime(int metodo){
+    fstream reviewsComprimedP, reviewsDescomprimedP;
+    string str,ret;
+    reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
+    reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
+    if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
+        while(getline(reviewsComprimedP, str)){
+            ret = "";
+            ret = descomprime(str, metodo);
+            reviewsDescomprimedP.write(ret.c_str(), ret.size());
+        }
+    }
+    reviewsComprimedP.close();
+    reviewsDescomprimedP.close();
 }
 
 // Função de Métricas para a Segunda Etapa
