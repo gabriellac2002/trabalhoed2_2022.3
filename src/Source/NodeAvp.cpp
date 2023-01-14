@@ -15,7 +15,7 @@ NodeAvp::NodeAvp(string id, int endMemory) //constructor
     this->left = NULL;
     this->right = NULL;
     this->color = 1; // Em uma arvore vermelho e preto, o nó sempre começa com a cor vermelha
-    this->endMemory =  endMemory;
+    this->endMemory =  endMemory; //endereço do product review no binário
 }
 
 NodeAvp::~NodeAvp() //destrutor

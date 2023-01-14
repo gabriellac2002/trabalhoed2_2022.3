@@ -145,6 +145,44 @@ ProductReview returnRegister(ifstream *file, int i)
     return *productReview;
 }
 
+ProductReview returnarRegistroAvp(ifstream *file,int endMemory)
+{
+    int userIdSize = 21;
+    int productIdSize = 10;
+    int timestampSize = 10;
+
+    file->seekg(endMemory);
+    int pos = file->tellp();
+    ProductReview *productReview = new ProductReview();
+
+    char *userId = new char[userIdSize];
+    userId[21] = '\0';
+    char *productId = new char[productIdSize];
+    productId[10] = '\0';
+    char *timestamp = new char[timestampSize];
+    timestamp[10] = '\0';
+    float rating;
+
+    file->read(reinterpret_cast<char *>(userId), userIdSize);
+    file->read(reinterpret_cast<char *>(productId), productIdSize);
+    file->read(reinterpret_cast<char *>(&rating), sizeof(float));
+    file->read(reinterpret_cast<char *>(timestamp), timestampSize);
+    file->read(reinterpret_cast<char *>(&pos), sizeof(int));
+
+    productReview->setUserId(userId);
+    productReview->setProductId(productId);
+    productReview->setRating(rating);
+    productReview->setTimestamp(timestamp);
+    productReview->setPos(pos);
+
+    delete[] userId;
+    delete[] productId;
+    delete[] timestamp;
+
+    return *productReview;
+}
+
+
 ProductReview *import(int n)
 {
     int size = 7824483;
@@ -409,18 +447,18 @@ void doHashing(string pathToFolder)
 
 int main(int argc, char** argv)
 {
-    // srand(time(NULL));
+    srand(time(NULL));
     
-    // if(argc < 2)
-    // {
-    //     return 0;
-    // }
+    if(argc < 2)
+    {
+        return 0;
+    }
 
-    // string path_teste(argv[1]);
+    string path_teste(argv[1]);
 
-    // cout << "Converting cvs file to binary..." << endl;
-    // //createBinary(path_teste);
-    // cout << "Binary file ready!" << endl;
+    cout << "Converting cvs file to binary..." << endl;
+    //createBinary(path_teste);
+    cout << "Binary file ready!" << endl;
 
     // cout << "_____________________________________________" << endl;
     // cout << "Pick one of the following options:" << endl;

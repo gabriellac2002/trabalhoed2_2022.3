@@ -232,7 +232,7 @@ void ArvoreVP::printAux(NodeAvp* p)
     printAux(p->getLeft());
 }
 
-ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes, string pathToFolder)
+ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes)
 {
     string id = userId + productId;
     if(this->raiz != NULL)
@@ -241,7 +241,7 @@ ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes
         if(node != NULL)
         {
             int pos = no->getEndMemory();
-            return returnRegister(pathToFolder,pos);
+            return returnRegister(,pos);
         }
         else
         {
@@ -256,20 +256,20 @@ NodeAvp* ArvoreVP::buscaAux(NodeAvp * no, string id, int* comparacoes)
     //caso o no seja nulo ou com o valor compativel
     if(node == NULL || idIgual(no->getId(), id))
     {
-        (*comparacoes++);
+        (*comparacoes)++;
         return node;
     }
 
     //caso o id seja maior que o atual
     if( !compararId(id, no->getId()))
     {
-        (*comparacoes++);
+        (*comparacoes)++;
         return buscaAux(node->getRigth(), id, comparacoes);
     } 
     else 
     {
         //caso o id seja menor que o atual
-        (*comparacoes++);
+        (*comparacoes)++;
         return buscaAux(node->getLeft(), id, comparacoes);
     }
 }
@@ -281,7 +281,7 @@ bool ArvoreVP::compararId(char* id1, char* id2)
     return id1[i] > id2[i];
 }
 
-bool RedBlackTree::idIgual(char* id1, char* id2){
+bool ArvoreVP::idIgual(char* id1, char* id2){
     int i = 0;
     for(i = 0; id1[i] != '\0' && id1[i] == id2[i]; i++);
     return id1[i] == id2[i];
