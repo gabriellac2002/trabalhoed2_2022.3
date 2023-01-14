@@ -17,7 +17,6 @@ class LZ77
     int Nb; //tamanho do bufer
     string antc; //mensagem anterior para a compressao
     string antd; //mensagem anterior para a descompressao
-    CodigoLZ77 *Cod;//vetor de codificacao
 
     public:
     LZ77();

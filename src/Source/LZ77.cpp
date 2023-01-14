@@ -21,7 +21,6 @@ string LZ77::comprime(string str)
 {
     string ret,aux;
     aux = this->antc + str;//concatena a mensagem anterior com a atual
-    this->Cod = new CodigoLZ77 [str.size()*0.6];//cria um vetor de codificação com o tamanho da mensagem * 0.6, como a taxa de compressao é de 40%, media/pior caso
     int inicioDicioMen = 0,pos=0;
     int i = 0;
     while(i<str.size()){//ate o fim da mensagem
@@ -39,29 +38,18 @@ string LZ77::comprime(string str)
             }
         }
 
-        CodigoLZ77 cod;
-        cod.setP(P);
-        cod.setL(L);
-        cod.setC(str[i+L+1]);
-        cod.setConfirma();
-        this->Cod[pos] = cod;
+        ret +="(";//adiciona o termo comprimido a string de retorno
+        ret+=to_string(P);
+        ret+=",";
+        ret+=to_string(L);
+        ret+=",";
+        ret+=str[i+L];
+        ret+=")";
 
         i += L + 1;//adianta o inicio do buffer para o fim da sequencia + 1 para encobrir a letra que finaliza
     }
 
-    for(int i =0;i<str.size()*0.6;i++){//para cada item no vetor de compressao, concatena a string de retorno com o codigo
-        if(this->Cod[i].getConfirma() == 1){
-            ret += "(";
-            ret += to_string(this->Cod[i].getP());
-            ret += ",";
-            ret += to_string(this->Cod[i].getL());
-            ret += ",";
-            ret += this->Cod[i].getC();
-            ret += ")";
-        }
-    }
-
-    this->antc = ret;
+    this->antc = str;
     // Return the compressed output as a string
     return ret;
 }
