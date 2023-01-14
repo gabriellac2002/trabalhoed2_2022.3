@@ -397,7 +397,7 @@ RegistroHash* createTable(int n)
  string comprime(string str, int metodo){
 
     string ret;
-    switch (metodo)
+    switch (metodo) // estrutura de decisão para escolher o método de compressão a partir do número passado como parâmetro em metodo
     {
     case 1:
         Huffman *huffman = new Huffman();

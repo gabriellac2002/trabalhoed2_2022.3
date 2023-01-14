@@ -13,10 +13,11 @@ using namespace std;
 class LZ77
 {
     private:
-    int Nd;
-    int Nb; 
-    string ant;
-    CodigoLZ77 *Cod;
+    int Nd;//tamanho do dicionario
+    int Nb; //tamanho do bufer
+    string antc; //mensagem anterior para a compressao
+    string antd; //mensagem anterior para a descompressao
+    CodigoLZ77 *Cod;//vetor de codificacao
 
     public:
     LZ77();
