@@ -11,9 +11,9 @@ using namespace std;
 
 LZW::LZW()
 {    
-    this->dicionariobase = new string [91]; //parte usada da tabela ascii
-    this->dicionario = new string [91]; // tem-se a utilização de 2 dicionarios para agilizar o processo de descompressão
-    for (int i =0;i<91;i++){//preenchendo o dicionario
+    this->dicionariobase = new string [255]; //parte usada da tabela ascii
+    this->dicionario = new string [255]; // tem-se a utilização de 2 dicionarios para agilizar o processo de descompressão
+    for (int i =0;i<255;i++){//preenchendo o dicionario
         this->dicionariobase[i] = char(i);
         this->dicionario[i] = char(i);
     }
