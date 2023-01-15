@@ -399,20 +399,25 @@ RegistroHash* createTable(int n)
     string ret;
     switch (metodo) // estrutura de decisão para escolher o método de compressão a partir do número passado como parâmetro em metodo
     {
-    case 1:
-        Huffman *huffman = new Huffman();
-        break;
-
     case 2:
+    {
         LZ77 *lz77 = new LZ77();
         ret = lz77->comprime(str);
         break;
-
+    }
     case 3:
+    {
         LZW *lzw = new LZW();
-        ret = lzw->comprime(str);    
+        ret = lzw->comprime(str);  
+        break;  
+    }
+
     default:
+    {
+        cout<<"Método de compressão não encontrado"<<endl;
         break;
+    }
+
     }
 
     return ret;
@@ -422,35 +427,41 @@ string descomprime(string str, int metodo){
     string ret;
     switch (metodo)
     {
-    case 1:
-        Huffman *huffman = new Huffman();//arrumar o huffman
-        break;
-
     case 2:
+    {
         LZ77 *lz77 = new LZ77();
         ret = lz77->descomprime(str);
         break;
-
+    }
     case 3:
+    {
         LZW *lzw = new LZW();
-        ret = lzw->descomprime(str);    
-    default:
+        ret = lzw->descomprime(str);  
         break;
     }
+        
 
+    default:
+    {
+        cout<<"Método de descompressão não encontrado"<<endl;
+        break;
+    }
+    }
     return ret;
 }
 
 void comprime(int metodo){
-    fstream reviewsOriginP, reviewsComprimedP;
+    fstream reviewsOriginP;
+    ofstream reviewsComprimedP;
     string str,ret;
-    reviewsOriginP.open("reviewsOrig.txt", ios::in);
-    reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
+    reviewsOriginP.open("../Archives/reviewsOrig.txt", ios::in);
+    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::binary);
     if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
         while(getline(reviewsOriginP, str)){
             ret = "";
             ret = comprime(str, metodo);
-            reviewsComprimedP.write(ret.c_str(), ret.size());
+            reviewsComprimedP.write(reinterpret_cast<const char*>(ret.c_str()), ret.size());
+            reviewsComprimedP.write((ret.c_str()), ret.size());;
         }
     }
     reviewsOriginP.close();
@@ -460,13 +471,13 @@ void comprime(int metodo){
 void descomprime(int metodo){
     fstream reviewsComprimedP, reviewsDescomprimedP;
     string str,ret;
-    reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
-    reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
+    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::in | ios::binary);
+    reviewsDescomprimedP.open("../Archives/reviewsDescomp.txt", ios::out);
     if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
         while(getline(reviewsComprimedP, str)){
             ret = "";
             ret = descomprime(str, metodo);
-            reviewsDescomprimedP.write(ret.c_str(), ret.size());
+            cout<<ret<<endl;
         }
     }
     reviewsComprimedP.close();
@@ -522,82 +533,6 @@ void doHashing(string pathToFolder)
 
 }
 
-string comprime(string str, int metodo){
-
-    string ret;
-    switch (metodo)
-    {
-    case 1:
-        break;
-
-    case 2:
-        LZ77 *lz77 = new LZ77();
-        ret = lz77->comprime(str);
-        break;
-
-    case 3:
-        LZW *lzw = new LZW();
-        ret = lzw->comprime(str);    
-    default:
-        break;
-    }
-
-    return ret;
-}
-
-string descomprime(string str, int metodo){
-    string ret;
-    switch (metodo)
-    {
-    case 1:
-        break;
-
-    case 2:
-        LZ77 *lz77 = new LZ77();
-        ret = lz77->descomprime(str);
-        break;
-
-    case 3:
-        LZW *lzw = new LZW();
-        ret = lzw->descomprime(str);    
-    default:
-        break;
-    }
-
-    return ret;
-}
-
-void comprime(int metodo){
-    fstream reviewsOriginP, reviewsComprimedP;
-    string str,ret;
-    reviewsOriginP.open("reviewsOrig.txt", ios::in);
-    reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
-    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
-        while(getline(reviewsOriginP, str)){
-            ret = "";
-            ret = comprime(str, metodo);
-            reviewsComprimedP.write(ret.c_str(), ret.size());
-        }
-    }
-    reviewsOriginP.close();
-    reviewsComprimedP.close();
-}
-
-void descomprime(int metodo){
-    fstream reviewsComprimedP, reviewsDescomprimedP;
-    string str,ret;
-    reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
-    reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
-    if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
-        while(getline(reviewsComprimedP, str)){
-            ret = "";
-            ret = descomprime(str, metodo);
-            reviewsDescomprimedP.write(ret.c_str(), ret.size());
-        }
-    }
-    reviewsComprimedP.close();
-    reviewsDescomprimedP.close();
-}
 
 int main(int argc, char** argv)
 {
@@ -611,13 +546,14 @@ int main(int argc, char** argv)
     string path_teste(argv[1]);
 
     cout << "Converting cvs file to binary..." << endl;
-    createBinary(path_teste);
+    // createBinary(path_teste);
     cout << "Binary file ready!" << endl;
 
     cout << "_____________________________________________" << endl;
     cout << "Pick one of the following options:" << endl;
     cout << "1) Sorting" << endl;
     cout << "2) Hashing" << endl;
+    cout << "3) Compression" << endl;
     cout << "_____________________________________________" << endl;
 
     int mainOption;
@@ -631,9 +567,42 @@ int main(int argc, char** argv)
     case 2:
         doHashing(path_teste);
         break;
+    case 3:
+        cout << "_____________________________________________" << endl;
+        cout << "Selecione a opção de compressao que deseja: " << endl;
+        cout << "1) Huffman" << endl;//nao colocar esse ainda
+        cout << "2) LZ77" << endl;
+        cout << "3) LZW" << endl;
+        cout << "_____________________________________________" << endl;
+
+        int compressionOption;
+        cin >> compressionOption;
+
+        comprime(compressionOption);
+        descomprime(compressionOption);
+        break;            
     default:
         cout << "This is not a valid option!" << endl;
         break;
     }
 
+    float sizeOrigin,sizeComprimed;
+    float taxaCompressao;
+    fstream reviewsOriginP,reviewsComprimedP;
+    reviewsOriginP.open("../Archives/reviewsOrig.txt", ios::in);
+    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::out | ios::binary);
+
+    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
+        reviewsOriginP.seekg(0, ios::end);
+        sizeOrigin = reviewsOriginP.tellg();
+        reviewsComprimedP.seekg(0, ios::end);
+        sizeComprimed = reviewsComprimedP.tellg();
+        cout << "Tamanho do arquivo original: " << sizeOrigin << endl;
+        cout << "Tamanho do arquivo comprimido: " << sizeComprimed << endl;
+        taxaCompressao = 1 - sizeComprimed/sizeOrigin*8;
+    }
+    
+    cout<<taxaCompressao<<endl;
+
+    return 0;
 }

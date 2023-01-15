@@ -85,7 +85,7 @@ bool Huffman::isSizeOne()
     return this->size == 1;
 }
 
-void swapNodeHuffman(NodeHuffman **a, NodeHuffman **b)
+void Huffman::swapNodeHuffman(NodeHuffman **a, NodeHuffman **b)
 {
     NodeHuffman* t = *a;
     *a = *b;
