@@ -28,7 +28,7 @@ class TreeBNo
         void percorrer(); //Percorrer todos os nós em uma subarvore onde esse nó é a raiz
 
         //Buscar nó
-        TreeBNo *buscar(int k); //Retorna NULL se k não estiver presente
+        TreeBNo *buscar(string k); //Retorna NULL se k não estiver presente
         void print(); //Imprimir nó
         
     friend class BTree;

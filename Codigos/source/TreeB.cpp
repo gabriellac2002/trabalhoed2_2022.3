@@ -64,7 +64,7 @@ void TreeBNo::percorrer()
 }
 
 //Função para pesquisar a chave k
-TreeBNo *TreeBNo::buscar(int k)
+TreeBNo *TreeBNo::buscar(string k)
 {
     int comparar;
 
@@ -275,4 +275,13 @@ void TreeB::print()
     else {
         raiz->print();
     }
+}
+
+ProductReview *TreeB::busca(string userId, string productId)
+{
+    //Concatena o id do usuário com o id do produto
+    string id = userId + productId;
+    TreeBNo *raizAux = this->raiz;
+
+    buscar(id);
 }

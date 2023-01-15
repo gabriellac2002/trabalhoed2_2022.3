@@ -32,7 +32,7 @@ class TreeB
 
         //Função para buscar chave na árvore
         TreeBNo *buscar(int k)
-        {return (raiz == NULL)? NULL : raiz->buscar(k); }
+        {return (raiz == NULL)? NULL : raiz->buscar(id); }
 
         // A função main que insere uma nova chave
         void inserir(ProductReview *pr, int k); 
