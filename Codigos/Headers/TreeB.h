@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "TreeBNo.h" //incluindo o '.h' do Nó da Árvore B
+#include "ProductReview.h" //incluindo o '.h' do ProductReview
 
 using namespace std;
 
@@ -33,6 +34,14 @@ class TreeB
 
         // A função main que insere uma nova chave
         void inserir(int k); 
+
+        // Função obrigatória
+        void insere(ProductReview *pr);
+        void print();
+        ProductReview* busca(string userId, string productId);
+
+        //Funções auxiliares
+        void printAux(TreeBNo *p);
 };
 
 #endif //TREEB_H_INCLUDED
