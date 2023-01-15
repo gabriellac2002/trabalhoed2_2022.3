@@ -266,3 +266,13 @@ void TreeB::insere(ProductReview *pr, int comparacoes)
     inserir(pr, valor);
 }
 
+void TreeB::print()
+{
+    if(raiz -= NULL) {
+        cout << "Arvore vazia" << endl;
+    }
+
+    else {
+        raiz->print();
+    }
+}

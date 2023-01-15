@@ -41,9 +41,6 @@ class TreeB
         void insere(ProductReview *pr, int comparacoes);
         void print();
         ProductReview* busca(string userId, string productId);
-
-        //Funções auxiliares
-        void printAux(TreeBNo *p);
 };
 
 #endif //TREEB_H_INCLUDED

@@ -29,6 +29,7 @@ class TreeBNo
 
         //Buscar nó
         TreeBNo *buscar(int k); //Retorna NULL se k não estiver presente
+        void print(); //Imprimir nó
         
     friend class BTree;
 };
