@@ -19,6 +19,7 @@
 #include "../Headers/LZ77.h"
 #include "../Headers/LZW.h"
 #include "../Headers/Huffman.h"
+
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
 using namespace std;
