@@ -35,7 +35,7 @@ class TreeB
         {return (raiz == NULL)? NULL : raiz->buscar(k); }
 
         // A função main que insere uma nova chave
-        void inserir(int k); 
+        void inserir(ProductReview *pr, int comparacoes); 
 
         // Função obrigatória
         void insere(ProductReview *pr, int comparacoes);

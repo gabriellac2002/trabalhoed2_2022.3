@@ -107,7 +107,7 @@ TreeBNo *TreeBNo::buscar(int k)
     return C[i]->buscar(k);
 }
 
-void TreeB::inserir(int k)
+void TreeB::inserir(ProductReview *pr, int comparacoes)
 {
     //Declara e inicaliza a variavel de comparacao
     int comparar;
@@ -124,7 +124,7 @@ void TreeB::inserir(int k)
 
         //Alocar memória para raiz
         raiz = new TreeBNo(t, true);
-        raiz->chave[0] = k; //Insere chave
+        raiz->chave[0] = (*pr); //Insere chave
         raiz->n = 1; //Atualizar número de chaves na raiz
     }
 
@@ -149,7 +149,7 @@ void TreeB::inserir(int k)
                 comparar += 1; //Atualiza a variavel
                 i++;
             }
-            s->C[i]->inserirNaoCheia(k);
+            s->C[i]->inserirNaoCheia(pr, comparacoes);
 
             //Alterar raiz
             raiz = s;
@@ -157,7 +157,7 @@ void TreeB::inserir(int k)
 
         else //Se raiz não tiver cheio, chame a função inserirNaoCheia
         {
-            raiz->inserirNaoCheia(k);
+            raiz->inserirNaoCheia(pr, comparacoes);
         }
     }
     end = clock(); //Finaliza o clock de contar o tempo
@@ -170,7 +170,7 @@ void TreeB::inserir(int k)
 }
 
 //O nó não deve está cheia quando a função deve ser chamada
-void TreeBNo::inserirNaoCheia(int k) //Função para inserir uma nova chave no nó
+void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função para inserir uma nova chave no nó
 {
     //Inicialize o índice como índice do elemento mais à direita
     int i;
@@ -210,7 +210,7 @@ void TreeBNo::inserirNaoCheia(int k) //Função para inserir uma nova chave no n
                 i++;
             }
         }
-        C[i + 1]->inserirNaoCheia(k);
+        C[i + 1]->inserirNaoCheia(pr, comparacoes);
     }
 }
 
