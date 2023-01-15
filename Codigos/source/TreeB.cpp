@@ -36,6 +36,12 @@ TreeBNo::TreeBNo(int t1, bool folha1)
     n = 0;
 }
 
+TreeBNo::TreeBNo(string id, int memory)
+{
+    id = id;
+    memory = memory;
+}
+
 //Função para percorrer todos os nós em uma subárvore com raiz neste nó
 void TreeBNo::percorrer()
 {
@@ -248,4 +254,11 @@ void TreeBNo::dividirFilho(int i, TreeBNo *y)
 
     //Incrementar a contagem de chaves neste nó
     n = n + 1;
+}
+
+void TreeB::insere(ProductReview *pr, int comparacoes)
+{
+    //Concatena o id do usuário com o id do produto
+    string concatena = pr->getUserId() + pr->getProductId();
+    TreeBNo *p = new TreeBNo(concatena, 1);
 }

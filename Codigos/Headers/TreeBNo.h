@@ -20,6 +20,7 @@ class TreeBNo
         
         
         TreeBNo(int t, bool leaf); //Construtor 1
+        TreeBNo(string id, int memory); //Construtor 2
         ~TreeBNo(); //Destrutor
 
         void inserirNaoCheia(int k); //Inserir uma nova chave

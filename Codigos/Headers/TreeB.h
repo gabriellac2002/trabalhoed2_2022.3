@@ -20,6 +20,8 @@ class TreeB
     private:
         TreeBNo *raiz; //Ponteiro para o nó raiz
         int t; //grau minimo
+        string id; //id da árvore
+        int memory; //memória da árvore 
 
     public:
         TreeB(int grau); //Construtor
@@ -36,7 +38,7 @@ class TreeB
         void inserir(int k); 
 
         // Função obrigatória
-        void insere(ProductReview *pr);
+        void insere(ProductReview *pr, int comparacoes);
         void print();
         ProductReview* busca(string userId, string productId);
 
