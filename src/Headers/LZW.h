@@ -13,8 +13,11 @@ class LZW
     string buffer;//o cursos aponta para a primeira casa do buffer
     string *dicionariobase;//parte da tabela ascii
     string *dicionario;//contem as partes que nao estao na tabela ascii
+    int sizedicio;//tamanho do dicionario atual
     int ver;//verificação para a reinicialização do dicionario
     string *sequencia;//pega apenas os items que nao estao na ascii = com mais de 1 char
+    float sizeOri;//tamanho da mensagem original
+    float sizeComp;//tamanho da mensagem comprimida
 
     public:
     LZW();

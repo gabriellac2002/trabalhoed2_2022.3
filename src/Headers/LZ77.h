@@ -15,12 +15,16 @@ class LZ77
     private:
     int Nd;//tamanho do dicionario
     int Nb; //tamanho do bufer
+    float sizeOri;
+    float sizeComp;
     string antc; //mensagem anterior para a compressao
     string antd; //mensagem anterior para a descompressao
 
     public:
     LZ77();
     string comprime(string str);
+    void setOri(int size);
+    void setComp(int size);
     string descomprime(string str);
 };
 
