@@ -124,7 +124,7 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 
         //Alocar memória para raiz
         raiz = new TreeBNo(t, true);
-        raiz->chave[0] = (*pr); //Insere chave
+        raiz->chave[0] = comparacoes; //Insere chave
         raiz->n = 1; //Atualizar número de chaves na raiz
     }
 
@@ -145,7 +145,7 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 
             //A nova raiz tem dois filhos e decidir qual das duas folhas terá uma nova chave
             int i = 0;
-            if(s->chave[0] < k){
+            if(s->chave[0] < comparacoes){
                 comparar += 1; //Atualiza a variavel
                 i++;
             }
@@ -181,20 +181,20 @@ void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função par
         //O loop faz duas coisas:
         //1) Encontra a localização da nova chave a ser inserida 
         //2) Moves all greater keys to one place ahead
-        while(i >= 0 && chave[i] > k){
+        while(i >= 0 && chave[i] > comparacoes){
             chave[i + 1] = chave[i];
             i--;
         }
 
         //Insira a nova chave no local encontrado
-        chave[i +  1] = k;
+        chave[i +  1] = comparacoes;
         n = n + 1; 
     }
     
     else //Se este nó não for folha 
     {
         //Encontre o filho que vai ter a nova chave
-        while (i >= 0 && chave[i] > k)
+        while (i >= 0 && chave[i] > comparacoes)
         {
             i--;
         }
@@ -206,7 +206,7 @@ void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função par
 
             //Após a divisão, o filho do meio de C[i] sobre C[i] é dividido em dois
             //Veja qual dos dois vai ter a nova chave
-            if(chave[i + 1] < k){
+            if(chave[i + 1] < comparacoes){
                 i++;
             }
         }
