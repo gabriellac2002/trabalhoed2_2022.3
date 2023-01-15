@@ -9,6 +9,11 @@
 #include <array>
 #include <chrono>
 #include "string.h"
+
+#include <cstdlib>
+#include <string>
+#include <ctime>
+
 #include "../Headers/ProductReview.h"
 #include "../Headers/MergeSort.h"
 #include "../Headers/QuickSort.h"
@@ -445,47 +450,153 @@ void doHashing(string pathToFolder)
 
 }
 
-int main(int argc, char** argv)
-{
-    srand(time(NULL));
-    
-    if(argc < 2)
+ void printPrompt(ProductReview *vet, int n)
     {
-        return 0;
+        char imp;
+        cout << "Imprimir (s/n): ";
+        cin >> imp;
+
+        if(vet == NULL)
+            cout << "ALERTA: ponteiro nulo, nada a imprimir!" << endl;
+        else if(imp == 's')
+        {
+            for(int i = 0; i < n; i++)
+                vet[i].print();
+        }
     }
 
-    string path_teste(argv[1]);
+    void printPrompt(ArvoreVP *arv, int n)
+    {
+        char imp;
+        cout << "Imprimir (s/n): ";
+        cin >> imp;
 
-    cout << "Converting cvs file to binary..." << endl;
-    //createBinary(path_teste);
-    cout << "Binary file ready!" << endl;
+        if(arv == NULL)
+            cout << "ALERTA: ponteiro nulo, nada a imprimir!" << endl;
+        else if(imp == 's')
+            arv->print();
+    }
 
-    // cout << "_____________________________________________" << endl;
-    // cout << "Pick one of the following options:" << endl;
-    // cout << "1) Sorting" << endl;
-    // cout << "2) Hashing" << endl;
-    // cout << "_____________________________________________" << endl;
+    ProductReview* randomTest(int n)
+    {
+        ProductReview *vet = new ProductReview[n];
 
-    // int mainOption;
-    // cin >> mainOption;
+        for(int i = 0; i < n; i++)
+        {
+            string u("STR");
+            u += 'a'+rand()%('z'-'a');
+            vet[i].userId = u; // ou essa linha ou a de baixo pode ser usada, dependendo de como foi implementado (a de baixo é preferencial)
+            //vet[i].setUserId(u);
+        }
 
-    // switch (mainOption)
-    // {
-    // case 1: 
-    //     doSorting(path_teste);
-    //     break;
-    // case 2:
-    //     doHashing(path_teste);
-    //     break;
-    // default:
-    //     cout << "This is not a valid option!" << endl;
-    //     break;
-    // }
+        return vet;
+    }
 
-    //testes
-    int* comparacoes = 0;
+    template<typename T>
+    void treeTest(T arv, ProductReview *vet, int n)
+    {
+        int comparacoes = 0;
+        for(int i = 0; i < n; i++)
+            arv->insere(&vet[i], &comparacoes);
+        printPrompt(vet, n);
 
-    ArvoreVP* arv1 = new ArvoreVP();
-    ProductReview* p1 = new ProductReview();
+        string userId, productId;
+        cout << "Digite um par (userId, productId) para busca: ";
+        cin >> userId >> productId;
+        while(userId != "quit")
+        {
+            ProductReview *p = arv->busca(userId, productId, &comparacoes);
+            if(p != NULL)
+                p->print();
+            else
+                cout << "Produto nao encontrado!" << endl;
+            
+            cout << "Digite outro par (userId, productId) para busca: ";
+            cin >> userId >> productId;
+        }
+    }
 
+// 
+
+int main(int argc, char *argv[])
+{
+    if(argc > 1)
+    {
+        // OBS.: TODOS OS ARQUIVOS USADOS NO PROGRAMA (TANTO DE ENTRADA QUANTO DE SAÍDA) DEVEM ESTAR LOCALIZADOS NO DIRETÓRIO FORNECIDO
+        // PELO USUÁRIO COMO ARGUMENTO DA LINHA DE COMANDO
+        std::string path(argv[1]);
+        createBinary(path);
+
+        int registerIdx;
+        cout << "Digite um indice de registro (-1 para sair): ";
+        cin >> registerIdx;
+        while (registerIdx != -1)
+        {
+            getReview(registerIdx);
+            cout << "Digite outro indice de registro (-1 para sair): ";
+            cin >> registerIdx;
+        }
+
+        ProductReview *vet = 0;
+        ArvoreVP *arv_vp = 0;
+        ArvoreB *arv_b = 0;
+        int option, n;
+        do
+        {
+            cout << "[1] Vetor de teste" << endl 
+                << "[2] Importar registros" << endl
+                << "[3] Arvore vermelho-preto" << endl
+                // << "[4] Arvore B" << endl
+                // << "[5] Huffman" << endl
+                // << "[6] LZ77" << endl
+                // << "[7] LZW" << endl
+                << "[0] Sair" << endl;
+
+            cout << "Digite uma opcao de menu: ";
+            cin >> option;
+            switch (option)
+            {
+                case 1:
+                    n = 10;
+                    delete [] vet;
+                    vet = randomTest(n);
+                    printPrompt(vet, n);
+                    break;
+                case 2:
+                    cout << "Quantos registros deseja importar? ";
+                    cin >> n;
+                    delete [] vet;
+                    vet = import(n);
+                    printPrompt(vet, n);
+                    break;
+                case 3:
+                    delete arv_vp;
+                    arv_vp = new ArvoreVP();
+                    treeTest(arv_vp, vet, n);
+                    break;
+                // case 4:
+                //     delete arv_b;
+                //     arv_b = new ArvoreB();
+                //     treeTest(arv_b, vet, n);
+                //     break;
+                // case 5:
+                //     compressTest(0);
+                //     break;
+                // case 6:
+                //     compressTest(1);
+                //     break;
+                // case 7:
+                //     compressTest(2);
+                //     break;
+                default:
+                    break;
+            }
+        } while(option != 0);
+
+        delete [] vet;
+        delete arv_vp;
+        // delete arv_b;
+    }
+
+    return 0;
 }
