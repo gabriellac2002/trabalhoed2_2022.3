@@ -23,7 +23,7 @@ class TreeBNo
         TreeBNo(string id, int memory); //Construtor 2
         ~TreeBNo(); //Destrutor
 
-        void inserirNaoCheia(ProductReview *pr, int comparacoes); //Inserir uma nova chave
+        void inserirNaoCheia(ProductReview *pr, int k); //Inserir uma nova chave
         void dividirFilho(int i, TreeBNo *y); //Dividir nó
         void percorrer(); //Percorrer todos os nós em uma subarvore onde esse nó é a raiz
 

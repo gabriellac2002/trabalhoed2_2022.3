@@ -107,7 +107,7 @@ TreeBNo *TreeBNo::buscar(int k)
     return C[i]->buscar(k);
 }
 
-void TreeB::inserir(ProductReview *pr, int comparacoes)
+void TreeB::inserir(ProductReview *pr, int k)
 {
     //Declara e inicaliza a variavel de comparacao
     int comparar;
@@ -124,7 +124,7 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 
         //Alocar memória para raiz
         raiz = new TreeBNo(t, true);
-        raiz->chave[0] = comparacoes; //Insere chave
+        raiz->chave[0] = k; //Insere chave
         raiz->n = 1; //Atualizar número de chaves na raiz
     }
 
@@ -145,11 +145,11 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 
             //A nova raiz tem dois filhos e decidir qual das duas folhas terá uma nova chave
             int i = 0;
-            if(s->chave[0] < comparacoes){
+            if(s->chave[0] < k){
                 comparar += 1; //Atualiza a variavel
                 i++;
             }
-            s->C[i]->inserirNaoCheia(pr, comparacoes);
+            s->C[i]->inserirNaoCheia(pr, k);
 
             //Alterar raiz
             raiz = s;
@@ -157,7 +157,7 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 
         else //Se raiz não tiver cheio, chame a função inserirNaoCheia
         {
-            raiz->inserirNaoCheia(pr, comparacoes);
+            raiz->inserirNaoCheia(pr, k);
         }
     }
     end = clock(); //Finaliza o clock de contar o tempo
@@ -170,7 +170,7 @@ void TreeB::inserir(ProductReview *pr, int comparacoes)
 }
 
 //O nó não deve está cheia quando a função deve ser chamada
-void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função para inserir uma nova chave no nó
+void TreeBNo::inserirNaoCheia(ProductReview *pr, int k) //Função para inserir uma nova chave no nó
 {
     //Inicialize o índice como índice do elemento mais à direita
     int i;
@@ -181,20 +181,20 @@ void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função par
         //O loop faz duas coisas:
         //1) Encontra a localização da nova chave a ser inserida 
         //2) Moves all greater keys to one place ahead
-        while(i >= 0 && chave[i] > comparacoes){
+        while(i >= 0 && chave[i] > k){
             chave[i + 1] = chave[i];
             i--;
         }
 
         //Insira a nova chave no local encontrado
-        chave[i +  1] = comparacoes;
+        chave[i +  1] = k;
         n = n + 1; 
     }
     
     else //Se este nó não for folha 
     {
         //Encontre o filho que vai ter a nova chave
-        while (i >= 0 && chave[i] > comparacoes)
+        while (i >= 0 && chave[i] > k)
         {
             i--;
         }
@@ -206,11 +206,11 @@ void TreeBNo::inserirNaoCheia(ProductReview *pr, int comparacoes) //Função par
 
             //Após a divisão, o filho do meio de C[i] sobre C[i] é dividido em dois
             //Veja qual dos dois vai ter a nova chave
-            if(chave[i + 1] < comparacoes){
+            if(chave[i + 1] < k){
                 i++;
             }
         }
-        C[i + 1]->inserirNaoCheia(pr, comparacoes);
+        C[i + 1]->inserirNaoCheia(pr, k);
     }
 }
 
@@ -261,4 +261,8 @@ void TreeB::insere(ProductReview *pr, int comparacoes)
     //Concatena o id do usuário com o id do produto
     string concatena = pr->getUserId() + pr->getProductId();
     TreeBNo *p = new TreeBNo(concatena, 1);
+    int valor = rand() % 50;
+
+    inserir(pr, valor);
 }
+
