@@ -424,70 +424,67 @@ RegistroHash* createTable(int n)
 }
 
 string descomprime(string str, int metodo){
-    string ret;
+    string ret =  "";
     switch (metodo)
     {
-    case 2:
-    {
-        LZ77 *lz77 = new LZ77();
-        ret = lz77->descomprime(str);
-        break;
-    }
-    case 3:
-    {
-        LZW *lzw = new LZW();
-        ret = lzw->descomprime(str);  
-        break;
-    }
-        
-
-    default:
-    {
-        cout<<"Método de descompressão não encontrado"<<endl;
-        break;
-    }
+        case 2:
+        {
+            LZ77 *lz77 = new LZ77();
+            ret = lz77->descomprime(str);
+            break;
+        }
+        case 3:
+        {
+            LZW *lzw = new LZW();
+            ret = lzw->descomprime(str);  
+            break;
+        }
+        default:
+        {
+            cout<<"Método de descompressão não encontrado"<<endl;
+            break;
+        }
     }
     return ret;
 }
 
 void comprime(int metodo){
-    fstream reviewsOriginP;
+    fstream reviewsOriginP,saida;
     ofstream reviewsComprimedP;
-    string str,ret;
+    string str,ret,aux = "";
     reviewsOriginP.open("../Archives/reviewsOrig.txt", ios::in);
     reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::binary | ios::out);//apaga tudo que tem no arquivo para uma nova compressao
     if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
         while(getline(reviewsOriginP, str)){
             ret = "";
             ret = comprime(str, metodo);
+            aux += ret;
             //reviewsComprimedP.write(reinterpret_cast<const char*>(ret.c_str()), ret.size());
-            reviewsComprimedP.write((ret.c_str()), ret.size());;
+            reviewsComprimedP.write((ret.c_str()), ret.size());
         }
+    }
+    saida.open("../Archives/saida.txt", ios::out | ios::app);
+    if(saida.is_open()){
+        saida.write((str.c_str()), str.size());
+        saida.write((aux.c_str()), aux.size());
     }
     reviewsOriginP.close();
     reviewsComprimedP.close();
 }
 
 void descomprime(int metodo){
-    fstream reviewsComprimedP, reviewsDescomprimedP;
+    fstream reviewsComprimedP;
     string str,ret = "",comp = "";
     float sizeComp = 0, sizeDescomp = 0;
     reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::in | ios::binary);
-    reviewsDescomprimedP.open("../Archives/saida.txt", ios::app);
-    if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
+    if(reviewsComprimedP.is_open()){
         while(getline(reviewsComprimedP, str)){
             comp += str; 
             ret += descomprime(str, metodo);
             sizeComp += str.size();
         }
     }
-    sizeDescomp = ret.size();
-    reviewsDescomprimedP.write((comp.c_str()), comp.size());
-    reviewsDescomprimedP.write((ret.c_str()), ret.size());
-    ret = "Taxa de compressao: " + to_string(sizeComp/sizeDescomp*4);
-    reviewsDescomprimedP.write((ret.c_str()), ret.size());
     reviewsComprimedP.close();
-    reviewsDescomprimedP.close();
 }
 
 // Função de Métricas para a Segunda Etapa

@@ -67,9 +67,14 @@ string LZW::comprime(string str)
     }
 
     this->sizeComp = ret.size();//tamanho da mensagem comprimida
-    cout<<"Tamanho da mensagem original: "<<this->sizeOri<<endl;
-    cout<<"Tamanho da mensagem comprimida: "<<this->sizeComp<<endl;
     cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
+    string aux = "\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*4)) + "\n";
+    fstream saida;
+    saida.open("../Archives/saida.txt", ios::out | ios::app);
+    if(saida.is_open()){
+        saida.write((aux.c_str()), aux.size());
+    }
+    saida.close();
     return ret;
 }
 

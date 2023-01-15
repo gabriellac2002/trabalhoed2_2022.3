@@ -55,9 +55,14 @@ string LZ77::comprime(string str)
     this->antc = str;
     // Return the compressed output as a string
     this->sizeComp += ret.size();
-    cout<<"Tamanho da mensagem original: "<<this->sizeOri<<endl;
-    cout<<"Tamanho da mensagem comprimida: "<<this->sizeComp<<endl;
     cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
+    string compre = "\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*4)) + "\n";
+    fstream saida;
+    saida.open("../Archives/saida.txt", ios::out | ios::app);
+    if(saida.is_open()){
+        saida.write((compre.c_str()), compre.size());
+    }
+    saida.close();
     return ret;
 }
 
