@@ -455,12 +455,12 @@ void comprime(int metodo){
     ofstream reviewsComprimedP;
     string str,ret;
     reviewsOriginP.open("../Archives/reviewsOrig.txt", ios::in);
-    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::binary);
+    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::binary | ios::out);//apaga tudo que tem no arquivo para uma nova compressao
     if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
         while(getline(reviewsOriginP, str)){
             ret = "";
             ret = comprime(str, metodo);
-            reviewsComprimedP.write(reinterpret_cast<const char*>(ret.c_str()), ret.size());
+            //reviewsComprimedP.write(reinterpret_cast<const char*>(ret.c_str()), ret.size());
             reviewsComprimedP.write((ret.c_str()), ret.size());;
         }
     }
@@ -470,15 +470,22 @@ void comprime(int metodo){
 
 void descomprime(int metodo){
     fstream reviewsComprimedP, reviewsDescomprimedP;
-    string str,ret;
+    string str,ret = "",comp = "";
+    float sizeComp = 0, sizeDescomp = 0;
     reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::in | ios::binary);
-    reviewsDescomprimedP.open("../Archives/reviewsDescomp.txt", ios::out);
+    reviewsDescomprimedP.open("../Archives/saida.txt", ios::app);
     if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
         while(getline(reviewsComprimedP, str)){
-            ret = "";
-            ret = descomprime(str, metodo);
+            comp += str; 
+            ret += descomprime(str, metodo);
+            sizeComp += str.size();
         }
     }
+    sizeDescomp = ret.size();
+    reviewsDescomprimedP.write((comp.c_str()), comp.size());
+    reviewsDescomprimedP.write((ret.c_str()), ret.size());
+    ret = "Taxa de compressao: " + to_string(sizeComp/sizeDescomp*4);
+    reviewsDescomprimedP.write((ret.c_str()), ret.size());
     reviewsComprimedP.close();
     reviewsDescomprimedP.close();
 }
