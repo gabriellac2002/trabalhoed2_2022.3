@@ -55,12 +55,14 @@ string LZ77::comprime(string str)
     this->antc = str;
     // Return the compressed output as a string
     this->sizeComp += ret.size();
+    cout<<"Tamanho da mensagem original: "<<this->sizeOri<<endl;
+    cout<<"Tamanho da mensagem comprimida: "<<this->sizeComp<<endl;
+    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
     return ret;
 }
 
 string LZ77::descomprime(string str)
 {
-    cout<<str<<endl;
     string ret,aux;
     int i = 0,p,l,c;
     while(i<str.size()/2){//para cada termo da string comprimida
@@ -90,7 +92,6 @@ string LZ77::descomprime(string str)
             }
             ret += c;//adiciona o char ao final
             aux = "";
-            cout<<ret<<endl;
         }
         else{
             i++;

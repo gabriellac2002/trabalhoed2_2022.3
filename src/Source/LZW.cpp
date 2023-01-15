@@ -43,6 +43,7 @@ int LZW::existDicio(string str){//verifica se uma sequencia existe no dicionario
 
 string LZW::comprime(string str)
 {
+    this->sizeOri = str.size();//tamanho da mensagem original 
     string ret,ant,atual;
     int add;
     this->buffer = "";
@@ -64,6 +65,11 @@ string LZW::comprime(string str)
     if(this->buffer.size()>0){//caso a sequencia nao tenha sido adicionada ao dicionario
         ret = ret + "(" + to_string(existDicio(this->buffer)) + ")";
     }
+
+    this->sizeComp = ret.size();//tamanho da mensagem comprimida
+    cout<<"Tamanho da mensagem original: "<<this->sizeOri<<endl;
+    cout<<"Tamanho da mensagem comprimida: "<<this->sizeComp<<endl;
+    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
     return ret;
 }
 

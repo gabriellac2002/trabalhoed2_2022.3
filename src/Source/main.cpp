@@ -477,7 +477,6 @@ void descomprime(int metodo){
         while(getline(reviewsComprimedP, str)){
             ret = "";
             ret = descomprime(str, metodo);
-            cout<<ret<<endl;
         }
     }
     reviewsComprimedP.close();
@@ -585,24 +584,6 @@ int main(int argc, char** argv)
         cout << "This is not a valid option!" << endl;
         break;
     }
-
-    float sizeOrigin,sizeComprimed;
-    float taxaCompressao;
-    fstream reviewsOriginP,reviewsComprimedP;
-    reviewsOriginP.open("../Archives/reviewsOrig.txt", ios::in);
-    reviewsComprimedP.open("../Archives/reviewsComp.bin", ios::out | ios::binary);
-
-    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
-        reviewsOriginP.seekg(0, ios::end);
-        sizeOrigin = reviewsOriginP.tellg();
-        reviewsComprimedP.seekg(0, ios::end);
-        sizeComprimed = reviewsComprimedP.tellg();
-        cout << "Tamanho do arquivo original: " << sizeOrigin << endl;
-        cout << "Tamanho do arquivo comprimido: " << sizeComprimed << endl;
-        taxaCompressao = 1 - sizeComprimed/sizeOrigin*8;
-    }
-    
-    cout<<taxaCompressao<<endl;
 
     return 0;
 }
