@@ -9,6 +9,7 @@
 #include <array>
 #include <chrono>
 #include "string.h"
+#include <unordered_map>
 #include "../Headers/ProductReview.h"
 #include "../Headers/MergeSort.h"
 #include "../Headers/QuickSort.h"
@@ -17,15 +18,17 @@
 #include "../Headers/RegistroHash.h"
 #include "../Headers/LZ77.h"
 #include "../Headers/LZW.h"
-
+#include "../Headers/Huffman.h"
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
 
 using namespace std;
 using namespace chrono;
 
 // COMANDOS PARA RODAR O PROGRAMA:
-// g++ *.cpp -o final
-// .\final.exe .\ 
+// cd src
+// cd Source
+//  g++ *.cpp* -o final  
+//  .\final.exe ..\Archives
 
 // Função para gerar um número aleatório do intervalo entre a e b
 
@@ -45,6 +48,7 @@ void createBinary(string &path)
     int productIdSize = 10;
     int timestampSize = 10;
 
+        
     if (csvArchive.is_open())
     {
         ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
@@ -153,7 +157,7 @@ ProductReview *import(int n)
 {
     int size = 7824483;
     ifstream binaryArchive;
-    binaryArchive.open("ratings_Electronics.bin", ios::in | ios::binary);
+    binaryArchive.open("../Archivesratings_Electronics.bin", ios::in | ios::binary);
     if (!binaryArchive.is_open())
     {
         cout << "Error! Could not open binary file! (Error at import)" << endl;
@@ -381,39 +385,66 @@ RegistroHash* createTable(int n)
 
  }
 
- char* returnContent (string str)
- {
+unordered_map<char,long> createFrequenceMap(string str)
+{
+    int size = str.length();
+    unordered_map<char, long> frequenceMap;
+    for (int i = 0; i < size; i++)
+    {
+        frequenceMap[str[i]]++;
+    }       
+
+    return frequenceMap;
+}
+
+Huffman* instantiateHuffman(unordered_map<char, long> frequenceMap, long* frequence, char* content, long n, int* comparisons)
+{
+    Huffman* huffman = new Huffman(10000, n);
     
- }
 
- long* returnFrequence (string str)
- {
+    for (int i = 0; i < n; i++)
+    {
+        content[i] = frequenceMap.begin()->first;
+        frequence[i] = frequenceMap.begin()->second;
+        frequenceMap.erase(frequenceMap.begin());
+    }
+    
+    huffman->buildHuffmanTree(content, frequence, comparisons);
+    int array[1000];
+    huffman->storeCodes(huffman->getRoot(), array, 0);
 
- }
+    return huffman;
+}
 
  // Funções de Compresssão
 
- string comprime(string str, int metodo)
- {
-    //
- }
+//  string comprime(string str, int metodo)
+//  {
+//     //
+//  }
 
- string descomprime(string str, int metodo)
- {
-    //
- }
+//  string descomprime(string str, int metodo)
+//  {
+//     //
+//  }
 
-void comprime(int metodo) 
-{
-    //
-}
+// void comprime(int metodo) 
+// {
+//     //
+// }
 
-void descomprime(int metodo) 
-{
-    //
-}
+// void descomprime(int metodo) 
+// {
+//     //
+// }
 
 // Função de Métricas para a Segunda Etapa
+
+// void compressiosMetricsFunction(string pathToFolder, int methodId)
+// {
+//     ifstream inputArchive(pathToFolder + "input.txt");
+//     ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
+// }
 
  // Funções de Chamada
 
@@ -462,96 +493,96 @@ void doHashing(string pathToFolder)
 
 }
 
-string comprime(string str, int metodo){
+// string comprime(string str, int metodo){
 
-    string ret;
-    switch (metodo)
-    {
-    case 1:
-        break;
+//     string ret;
+//     switch (metodo)
+//     {
+//     case 1:
+//         break;
 
-    case 2:
-        LZ77 *lz77 = new LZ77();
-        ret = lz77->comprime(str);
-        break;
+//     case 2:
+//         LZ77 *lz77 = new LZ77();
+//         ret = lz77->comprime(str);
+//         break;
 
-    case 3:
-        LZW *lzw = new LZW();
-        ret = lzw->comprime(str);    
-    default:
-        break;
-    }
+//     case 3:
+//         LZW *lzw = new LZW();
+//         ret = lzw->comprime(str);    
+//     default:
+//         break;
+//     }
 
-    return ret;
-}
+//     return ret;
+// }
 
-string descomprime(string str, int metodo){
-    string ret;
-    switch (metodo)
-    {
-    case 1:
-        break;
+// string descomprime(string str, int metodo){
+//     string ret;
+//     switch (metodo)
+//     {
+//     case 1:
+//         break;
 
-    case 2:
-        LZ77 *lz77 = new LZ77();
-        ret = lz77->descomprime(str);
-        break;
+//     case 2:
+//         LZ77 *lz77 = new LZ77();
+//         ret = lz77->descomprime(str);
+//         break;
 
-    case 3:
-        LZW *lzw = new LZW();
-        ret = lzw->descomprime(str);    
-    default:
-        break;
-    }
+//     case 3:
+//         LZW *lzw = new LZW();
+//         ret = lzw->descomprime(str);    
+//     default:
+//         break;
+//     }
 
-    return ret;
-}
+//     return ret;
+// }
 
-void comprime(int metodo){
-    fstream reviewsOriginP, reviewsComprimedP;
-    string str,ret;
-    reviewsOriginP.open("reviewsOrig.txt", ios::in);
-    reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
-    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
-        while(getline(reviewsOriginP, str)){
-            ret = "";
-            ret = comprime(str, metodo);
-            reviewsComprimedP.write(ret.c_str(), ret.size());
-        }
-    }
-    reviewsOriginP.close();
-    reviewsComprimedP.close();
-}
+// void comprime(int metodo){
+//     fstream reviewsOriginP, reviewsComprimedP;
+//     string str,ret;
+//     reviewsOriginP.open("reviewsOrig.txt", ios::in);
+//     reviewsComprimedP.open("reviewsComp.bin", ios::out | ios::binary);
+//     if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
+//         while(getline(reviewsOriginP, str)){
+//             ret = "";
+//             ret = comprime(str, metodo);
+//             reviewsComprimedP.write(ret.c_str(), ret.size());
+//         }
+//     }
+//     reviewsOriginP.close();
+//     reviewsComprimedP.close();
+// }
 
-void descomprime(int metodo){
-    fstream reviewsComprimedP, reviewsDescomprimedP;
-    string str,ret;
-    reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
-    reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
-    if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
-        while(getline(reviewsComprimedP, str)){
-            ret = "";
-            ret = descomprime(str, metodo);
-            reviewsDescomprimedP.write(ret.c_str(), ret.size());
-        }
-    }
-    reviewsComprimedP.close();
-    reviewsDescomprimedP.close();
-}
+// void descomprime(int metodo){
+//     fstream reviewsComprimedP, reviewsDescomprimedP;
+//     string str,ret;
+//     reviewsComprimedP.open("reviewsComp.bin", ios::in | ios::binary);
+//     reviewsDescomprimedP.open("reviewsDescomp.txt", ios::out);
+//     if(reviewsComprimedP.is_open() && reviewsDescomprimedP.is_open()){
+//         while(getline(reviewsComprimedP, str)){
+//             ret = "";
+//             ret = descomprime(str, metodo);
+//             reviewsDescomprimedP.write(ret.c_str(), ret.size());
+//         }
+//     }
+//     reviewsComprimedP.close();
+//     reviewsDescomprimedP.close();
+// }
 
 int main(int argc, char** argv)
 {
     srand(time(NULL));
     
-    // if(argc < 2)
-    // {
-    //     return 0;
-    // }
+    if(argc < 2)
+    {
+        return 0;
+    }
 
     string path_teste(argv[1]);
 
     cout << "Converting cvs file to binary..." << endl;
-    createBinary(path_teste);
+    // createBinary(path_teste);
     cout << "Binary file ready!" << endl;
 
     cout << "_____________________________________________" << endl;
@@ -571,6 +602,35 @@ int main(int argc, char** argv)
     case 2:
         doHashing(path_teste);
         break;
+    case 3:
+    {
+        int comparisons;
+        int n;
+        cout << "Quantos registros você deseja concatenar?" << endl;
+        cin >> n;
+        ProductReview* productReviews = import(n);
+
+        string str = concatRegisters(productReviews, n);
+
+        unordered_map<char, long> frequenceMap = createFrequenceMap(str);
+
+        int relevantes = frequenceMap.size();
+        long* frequence = new long[relevantes];
+        char* content = new char[relevantes];
+
+        Huffman* huffman = instantiateHuffman(frequenceMap, frequence, content, relevantes, &comparisons);
+        huffman->setOriginalSize(str.size());
+
+        bool* compressionArray = huffman->huffmanCompression(content, frequence, str, relevantes);
+        
+        char* decoded = huffman->decompress(compressionArray);
+
+        float compressionRate = 1 - huffman->getCompressionSize() / (huffman->getOriginalSize() * 8);
+
+        cout << "Taxa de Compressão: " << compressionRate << endl;
+        
+        break;
+    }
     default:
         cout << "This is not a valid option!" << endl;
         break;
