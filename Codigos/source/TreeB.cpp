@@ -76,16 +76,17 @@ TreeBNo *TreeBNo::buscar(string k)
     //Iniciando o clock para contar o tempo
     start = clock();
     //Encontre a primeira chave maior ou igual a k
-    int i;
-    i = 0;
-
-    while(i < n && k > chave[i]){
-        comparar += 1;
-        i++;
+    int i, j;
+    i = j = 0;
+    for(i = 0; i < n; i++){
+        if(i < n && k[j] > chave[i]){
+            comparar += 1;
+            break;
+        }
     }
 
     //Se a chave encontrada for igual a k e retorne esse nó
-    if(chave[i] == k){
+    if(chave[i] == k[j]){
         comparar += 1;
         return this;
     }

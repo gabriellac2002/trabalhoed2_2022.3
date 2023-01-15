@@ -31,7 +31,7 @@ class TreeB
         { if(raiz != NULL) raiz->percorrer(); }
 
         //Função para buscar chave na árvore
-        TreeBNo *buscar(int k)
+        TreeBNo *buscar(string k)
         {return (raiz == NULL)? NULL : raiz->buscar(id); }
 
         // A função main que insere uma nova chave

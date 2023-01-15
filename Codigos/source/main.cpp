@@ -438,68 +438,6 @@ RegistroHash* createTable(int n)
     return registro;
 }
 
-void testaArvoreB(string str)
-{
-
-    unsigned int N = 1000000;
-    int B = 100;
-    string reviewId;
-
-    TreeB *arvB = new TreeB(N);
-
-    // Encontra reviews aleatórias e dá push:
-    for (int i = 0; i < N; i++)
-    {
-        int posicao = rand() % LINES_CSV;
-        //reviewId = str[posicao].getReviewId();
-        arvB->inserir(posicao);
-    }
-    arvB->percorrer();
-
-    int x;
-
-    cout << "Digite 1 para procurar na arvore " << endl;
-    cout << "Outro para sair " << endl;
-
-    cin >> x;
-
-    switch (x)
-    {
-    case 1:
-        int procurar;
-        cout << "Digite um numero de 0 a 100 para procurar na arvore => ";
-        cin >> procurar;
-
-        (arvB->buscar(procurar) != NULL) ? cout << "Esta na arvore!" : cout << "Ausente" << endl;
-        break;
-    }
-}
-
-
-void testeArvores(string str)
-{
-    cout << "Escolha uma Arvore para montar " << endl;
-    cout << "Digite 1 para Arvore Rubro Negra" << endl;
-    cout << "Digite 2 para Arvore B" << endl;
-    cout << "Digite outro para sair" << endl;
-
-    int numeroEscolhido;
-
-    cin >> numeroEscolhido;
-
-    switch(numeroEscolhido)
-    {
-        case 1:
-            //testaArvoreRubroNegra();
-            break;
-        case 2:
-            //testaArvoreB(str);
-            break;
-        default:
-            break;
-    }
-}
-
 int main(int argc, char** argv)
 {
     string path_teste(argv[1]);
