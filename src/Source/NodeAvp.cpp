@@ -24,6 +24,11 @@ NodeAvp::~NodeAvp() //destrutor
 }
 
 //setters
+void NodeAvp::setColor(int color)
+{
+    this->color = color;
+}
+
 
 void NodeAvp::setId(string id)
 {
@@ -54,30 +59,30 @@ void NodeAvp::setEndMemory(int endMemory)
 
 string NodeAvp::getId()
 {
-    return this->id;  
+    return id;  
 }
 
 NodeAvp *NodeAvp::getParent()
 {
-    return this->parent;
+    return parent;
 }
 
 NodeAvp *NodeAvp::getLeft() //esquerda
 {
-    return this->left;
+    return left;
 }
 
 NodeAvp *NodeAvp::getRigth() //direita
 {
-    return this->right;
+    return right;
 }
 
 int NodeAvp::getColor()
 {
-    return this->color;
+    return color;
 }
 
 int NodeAvp::getEndMemory()
 {
-    return this->endMemory;
+    return endMemory;
 }

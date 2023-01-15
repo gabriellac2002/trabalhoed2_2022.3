@@ -120,7 +120,6 @@ ProductReview returnRegister(ifstream *file, int i)
     int timestampSize = 10;
 
     file->seekg(i * PRODUCT_REVIEW_SIZE);
-    int pos = file->tellp();
     ProductReview *productReview = new ProductReview();
 
     char *userId = new char[userIdSize];
@@ -135,13 +134,13 @@ ProductReview returnRegister(ifstream *file, int i)
     file->read(reinterpret_cast<char *>(productId), productIdSize);
     file->read(reinterpret_cast<char *>(&rating), sizeof(float));
     file->read(reinterpret_cast<char *>(timestamp), timestampSize);
-    file->read(reinterpret_cast<char *>(&pos), sizeof(int));
+    
 
     productReview->setUserId(userId);
     productReview->setProductId(productId);
     productReview->setRating(rating);
     productReview->setTimestamp(timestamp);
-    productReview->setPos(pos);
+   
 
     delete[] userId;
     delete[] productId;
@@ -150,42 +149,7 @@ ProductReview returnRegister(ifstream *file, int i)
     return *productReview;
 }
 
-ProductReview returnarRegistroAvp(ifstream *file,int endMemory)
-{
-    int userIdSize = 21;
-    int productIdSize = 10;
-    int timestampSize = 10;
 
-    file->seekg(endMemory);
-    int pos = file->tellp();
-    ProductReview *productReview = new ProductReview();
-
-    char *userId = new char[userIdSize];
-    userId[21] = '\0';
-    char *productId = new char[productIdSize];
-    productId[10] = '\0';
-    char *timestamp = new char[timestampSize];
-    timestamp[10] = '\0';
-    float rating;
-
-    file->read(reinterpret_cast<char *>(userId), userIdSize);
-    file->read(reinterpret_cast<char *>(productId), productIdSize);
-    file->read(reinterpret_cast<char *>(&rating), sizeof(float));
-    file->read(reinterpret_cast<char *>(timestamp), timestampSize);
-    file->read(reinterpret_cast<char *>(&pos), sizeof(int));
-
-    productReview->setUserId(userId);
-    productReview->setProductId(productId);
-    productReview->setRating(rating);
-    productReview->setTimestamp(timestamp);
-    productReview->setPos(pos);
-
-    delete[] userId;
-    delete[] productId;
-    delete[] timestamp;
-
-    return *productReview;
-}
 
 
 ProductReview *import(int n)
@@ -485,8 +449,8 @@ void doHashing(string pathToFolder)
         {
             string u("STR");
             u += 'a'+rand()%('z'-'a');
-            vet[i].userId = u; // ou essa linha ou a de baixo pode ser usada, dependendo de como foi implementado (a de baixo é preferencial)
-            //vet[i].setUserId(u);
+            // vet[i].userId = u; // ou essa linha ou a de baixo pode ser usada, dependendo de como foi implementado (a de baixo é preferencial)
+            vet[i].setUserId(u);
         }
 
         return vet;
@@ -520,83 +484,82 @@ void doHashing(string pathToFolder)
 
 int main(int argc, char *argv[])
 {
-    if(argc > 1)
-    {
-        // OBS.: TODOS OS ARQUIVOS USADOS NO PROGRAMA (TANTO DE ENTRADA QUANTO DE SAÍDA) DEVEM ESTAR LOCALIZADOS NO DIRETÓRIO FORNECIDO
-        // PELO USUÁRIO COMO ARGUMENTO DA LINHA DE COMANDO
-        std::string path(argv[1]);
-        createBinary(path);
+    // if(argc > 1)
+    // {
+    //     // OBS.: TODOS OS ARQUIVOS USADOS NO PROGRAMA (TANTO DE ENTRADA QUANTO DE SAÍDA) DEVEM ESTAR LOCALIZADOS NO DIRETÓRIO FORNECIDO
+    //     // PELO USUÁRIO COMO ARGUMENTO DA LINHA DE COMANDO
+    //     std::string path(argv[1]);
+    //     createBinary(path);
 
-        int registerIdx;
-        cout << "Digite um indice de registro (-1 para sair): ";
-        cin >> registerIdx;
-        while (registerIdx != -1)
-        {
-            getReview(registerIdx);
-            cout << "Digite outro indice de registro (-1 para sair): ";
-            cin >> registerIdx;
-        }
+    //     int registerIdx;
+    //     cout << "Digite um indice de registro (-1 para sair): ";
+    //     cin >> registerIdx;
+    //     while (registerIdx != -1)
+    //     {
+    //         getReview(registerIdx);
+    //         cout << "Digite outro indice de registro (-1 para sair): ";
+    //         cin >> registerIdx;
+    //     }
 
-        ProductReview *vet = 0;
-        ArvoreVP *arv_vp = 0;
-        ArvoreB *arv_b = 0;
-        int option, n;
-        do
-        {
-            cout << "[1] Vetor de teste" << endl 
-                << "[2] Importar registros" << endl
-                << "[3] Arvore vermelho-preto" << endl
-                // << "[4] Arvore B" << endl
-                // << "[5] Huffman" << endl
-                // << "[6] LZ77" << endl
-                // << "[7] LZW" << endl
-                << "[0] Sair" << endl;
+    //     ProductReview *vet = 0;
+    //     ArvoreVP *arv_vp = 0;
+    //     int option, n;
+    //     do
+    //     {
+    //         cout << "[1] Vetor de teste" << endl 
+    //             << "[2] Importar registros" << endl
+    //             << "[3] Arvore vermelho-preto" << endl
+    //             // << "[4] Arvore B" << endl
+    //             // << "[5] Huffman" << endl
+    //             // << "[6] LZ77" << endl
+    //             // << "[7] LZW" << endl
+    //             << "[0] Sair" << endl;
 
-            cout << "Digite uma opcao de menu: ";
-            cin >> option;
-            switch (option)
-            {
-                case 1:
-                    n = 10;
-                    delete [] vet;
-                    vet = randomTest(n);
-                    printPrompt(vet, n);
-                    break;
-                case 2:
-                    cout << "Quantos registros deseja importar? ";
-                    cin >> n;
-                    delete [] vet;
-                    vet = import(n);
-                    printPrompt(vet, n);
-                    break;
-                case 3:
-                    delete arv_vp;
-                    arv_vp = new ArvoreVP();
-                    treeTest(arv_vp, vet, n);
-                    break;
-                // case 4:
-                //     delete arv_b;
-                //     arv_b = new ArvoreB();
-                //     treeTest(arv_b, vet, n);
-                //     break;
-                // case 5:
-                //     compressTest(0);
-                //     break;
-                // case 6:
-                //     compressTest(1);
-                //     break;
-                // case 7:
-                //     compressTest(2);
-                //     break;
-                default:
-                    break;
-            }
-        } while(option != 0);
+    //         cout << "Digite uma opcao de menu: ";
+    //         cin >> option;
+    //         switch (option)
+    //         {
+    //             case 1:
+    //                 n = 10;
+    //                 delete [] vet;
+    //                 vet = randomTest(n);
+    //                 printPrompt(vet, n);
+    //                 break;
+    //             case 2:
+    //                 cout << "Quantos registros deseja importar? ";
+    //                 cin >> n;
+    //                 delete [] vet;
+    //                 vet = import(n);
+    //                 printPrompt(vet, n);
+    //                 break;
+    //             case 3:
+    //                 delete arv_vp;
+    //                 arv_vp = new ArvoreVP();
+    //                 treeTest(arv_vp, vet, n);
+    //                 break;
+    //             // case 4:
+    //             //     delete arv_b;
+    //             //     arv_b = new ArvoreB();
+    //             //     treeTest(arv_b, vet, n);
+    //             //     break;
+    //             // case 5:
+    //             //     compressTest(0);
+    //             //     break;
+    //             // case 6:
+    //             //     compressTest(1);
+    //             //     break;
+    //             // case 7:
+    //             //     compressTest(2);
+    //             //     break;
+    //             default:
+    //                 break;
+    //         }
+    //     } while(option != 0);
 
-        delete [] vet;
-        delete arv_vp;
-        // delete arv_b;
-    }
+    //     delete [] vet;
+    //     delete arv_vp;
+    //     // delete arv_b;
+    // }
 
-    return 0;
+    // return 0;
 }

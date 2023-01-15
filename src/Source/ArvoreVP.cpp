@@ -5,8 +5,9 @@
 #include "string.h"
 
 #include "../Headers/NodeAvp.h"
-#include "./NodeAvp.cpp"
 #include "../Headers/ArvoreVP.h"
+
+
 
 using namespace std;
 
@@ -25,25 +26,24 @@ ArvoreVP::~ArvoreVP()
 //getters and setters
 void ArvoreVP::setRaiz(NodeAvp* raiz)
 {
-    this->raiz = raiz
+    this->raiz = raiz;
 }
 
-NodeAvp ArvoreVP::getRaiz()
+NodeAvp* ArvoreVP::getRaiz()
 {
     return this->raiz;
 }
 
-NodeAvp ArvoreVP::libera(NodeAvp* node)
+NodeAvp* ArvoreVP::libera(NodeAvp* node)
 {
     if(node != NULL)
     {
-        node->getLeft(libera(node->getLeft()));
-        node->getRigth(libera(node->getRigth()));
-        delete node;
-        node = NULL:
+        node->setLeft(libera(node->getLeft()));
+        node->setRigth(libera(node->getRigth()));
+        node = NULL;
     }
 
-    return NULL; 
+    return node; 
 }
 
 // função de rotação a esquerda
@@ -91,7 +91,7 @@ void ArvoreVP::rotateRight(NodeAvp* node)
 void ArvoreVP::insere(ProductReview *pr, int* comparacoes)
 {
     string concatenacao = pr->getUserId() + pr->getProductId(); // concatena o userId com o productId
-    NodeAvp* p = new NodeAvp(concatenacao,pr->getPos()); //manda concatenacao como id e a posicao do productReview
+    NodeAvp* p = new NodeAvp(concatenacao, 1); //manda concatenacao como id e a posicao do productReview
 
     //inserção usando busca binaria
     NodeAvp* raiz = insereAux(getRaiz(), p, comparacoes);
@@ -111,7 +111,7 @@ NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
     {
         //Caso contrario, faz uma busca binaria recursiva pela arvore para inserir o No no lugar certo
         //caso a raiz seja maior
-        if(compararId(raiz->getId(),no->getId()))
+        if(raiz->getId() > no->getId())
         {
             (*comparacoes)++;
             raiz->setLeft(insereAux(raiz->getLeft(), no, comparacoes));
@@ -222,10 +222,13 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
 
 void ArvoreVP::print()
 {
-    if(this->raiz == null)
+    if(this->raiz == NULL)
         cout << "Arvore vazia!" << endl;
-    else
-        printAux(this->raiz);
+    else{
+        NodeAvp* p = this->raiz;
+        printAux(p);
+    }
+        
 }
 
 void ArvoreVP::printAux(NodeAvp* p)
@@ -240,13 +243,14 @@ void ArvoreVP::printAux(NodeAvp* p)
 ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes)
 {
     string id = userId + productId; //concatena as strings para buscar o id
-    if(this->raiz != NULL) //se raiz for diferente de null
+    NodeAvp* raizAux = this->raiz;
+    if(raizAux != NULL) //se raiz for diferente de null
     {
-        NodeAvp* no = buscarAux(raiz, id, comparacoes); //no recebe o nó com o id compativel
+        NodeAvp* no = buscaAux(raizAux, id, comparacoes); //no recebe o no com o id compativel
         if(no != NULL) //se no for diferenre de null
         {
             int pos = no->getEndMemory(); //pos recebe a posicao no binario
-            return returnRegister(,pos);
+            // return returnRegister(,pos);
         }
         else
         {
@@ -258,17 +262,17 @@ ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes
 }
 
 //faz uma busca binaria
-NodeAvp* ArvoreVP::buscaAux(NodeAvp * no, string id, int* comparacoes)
+NodeAvp* ArvoreVP::buscaAux(NodeAvp * node, string id, int* comparacoes)
 {
     //caso o no seja nulo ou com o valor compativel
-    if(node == NULL || idIgual(no->getId(), id))
+    if(node == NULL || node->getId() == id)
     {
         (*comparacoes)++;
         return node;
     }
 
     //caso o id seja maior que o atual
-    if( !compararId(id, no->getId()))
+    if( id > node->getId())
     {
         (*comparacoes)++;
         return buscaAux(node->getRigth(), id, comparacoes);
@@ -281,15 +285,3 @@ NodeAvp* ArvoreVP::buscaAux(NodeAvp * no, string id, int* comparacoes)
     }
 }
 
-bool ArvoreVP::compararId(char* id1, char* id2)
-{
-    int i = 0;
-    for(i = 0; id1[i] != '\0' && id1[i] == id2[i]; i++);
-    return id1[i] > id2[i];
-}
-
-bool ArvoreVP::idIgual(char* id1, char* id2){
-    int i = 0;
-    for(i = 0; id1[i] != '\0' && id1[i] == id2[i]; i++);
-    return id1[i] == id2[i];
-}
