@@ -10,16 +10,19 @@
 
 using namespace std;
 
+//construtor
 ArvoreVP::ArvoreVP()
 {
     this->raiz = NULL;
 }
 
+//destrutor
 ArvoreVP::~ArvoreVP()
 {
     this->raiz = libera(raiz);
 }
 
+//getters and setters
 void ArvoreVP::setRaiz(NodeAvp* raiz)
 {
     this->raiz = raiz
@@ -43,55 +46,56 @@ NodeAvp ArvoreVP::libera(NodeAvp* node)
     return NULL; 
 }
 
-// this function performs left rotation
+// função de rotação a esquerda
 void ArvoreVP::rotateLeft(NodeAvp* node)
 {
-    NodeAvp* p_rigth = node->getRigth();
-    node->setRigth(p_rigth->getLeft());
+    NodeAvp* p_rigth = node->getRigth(); //pega o nó a direita do nó passado e armazena em p_rigth
+    node->setRigth(p_rigth->getLeft()); // pega o nó a direita e setta ele como o nó a esquerda de p_rigth
 
-    if(node->getRigth() != NULL)
-        node->getRigth()->setParent(node);
-    p_rigth->setParent(node->getParent());
+    if(node->getRigth() != NULL) //se o nó a direita do node for diferente de null
+        node->getRigth()->setParent(node); //o nó a direita do node recebe o node como pai
+    p_rigth->setParent(node->getParent()); //p_rigth recebe o mesmo pai de node como pai
 
-    if(node->getParent() == NULL)
-        raiz = p_rigth;
-    else if( node == node->getParent()->getLeft())
-        node->getParent()->setLeft(p_rigth);
+    if(node->getParent() == NULL) //se o pai do node for null
+        raiz = p_rigth; //raiz recebe p_rigth
+    else if( node == node->getParent()->getLeft()) // se node for igual ao no a esquerda do pai de node
+        node->getParent()->setLeft(p_rigth); // o nó a esquerda do pai do node recebe p_rigth
     else
-        node->getParent()->setRigth(p_rigth);
+        node->getParent()->setRigth(p_rigth); //o nó a direita do pai de node recebe p_rigth
     
-    p_rigth->setLeft(node);
-    node->setParent(p_rigth);
+    p_rigth->setLeft(node); //p_rigth recebe node como o no a esquerda
+    node->setParent(p_rigth); //node recebe p_rigth como pai
 }
 
+//funçãp de rotscionar a direita
 void ArvoreVP::rotateRight(NodeAvp* node)
 {
-    NodeAvp* p_left = node->getLeft();
-    node->setLeft(p_left->getRigth());
+    NodeAvp* p_left = node->getLeft(); //p_left recebe o nó a esquerda do node
+    node->setLeft(p_left->getRigth()); //o nó a esquerda do node recebe o nó direito do p_left
 
-    if(node->getLeft() != NULL)
-        node->getLeft()->setParent(node);
-    p_left->setParent(node->getParent());
+    if(node->getLeft() != NULL) //se o nó a esquerda for diferente de null
+        node->getLeft()->setParent(node); //o nó a esquerda do node recebe node como pai
+    p_left->setParent(node->getParent()); //p_left recebe o mesmo pai de node
 
-    if(node->getParent() == NULL)
-        raiz = p_left;
-    else if(node == node->getParent()->getLeft())
-        node->getParent()->setLeft(p_left);
+    if(node->getParent() == NULL) // se o pai de node for nulo
+        raiz = p_left; //raiz recebe p_left
+    else if(node == node->getParent()->getLeft()) // se node for igual ao nó a esquerda do pai de node
+        node->getParent()->setLeft(p_left); //o pai de node recebe p_left como nó direito
     else
-        node->getParent()->setRigth(p_left);
+        node->getParent()->setRigth(p_left); // o pai de node recebe p_left como nó esquerdo
     
-    p_left->setRigth(node);
-    node->setParent(p_left);
+    p_left->setRigth(node); //node vira o nó direito de p_left
+    node->setParent(p_left); //o pai de node vira p_left
 }
 
 void ArvoreVP::insere(ProductReview *pr, int* comparacoes)
 {
-    string concatenacao = pr->getUserId() + pr->getProductId();
-    NodeAvp* p = new NodeAvp(concatenacao,pr->getPos());
+    string concatenacao = pr->getUserId() + pr->getProductId(); // concatena o userId com o productId
+    NodeAvp* p = new NodeAvp(concatenacao,pr->getPos()); //manda concatenacao como id e a posicao do productReview
 
     //inserção usando busca binaria
     NodeAvp* raiz = insereAux(getRaiz(), p, comparacoes);
-    repair(raiz); // conserta os erros
+    repair(raiz,p); // conserta os erros
     
 }
 
@@ -100,8 +104,8 @@ NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
     //caso a arvore esteja vazia
     if(raiz == NULL)
     {
-       (*comparacoes)++;
-       return raiz;
+       (*comparacoes)++; // compara uma vez
+       return raiz; //retorna raiz
     }
     else
     {
@@ -115,6 +119,7 @@ NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
         }
         else
         {
+            //caso a raiz seja menor
             (*comparacoes)++;
             raiz->setRigth(insereAux(raiz->getRigth(), no, comparacoes));
             raiz->getRigth()->setParent(raiz);
@@ -129,14 +134,14 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
     //node1 -> raiz local
     //node2 -> no inserido/no local
 
-    NodeAvp* pai = NULL;
-    NodeAvp* avo = NULL;
+    NodeAvp* pai = NULL; //cria o pai auxiliar
+    NodeAvp* avo = NULL; // criz o avo auxilar
 
     //enquanto node2 for diferente de node1,node2 for diferente de preto e o pai de node2 for vermelho
     while((node2 !=  node1) && (node2->getColor() != 0) && (node2->getParent()->getColor() == 1))
     {
-        pai = node2->getParent();
-        avo = node2->getParent()->getParent();
+        pai = node2->getParent(); //pai vira o pai de node2
+        avo = node2->getParent()->getParent(); //avo vira pai do pai de node2
 
         //Caso : 1
         //pai do no conflitante está a esquerda do avo de pai
@@ -144,7 +149,7 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
         {
             NodeAvp* tio = avo->getRigth();
 
-            //o avo é vermelho
+            //se tio for diferente de null e for vermelho 
             if(tio != NULL && tio->getColor() == 1)
             {
                 avo->setColor(1); // avo vira vermelho
@@ -234,23 +239,25 @@ void ArvoreVP::printAux(NodeAvp* p)
 
 ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes)
 {
-    string id = userId + productId;
-    if(this->raiz != NULL)
+    string id = userId + productId; //concatena as strings para buscar o id
+    if(this->raiz != NULL) //se raiz for diferente de null
     {
-        NodeAvp* no = buscarAux(raiz, id, comparacoes);
-        if(node != NULL)
+        NodeAvp* no = buscarAux(raiz, id, comparacoes); //no recebe o nó com o id compativel
+        if(no != NULL) //se no for diferenre de null
         {
-            int pos = no->getEndMemory();
+            int pos = no->getEndMemory(); //pos recebe a posicao no binario
             return returnRegister(,pos);
         }
         else
         {
+            //caso não seja encontrado
             cout << " == ID NÃO ENCONTRADO ==" << endl;
             return NULL;
         }
     }
 }
 
+//faz uma busca binaria
 NodeAvp* ArvoreVP::buscaAux(NodeAvp * no, string id, int* comparacoes)
 {
     //caso o no seja nulo ou com o valor compativel

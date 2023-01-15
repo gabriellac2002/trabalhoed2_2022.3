@@ -23,6 +23,8 @@ NodeAvp::~NodeAvp() //destrutor
 
 }
 
+//setters
+
 void NodeAvp::setId(string id)
 {
     this->id = id;
@@ -47,6 +49,8 @@ void NodeAvp::setEndMemory(int endMemory)
 {
     this->endMemory = endMemory;
 }
+
+//getters
 
 string NodeAvp::getId()
 {
