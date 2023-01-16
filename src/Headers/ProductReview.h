@@ -22,10 +22,6 @@ class ProductReview
         string getUserId();
         float getRating();
         string getTimestamp();
-<<<<<<< HEAD
-
-=======
->>>>>>> 984c9bb905fa6e9da99b8fa9e8848412af618966
 
 };
 
