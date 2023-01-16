@@ -22,7 +22,7 @@ class LZ77
 
     public:
     LZ77();
-    string comprime(string str);
+    string comprime(string str,string path);
     void setOri(int size);
     void setComp(int size);
     string descomprime(string str);

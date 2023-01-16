@@ -23,7 +23,7 @@ class LZW
     LZW();
     int existDicio(string str);
     void adicionaDicio(string str);
-    string comprime(string str);
+    string comprime(string str,string path);
     string descomprime(string str);
 };
 

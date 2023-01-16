@@ -2,6 +2,10 @@
 #define Huffman_H_INCLUDED
 
 #include "NodeHuffman.h"
+#include "string.h"
+
+using namespace std;
+
 
 class Huffman {
     private:
@@ -11,13 +15,15 @@ class Huffman {
         NodeHuffman* root;
         bool** codeTable;
         int sizeTable[256];
-        double compressionSize;
-        double originalSize;
+        long compressionSize;
+        long originalSize;
 
     public:
         Huffman(long capacity, long size);
 
         virtual ~Huffman();
+
+        NodeHuffman* getRoot();
 
         long getSize();
         void setSize(long size);
@@ -40,7 +46,7 @@ class Huffman {
 
         void createBuildMinHeap(char *content, long *frequence, int* comparisons);
 
-        void printArray(int *array, int n);
+        void printArray();
 
         void huffmanCodes(char *content, long *frequence, int* comparisons);
 
@@ -56,17 +62,16 @@ class Huffman {
 
         void calculateSize(char* content, long* frequence, long total);
 
-        bool* huffmanCompression(char *content, long *frequence, char *uncompressed, long total);
+        bool* huffmanCompression(char *content, long *frequence, string uncompressed, long total,string path);
         char* decompress(bool *compression);
 
-        double getCompressionSize();
-        void setCompressionSize(double compressionSize);
+        long getCompressionSize();
+        void setCompressionSize(long compressionSize);
 
-        double getOriginalSize();
-        void setOriginalSize(double originalSize);
+        long getOriginalSize();
+        void setOriginalSize(long originalSize);
 
 };
 
 
 #endif //Huffman_H_INCLUDED
-
