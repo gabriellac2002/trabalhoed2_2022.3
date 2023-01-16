@@ -2,6 +2,9 @@
 #include <fstream>
 #include <math.h>
 #include <chrono>
+#include <unordered_map>
+#include "string.h"
+
 
 #include "../Headers/NodeHuffman.h"
 #include "../Headers/Huffman.h"
@@ -19,6 +22,11 @@ Huffman::Huffman(long capacity, long size)
     this->codeTable = new bool*[256];
     this->compressionSize = 0;
     this->originalSize = 0;
+
+    for(int i = 0; i < 256; i++)
+    {
+        this->sizeTable[i] = 0;
+    }
 }
 
 // Destrutor
@@ -37,6 +45,11 @@ Huffman::~Huffman()
 }
 
 // Getters e Setters
+
+NodeHuffman* Huffman::getRoot()
+{
+    return this->root;
+}
 
 long Huffman::getSize() 
 {
@@ -58,22 +71,22 @@ void Huffman::setCapacity(long capacity)
     Huffman::capacity = capacity;
 }
 
-double Huffman::getCompressionSize()
+long Huffman::getCompressionSize()
 {
     return this->compressionSize;
 }
 
-void Huffman::setCompressionSize(double compressionSize)
+void Huffman::setCompressionSize(long compressionSize)
 {
     this->compressionSize = compressionSize;
 }
 
-double Huffman::getOriginalSize()
+long Huffman::getOriginalSize()
 {
     return this->originalSize;
 }
 
-void Huffman::setOriginalSize(double originalSize)
+void Huffman::setOriginalSize(long originalSize)
 {
     this->originalSize = originalSize;
 }
@@ -170,7 +183,6 @@ NodeHuffman* Huffman::buildHuffmanTree(char *content, long *frequence, int* comp
 {
     NodeHuffman *left, *right, *top;
     createBuildMinHeap(content, frequence, comparisons);
-
     while (!isSizeOne()) 
     {
         left = extractMin(comparisons);
@@ -187,18 +199,33 @@ NodeHuffman* Huffman::buildHuffmanTree(char *content, long *frequence, int* comp
     root = extractMin(comparisons);
 }
 
-void Huffman::printArray(int *array, int n)
+void Huffman::printArray()
 {
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < 255; ++i)
     {
-        cout << array[i];
+        if(this->sizeTable[i] > 0)
+        {
+            cout << (char) i << ": ";
+            for(int j = 0; j < this->sizeTable[i]; j++)
+            {
+                cout << this->codeTable[i][j];
+            }
+            cout << endl;
+        }
     }
-    cout << "\n";
+
+    for(int i = 0; i < this->capacity; i++)
+    {
+        cout << "c: " << this->array[i]->getContent() << endl;
+    }
+
+    cout << endl;
 }
 
 void Huffman::storeArray(int array[], int n, bool* code)
 {
-    for (int i = 0; i < n; ++i){
+    for (int i = 0; i < n; ++i)
+    {
         code[i] = array[i];
     }
 }
@@ -229,24 +256,24 @@ void Huffman::storeCodes(NodeHuffman* root, int array[], int top)
 void Huffman::calculateSize(char* content, long* frequence, long total)
 {
     this->compressionSize = 0;
-    this->originalSize = total;
-
-    for(int i = 0; i < this->size; i++)
+    for(int i = 0; i < total; i++)
     {
         int nodeValue = content[i];
         this->compressionSize += (this->sizeTable[nodeValue] * frequence[i]);
     }
 }
 
-bool* Huffman::huffmanCompression(char *content, long *frequence, char *uncompressed, long total)
+bool* Huffman::huffmanCompression(char *content, long *frequence, string uncompressed, long total,string path)
 {
     this->calculateSize(content, frequence, total);
     bool* compressionArray = new bool[(int)this->compressionSize];
     int aux = 0;
-
+    string str = "";
+    
     for(int i = 0; i < this->originalSize; i++)
     {
         int nodeValue = uncompressed[i];
+        
         for(int j = 0; j < this->sizeTable[nodeValue]; j++)
         {
             compressionArray[aux] = this->codeTable[nodeValue][j];
@@ -254,16 +281,33 @@ bool* Huffman::huffmanCompression(char *content, long *frequence, char *uncompre
         }
     }
 
+    for(int i = 0;i<sizeof(compressionArray);i++)
+    {
+        if(compressionArray[i] == 1)
+            str += "1";
+        else
+            str += "0";
+    }
+
+    float comp = 1 - (float)this->compressionSize/((float)this->originalSize*8);
+    string inp = "\n\nTaxa de compressao: " + to_string(comp) + "\n";
+    fstream saida;
+    saida.open(path + "saida.txt", ios::out | ios::app);
+    if(saida.is_open()){
+        saida.write((inp.c_str()), inp.size());
+    }
+    saida.close();
+
     return compressionArray;
 }
 
 char* Huffman::decompress(bool *compression)
 {
-    char* decoded = new char[((int) originalSize) + 1];
+    char* decoded = new char[(originalSize)];
     int aux = 0;
     NodeHuffman* node = this->root;
 
-    for (int i = 0; i < ((int)this->compressionSize); i++)
+    for (int i = 0; i <= this->compressionSize; i++)
     {
         if (node->isLeaf())
         {
@@ -279,9 +323,12 @@ char* Huffman::decompress(bool *compression)
         else{
             node = node->getLeft();
         }
-    }
 
-    decoded[((int) originalSize)] = '\0';
+        
+    }
+    cout<<decoded<<endl;
+
+    // decoded[(originalSize)] = '\0';
 
     return decoded;
 }

@@ -19,7 +19,7 @@ LZ77::LZ77()
     //o vetor de codificação é inicializado com um tamanho equivalente a menor taxa de compressao
 }
 
-string LZ77::comprime(string str)
+string LZ77::comprime(string str,string path)
 {
     this->sizeOri += str.size();
     string ret,aux;
@@ -55,10 +55,10 @@ string LZ77::comprime(string str)
     this->antc = str;
     // Return the compressed output as a string
     this->sizeComp += ret.size();
-    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
-    string compre = "\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*4)) + "\n";
+    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*8)<<endl;
+    string compre = "\n\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*8)) + "\n";
     fstream saida;
-    saida.open("../Archives/saida.txt", ios::out | ios::app);
+    saida.open(path+"saida.txt", ios::out | ios::app);
     if(saida.is_open()){
         saida.write((compre.c_str()), compre.size());
     }
@@ -70,7 +70,7 @@ string LZ77::descomprime(string str)
 {
     string ret,aux;
     int i = 0,p,l,c;
-    while(i<str.size()/2){//para cada termo da string comprimida
+    while(i<str.size()){//para cada termo da string comprimida
         if(str[i] == '('){//encontra cada termo da string comprimida
             l = 0,p = 0;
             int j = i+1;

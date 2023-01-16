@@ -41,7 +41,7 @@ int LZW::existDicio(string str){//verifica se uma sequencia existe no dicionario
     return -1;
 }
 
-string LZW::comprime(string str)
+string LZW::comprime(string str,string path)
 {
     this->sizeOri = str.size();//tamanho da mensagem original 
     string ret,ant,atual;
@@ -67,10 +67,10 @@ string LZW::comprime(string str)
     }
 
     this->sizeComp = ret.size();//tamanho da mensagem comprimida
-    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*4)<<endl;
-    string aux = "\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*4)) + "\n";
+    cout<<"Taxa de compressao: "<< 1 - this->sizeComp/(this->sizeOri*8)<<endl;
+    string aux = "\n\nTaxa de compressao: " + to_string(1 - this->sizeComp/(this->sizeOri*8)) + "\n";
     fstream saida;
-    saida.open("../Archives/saida.txt", ios::out | ios::app);
+    saida.open(path + "saida.txt", ios::out | ios::app);
     if(saida.is_open()){
         saida.write((aux.c_str()), aux.size());
     }
@@ -86,7 +86,7 @@ string LZW::descomprime(string str)
     }
     string ret,ant ="";
     int i =0;
-    while (i < str.size()/2)//para cada caractere da mensagem comprimida
+    while (i < str.size())//para cada caractere da mensagem comprimida
     {
         if (str[i] == '(')//encontra o inicio de uma indicação de compressao
         {   
