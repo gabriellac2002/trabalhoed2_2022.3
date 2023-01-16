@@ -782,7 +782,7 @@ int main(int argc, char *argv[])
     //     return 0;
     // }
     string path(argv[1]);
-    
+
     PATH = path;
 
     cout << "Converting cvs file to binary..." << endl;
@@ -793,6 +793,7 @@ int main(int argc, char *argv[])
     cout << "Pick one of the following options:" << endl;
     cout << "1) Sorting" << endl;
     cout << "2) Hashing" << endl;
+    cout << "3) Compression" << endl;
     cout << "_____________________________________________" << endl;
 
     int mainOption;
@@ -814,6 +815,7 @@ int main(int argc, char *argv[])
         cout << "1) Huffman" << endl;//nao colocar esse ainda
         cout << "2) LZ77" << endl;
         cout << "3) LZW" << endl;
+        cout << "4) Red and Black Tree" << endl;
         cout << "_____________________________________________" << endl;
 
         int compressionOption;
@@ -821,7 +823,10 @@ int main(int argc, char *argv[])
 
         comprime(compressionOption);
         descomprime(compressionOption);
-        break;            
+        break;
+    case 4:
+        metricasVp(); 
+        break;                
     default:
         cout << "This is not a valid option!" << endl;
         break;
