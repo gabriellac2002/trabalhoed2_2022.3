@@ -510,6 +510,55 @@ void doHashing(string pathToFolder)
     cout << pr->getUserId() << endl;
 }
 
+void metricasVp()
+{
+    ofstream resultArchive("../Archives/saidaVP.txt", ios_base::app);
+
+    ArvoreVP* arv_vp = new ArvoreVP();
+
+    int n = 0;
+    ProductReview* vet;
+    ProductReview* vet_um;
+    cout << "Quantos registros deseja importar? ";
+    cin >> n;
+    vet = import(n);
+
+    cout << n << endl;
+
+    for(int i=0; i<n; i++)
+    {
+        arv_vp->insere(&vet[i]);
+
+    }
+
+    cout << "Insere" <<endl;
+    resultArchive << "Resultados das comparações e de tempo para " << n << " arquivos na insercao: \n" << endl;
+    cout<<  arv_vp->comparacoes << " -> Comparacoes" << endl;
+    resultArchive << "comparacoes: "<< arv_vp->comparacoes << endl;
+    cout<<  arv_vp->tempo << "-> Tempo" << endl;
+    resultArchive << "tempo: "<< arv_vp->tempo << endl;
+    resultArchive << "============================="<< endl;
+
+    vet_um = import(n);
+    for(int i=0; i<n; i++)
+    {
+        ProductReview y = vet_um[i];
+        ProductReview *x;
+        x = arv_vp->busca(y.getUserId(), y.getProductId());
+
+        cout << "Busca" <<endl;
+        resultArchive << "Resultados das comparações e de tempo para" << n << "arquivos na busca: \n" << endl;
+        cout<<  arv_vp->comparacoes << " -> Comparacoes" << endl;
+        resultArchive << "comparacoes: "<< arv_vp->comparacoes << endl;
+        cout<<  arv_vp->tempo << "-> Tempo" << endl;
+        resultArchive << "tempo: "<< arv_vp->tempo << endl;
+        resultArchive << "============================="<< endl;
+    }
+
+    
+
+}
+
 int main(int argc, char *argv[])
 {
     srand(time(NULL));
@@ -548,7 +597,7 @@ int main(int argc, char *argv[])
         doHashing(path_teste);
         break;
     case 3:
-       doRedAndBlackTreeTest();    
+       metricasVp(); 
        break;        
     default:
         cout << "This is not a valid option!" << endl;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <bitset>
 #include <chrono>
+#include <time.h>
 #include "string.h"
 
 #include "../Headers/NodeAvp.h"
@@ -306,6 +307,8 @@ void ArvoreVP::printAux(NodeAvp* p)
 
 ProductReview* ArvoreVP::busca(string userId, string productId)
 {
+    comparacoes = 0;
+    tempo = 0;
 
     clock_t tempoInicio, tempoFim;
     tempoInicio = clock();
@@ -317,6 +320,7 @@ ProductReview* ArvoreVP::busca(string userId, string productId)
         NodeAvp* no = buscaAux(raizAux, id); //no recebe o no com o id compativel
         if(no != NULL) //se no for diferenre de null
         {
+            
             tempoFim = clock();
             float tempoTotal = float(tempoFim - tempoInicio) / float(CLOCKS_PER_SEC);
             this->tempo = this->tempo + tempoTotal;
@@ -324,6 +328,7 @@ ProductReview* ArvoreVP::busca(string userId, string productId)
         }
         else
         {
+           
             //caso não seja encontrado
             cout << " == ID NÃO ENCONTRADO ==" << endl;
             tempoFim = clock();

@@ -31,11 +31,12 @@ class ArvoreVP
         void print(); // funcao obrigatoria
         void printAux(NodeAvp* p);
         int count=0;
+        int tempo;
+        int comparacoes = 0;
 
     private:
         NodeAvp* raiz;
-        int tempo;
-        int comparacoes = 0;
+        
 
     
 };
