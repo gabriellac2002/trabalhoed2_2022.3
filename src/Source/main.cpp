@@ -782,8 +782,7 @@ int main(int argc, char *argv[])
     //     return 0;
     // }
     string path(argv[1]);
-
-
+    
     PATH = path;
 
     cout << "Converting cvs file to binary..." << endl;
