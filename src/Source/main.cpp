@@ -38,7 +38,8 @@ int randomNumber(int a, int b)
 
 void createBinary(string &path)
 {
-    ifstream csvArchive(path + "/ratings_Electronics.csv");
+    // ifstream csvArchive(path + "/ratings_Electronics.csv");
+    ifstream csvArchive("../Archives/text.csv");
 
     int size = 7824483;
     int userIdSize = 21;
@@ -47,7 +48,8 @@ void createBinary(string &path)
 
     if (csvArchive.is_open())
     {
-        ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
+        // ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
+        ofstream binaryArchive("../Archives/text.bin");
         string strUserId, strProductId, strRating, strTimestamp;
         float rating;
         int pos;
@@ -156,7 +158,7 @@ ProductReview *import(int n)
 {
     int size = 7824483;
     ifstream binaryArchive;
-    binaryArchive.open("ratings_Electronics.bin", ios::in | ios::binary);
+    binaryArchive.open("../Archives/text.bin", ios::in | ios::binary);
     if (!binaryArchive.is_open())
     {
         cout << "Erro: Arquivo de entrada nao encontrado." << endl;
@@ -482,84 +484,76 @@ void doHashing(string pathToFolder)
 
 // 
 
+ void doRedAndBlackTreeTest()
+{
+    ArvoreVP* arv_vp = new ArvoreVP();
+
+    int n = 0;
+    ProductReview* vet;
+    cout << "Quantos registros deseja importar? ";
+    cin >> n;
+    vet = import(n);
+
+    cout << n << endl;
+
+    for(int i=0; i<n; i++)
+    {
+        arv_vp->insere(&vet[i]);
+    }
+    // cout << arv_vp->count << endl;
+    arv_vp->print();
+
+    ProductReview pp = vet[0];
+    ProductReview *pr = arv_vp->busca(pp.getUserId(), pp.getProductId());
+    
+    cout << "Esse é o userId" << endl;
+    cout << pr->getUserId() << endl;
+}
+
 int main(int argc, char *argv[])
 {
-    // if(argc > 1)
+    srand(time(NULL));
+    
+    // if(argc < 2)
     // {
-    //     // OBS.: TODOS OS ARQUIVOS USADOS NO PROGRAMA (TANTO DE ENTRADA QUANTO DE SAÍDA) DEVEM ESTAR LOCALIZADOS NO DIRETÓRIO FORNECIDO
-    //     // PELO USUÁRIO COMO ARGUMENTO DA LINHA DE COMANDO
-    //     std::string path(argv[1]);
-    //     createBinary(path);
-
-    //     int registerIdx;
-    //     cout << "Digite um indice de registro (-1 para sair): ";
-    //     cin >> registerIdx;
-    //     while (registerIdx != -1)
-    //     {
-    //         getReview(registerIdx);
-    //         cout << "Digite outro indice de registro (-1 para sair): ";
-    //         cin >> registerIdx;
-    //     }
-
-    //     ProductReview *vet = 0;
-    //     ArvoreVP *arv_vp = 0;
-    //     int option, n;
-    //     do
-    //     {
-    //         cout << "[1] Vetor de teste" << endl 
-    //             << "[2] Importar registros" << endl
-    //             << "[3] Arvore vermelho-preto" << endl
-    //             // << "[4] Arvore B" << endl
-    //             // << "[5] Huffman" << endl
-    //             // << "[6] LZ77" << endl
-    //             // << "[7] LZW" << endl
-    //             << "[0] Sair" << endl;
-
-    //         cout << "Digite uma opcao de menu: ";
-    //         cin >> option;
-    //         switch (option)
-    //         {
-    //             case 1:
-    //                 n = 10;
-    //                 delete [] vet;
-    //                 vet = randomTest(n);
-    //                 printPrompt(vet, n);
-    //                 break;
-    //             case 2:
-    //                 cout << "Quantos registros deseja importar? ";
-    //                 cin >> n;
-    //                 delete [] vet;
-    //                 vet = import(n);
-    //                 printPrompt(vet, n);
-    //                 break;
-    //             case 3:
-    //                 delete arv_vp;
-    //                 arv_vp = new ArvoreVP();
-    //                 treeTest(arv_vp, vet, n);
-    //                 break;
-    //             // case 4:
-    //             //     delete arv_b;
-    //             //     arv_b = new ArvoreB();
-    //             //     treeTest(arv_b, vet, n);
-    //             //     break;
-    //             // case 5:
-    //             //     compressTest(0);
-    //             //     break;
-    //             // case 6:
-    //             //     compressTest(1);
-    //             //     break;
-    //             // case 7:
-    //             //     compressTest(2);
-    //             //     break;
-    //             default:
-    //                 break;
-    //         }
-    //     } while(option != 0);
-
-    //     delete [] vet;
-    //     delete arv_vp;
-    //     // delete arv_b;
+    //     return 0;
     // }
 
-    // return 0;
+   
+
+    string path_teste(argv[1]);
+
+    cout << "Converting cvs file to binary..." << endl;
+    // createBinary(path_teste);
+    cout << "Binary file ready!" << endl;
+
+    cout << "_____________________________________________" << endl;
+    cout << "Pick one of the following options:" << endl;
+    cout << "1) Sorting" << endl;
+    cout << "2) Hashing" << endl;
+    cout << "3) Red and Black Tree" << endl;
+    cout << "_____________________________________________" << endl;
+
+    int mainOption;
+    cin >> mainOption;
+
+    
+
+    switch (mainOption)
+    {
+    case 1: 
+        doSorting(path_teste);
+        break;
+    case 2:
+        doHashing(path_teste);
+        break;
+    case 3:
+       doRedAndBlackTreeTest();    
+       break;        
+    default:
+        cout << "This is not a valid option!" << endl;
+        break;
+    }
+
+    return 0;
 }

@@ -7,36 +7,40 @@
 #include <bitset>
 #include "string.h"
 
+#include "./ProductReview.h"
+
 using namespace std;
 
 class NodeAvp
 {
     public:
 
-    NodeAvp(string id, int endMemory);
+    NodeAvp(string id);
     ~NodeAvp();
     void setId(string id);
     void setParent(NodeAvp *parent);
     void setLeft(NodeAvp *left);
     void setRigth(NodeAvp *right);
     void setColor(int color);
-    void setEndMemory(int endMemory);
+    void setProduct(ProductReview *product);
     string getId();
     NodeAvp* getParent();
     NodeAvp* getLeft();
     NodeAvp* getRigth();
     int getColor();
-    int getEndMemory();
+    ProductReview* getProduct();
+    
+    
 
 
     private:
     
-    int id; // holds the key
-	NodeAvp *parent; // pointer to the parent
-	NodeAvp *left; // pointer to left child
-	NodeAvp *right; // pointer to right child
-	int color; // 1 -> Red, 0 -> Black
-    int endMemory; //endereço no arquivo binario
+    string id; // id
+	NodeAvp *parent; // ponteiro para o pai
+	NodeAvp *left; // ponteiro para o nó a esuqerda
+	NodeAvp *right; // ponteiro para o nó a direita
+	int color; // 1 -> vermelho   0-> preto
+    ProductReview *product;
 
 };
 

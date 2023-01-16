@@ -8,14 +8,14 @@
 
 using namespace std;
 
-NodeAvp::NodeAvp(string id, int endMemory) //constructor
+NodeAvp::NodeAvp(string id) //constructor
 {
     this->id = id;
     this->parent = NULL;
     this->left = NULL;
     this->right = NULL;
     this->color = 1; // Em uma arvore vermelho e preto, o nó sempre começa com a cor vermelha
-    this->endMemory =  endMemory; //endereço do product review no binário
+    this->product = NULL;
 }
 
 NodeAvp::~NodeAvp() //destrutor
@@ -50,9 +50,10 @@ void NodeAvp::setRigth(NodeAvp *right)
     this->right = right;
 }
 
-void NodeAvp::setEndMemory(int endMemory)
+
+void NodeAvp::setProduct(ProductReview *product)
 {
-    this->endMemory = endMemory;
+    this->product = product;
 }
 
 //getters
@@ -82,7 +83,8 @@ int NodeAvp::getColor()
     return color;
 }
 
-int NodeAvp::getEndMemory()
+
+ProductReview* NodeAvp::getProduct()
 {
-    return endMemory;
+    return product;
 }

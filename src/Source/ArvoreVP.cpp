@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <bitset>
+#include <chrono>
 #include "string.h"
 
 #include "../Headers/NodeAvp.h"
@@ -15,6 +16,8 @@ using namespace std;
 ArvoreVP::ArvoreVP()
 {
     this->raiz = NULL;
+    this->tempo = 0;
+    this->comparacoes = 0;
 }
 
 //destrutor
@@ -24,9 +27,9 @@ ArvoreVP::~ArvoreVP()
 }
 
 //getters and setters
-void ArvoreVP::setRaiz(NodeAvp* raiz)
+void ArvoreVP::setRaiz(NodeAvp* p)
 {
-    this->raiz = raiz;
+    this->raiz = p;
 }
 
 NodeAvp* ArvoreVP::getRaiz()
@@ -88,44 +91,78 @@ void ArvoreVP::rotateRight(NodeAvp* node)
     node->setParent(p_left); //o pai de node vira p_left
 }
 
-void ArvoreVP::insere(ProductReview *pr, int* comparacoes)
+void ArvoreVP::insere(ProductReview *pr)
 {
+    
+    clock_t tempoInicio, tempoFim;
+    tempoInicio = clock();
+    // cout << "entrei no insere" << endl;
     string concatenacao = pr->getUserId() + pr->getProductId(); // concatena o userId com o productId
-    NodeAvp* p = new NodeAvp(concatenacao, 1); //manda concatenacao como id e a posicao do productReview
+    // cout << "concatenei" << endl;
+    NodeAvp* p = new NodeAvp(concatenacao); //manda concatenacao como id e a posicao do productReview
+    p->setProduct(pr); //insere o produto no nó correspondente
+    // cout << "criei um novo no" << endl;
 
     //inserção usando busca binaria
-    NodeAvp* raiz = insereAux(getRaiz(), p, comparacoes);
-    repair(raiz,p); // conserta os erros
+    cout << "1" <<endl;
+    NodeAvp* no_aux = insereAux(getRaiz(), p);
+    cout << "em teoria eu inseri o novo no" << endl;
+    // cout << "printei" << endl;
+    repair(no_aux,p); // conserta os erros
+    // cout << "em teoria eu consertei" << endl;
+    count ++;
+    tempoFim = clock();
+    float tempoTotal = float(tempoFim - tempoInicio) / float(CLOCKS_PER_SEC);
+    this->tempo = this->tempo + tempoTotal;
     
 }
 
-NodeAvp* ArvoreVP::insereAux(NodeAvp* raiz, NodeAvp* no, int* comparacoes)
+NodeAvp* ArvoreVP::insereAux(NodeAvp* p, NodeAvp* no)
 {
+    // cout<<"entrei no insereAux"<<endl;
     //caso a arvore esteja vazia
     if(raiz == NULL)
     {
-       (*comparacoes)++; // compara uma vez
-       return raiz; //retorna raiz
+        // cout << "raiz nula" << endl;
+       comparacoes ++; // compara uma vez
+       setRaiz(no); // raiz recebe o no
+        //    cout << getRaiz()->getColor()<< endl;
+       return no; //retorna raiz
+    }
+    else if(p == NULL)
+    {
+        comparacoes ++;
+        p = no;
+        return p;
     }
     else
     {
         //Caso contrario, faz uma busca binaria recursiva pela arvore para inserir o No no lugar certo
         //caso a raiz seja maior
-        if(raiz->getId() > no->getId())
+        if(p->getId() > no->getId())
         {
-            (*comparacoes)++;
-            raiz->setLeft(insereAux(raiz->getLeft(), no, comparacoes));
-            raiz->getLeft()->setParent(raiz);
+            // cout << "raiz maior" << endl;
+            comparacoes ++;
+            //  cout << "3" <<endl;
+            p->setLeft(insereAux(p->getLeft(), no));
+            //  cout << "2" <<endl;
+            p->getLeft()->setParent(p);
         }
         else
         {
+            // cout << "4" <<endl;
             //caso a raiz seja menor
-            (*comparacoes)++;
-            raiz->setRigth(insereAux(raiz->getRigth(), no, comparacoes));
-            raiz->getRigth()->setParent(raiz);
+            comparacoes ++;
+            // cout << "raiz menor" << endl;
+            p->setRigth(insereAux(p->getRigth(), no));
+            // cout << "entrei na recurssao" << endl;
+            p->getRigth()->setParent(p);
+            // cout << "ganhei um pai" << endl;
+            // cout << "5" <<endl;
         }
 
-        return raiz;
+        // cout << "sai do if" << endl;
+        return p;
     }
 }
 
@@ -137,16 +174,18 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
     NodeAvp* pai = NULL; //cria o pai auxiliar
     NodeAvp* avo = NULL; // criz o avo auxilar
 
+    // cout << "entrei no repair" << endl;
     //enquanto node2 for diferente de node1,node2 for diferente de preto e o pai de node2 for vermelho
     while((node2 !=  node1) && (node2->getColor() != 0) && (node2->getParent()->getColor() == 1))
     {
         pai = node2->getParent(); //pai vira o pai de node2
         avo = node2->getParent()->getParent(); //avo vira pai do pai de node2
-
+        // cout << "entrei no while" << endl;
         //Caso : 1
         //pai do no conflitante está a esquerda do avo de pai
         if(pai == avo->getLeft())
         {
+            // cout << "entrei no primeiro if" << endl;
             NodeAvp* tio = avo->getRigth();
 
             //se tio for diferente de null e for vermelho 
@@ -156,6 +195,7 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
                 pai->setColor(0); // pai vira preto
                 tio->setColor(0); // tio vira preto
                 node2 = avo;
+                // cout << "o avo vira vermelho e os filhos preto" << endl;
             }
             else
             {
@@ -165,21 +205,26 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
                     rotateLeft(pai);
                     node2 = pai;
                     pai = node2->getParent();
+                    // cout << "rotacionou a esquerda" << endl;
                 }
 
                 //o no conflitante esta a esquerda de seu pai entao rotaciona para a direita
                 rotateRight(avo);
+                // cout << "rotacionou a direita" << endl;
+
 
                 //ajuste de cores
                 int corAux = pai->getColor();
                 pai->setColor(avo->getColor());
                 avo->setColor(corAux);
+                // cout << "ajustou as cores" << endl;
 
                 node1 = pai;
             }
         }
         else
         {
+            // cout << "caso 2" << endl;
             // Caso : 2
             // pai do no conflitante é o filho da direita de seu avo
 
@@ -188,6 +233,7 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
             // o tio do no conflitante tambem e vermelho
             if((tio != NULL) && (tio->getColor() == 1))
             {
+                // cout << "avo vira vermelho " << endl;
                 avo->setColor(1);
                 pai->setColor(0);
                 tio->setColor(0);
@@ -195,9 +241,11 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
             }
             else
             {
+                // cout << "bla" << endl;
                 // o no conflitante esta a esquerda de seu pai entao rotaciona para a direita
                 if(node2 == pai->getLeft())
                 {
+                    // cout << "rotaciona a direita" << endl;
                     rotateRight(pai);
                     node2 = pai;
                     pai = node2->getParent();
@@ -205,6 +253,7 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
 
                 // o no conflitante esta a direita de seu pai entao rotaciona para a esquerda
                 rotateLeft(avo);
+                // cout << "rotacionou a esquerda" << endl;
 
                 //ajuste de cores
                 int corAux = pai->getColor();
@@ -222,66 +271,90 @@ void ArvoreVP::repair(NodeAvp* node1, NodeAvp* node2)
 
 void ArvoreVP::print()
 {
+    // cout << "entrei no print" << endl;
     if(this->raiz == NULL)
         cout << "Arvore vazia!" << endl;
     else{
+        // cout << "entrei no else" << endl;
         NodeAvp* p = this->raiz;
+        // cout << "prestes a entrar no print aux" << endl;
         printAux(p);
+        cout << "sai do print aux" << endl;
     }
         
 }
 
 void ArvoreVP::printAux(NodeAvp* p)
 {
-    printAux(p->getLeft());
-    cout << "---------- No --------" << endl;
-    cout << "ID: " << p->getId() << endl;
-    cout << "----------------------" << endl;
-    printAux(p->getLeft());
+    cout << "entrou no printAux" << endl;
+
+
+    if(p->getLeft() != NULL)
+        printAux(p->getLeft());
+    else
+    {
+        cout << "---------- No --------" << endl;
+        cout << "ID: " << p->getId() << endl;
+        cout << "----------------------" << endl;
+        cout << "COR: " << p->getColor() << endl;
+        cout << "----------------------" << endl;
+    }
+    if(p->getRigth() != NULL)
+        printAux(p->getRigth());
+    cout << "bla" << endl;
 }
 
-ProductReview* ArvoreVP::busca(string userId, string productId, int *comparacoes)
+ProductReview* ArvoreVP::busca(string userId, string productId)
 {
+
+    clock_t tempoInicio, tempoFim;
+    tempoInicio = clock();
+
     string id = userId + productId; //concatena as strings para buscar o id
     NodeAvp* raizAux = this->raiz;
     if(raizAux != NULL) //se raiz for diferente de null
     {
-        NodeAvp* no = buscaAux(raizAux, id, comparacoes); //no recebe o no com o id compativel
+        NodeAvp* no = buscaAux(raizAux, id); //no recebe o no com o id compativel
         if(no != NULL) //se no for diferenre de null
         {
-            int pos = no->getEndMemory(); //pos recebe a posicao no binario
-            // return returnRegister(,pos);
+            tempoFim = clock();
+            float tempoTotal = float(tempoFim - tempoInicio) / float(CLOCKS_PER_SEC);
+            this->tempo = this->tempo + tempoTotal;
+            return no->getProduct();
         }
         else
         {
             //caso não seja encontrado
             cout << " == ID NÃO ENCONTRADO ==" << endl;
+            tempoFim = clock();
+            float tempoTotal = float(tempoFim - tempoInicio) / float(CLOCKS_PER_SEC);
+            this->tempo = this->tempo + tempoTotal;
             return NULL;
         }
     }
 }
 
 //faz uma busca binaria
-NodeAvp* ArvoreVP::buscaAux(NodeAvp * node, string id, int* comparacoes)
+NodeAvp* ArvoreVP::buscaAux(NodeAvp * node, string id)
 {
     //caso o no seja nulo ou com o valor compativel
     if(node == NULL || node->getId() == id)
     {
-        (*comparacoes)++;
+        comparacoes ++;
         return node;
     }
 
     //caso o id seja maior que o atual
     if( id > node->getId())
     {
-        (*comparacoes)++;
-        return buscaAux(node->getRigth(), id, comparacoes);
+        comparacoes ++;
+        return buscaAux(node->getRigth(), id);
     } 
     else 
     {
         //caso o id seja menor que o atual
-        (*comparacoes)++;
-        return buscaAux(node->getLeft(), id, comparacoes);
+        comparacoes ++;
+        return buscaAux(node->getLeft(), id);
     }
 }
 
