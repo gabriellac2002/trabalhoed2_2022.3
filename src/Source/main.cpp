@@ -9,6 +9,7 @@
 #include <array>
 #include <chrono>
 #include "string.h"
+#include <unordered_map>
 
 #include <cstdlib>
 #include <string>
@@ -20,6 +21,9 @@
 #include "../Headers/TimSort.h"
 #include "../Headers/HashTable.h"
 #include "../Headers/RegistroHash.h"
+#include "../Headers/LZ77.h"
+#include "../Headers/LZW.h"
+#include "../Headers/Huffman.h"
 #include "../Headers/ArvoreVp.h"
 
 #define PRODUCT_REVIEW_SIZE (41 + sizeof(float))
@@ -27,7 +31,19 @@
 using namespace std;
 using namespace chrono;
 
-// função para gerar um número aleatório do intervalo entre a e b
+string PATH;
+unordered_map<char, long> FREQUENCEMAP;
+Huffman *huffmanGlobal;
+
+string PATH;
+unordered_map<char, long> FREQUENCEMAP;
+Huffman *huffmanGlobal;
+
+// COMANDOS PARA RODAR O PROGRAMA:
+// g++ *.cpp* -o final
+// .\final.exe ../Archives/ 
+
+// Função para gerar um número aleatório do intervalo entre a e b
 
 int randomNumber(int a, int b)
 {
@@ -38,8 +54,7 @@ int randomNumber(int a, int b)
 
 void createBinary(string &path)
 {
-    // ifstream csvArchive(path + "/ratings_Electronics.csv");
-    ifstream csvArchive("../Archives/text.csv");
+    ifstream csvArchive(path + "/ratings_Electronics.csv");
 
     int size = 7824483;
     int userIdSize = 21;
@@ -48,8 +63,7 @@ void createBinary(string &path)
 
     if (csvArchive.is_open())
     {
-        // ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
-        ofstream binaryArchive("../Archives/text.bin");
+        ofstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
         string strUserId, strProductId, strRating, strTimestamp;
         float rating;
         int pos;
@@ -73,13 +87,13 @@ void createBinary(string &path)
     }
     else
     {
-        cout << "Error! Could not open cvs file!" << endl;
+        cout << "Error! Could not open cvs file! (Error at createBinary)" << endl;
     }
 }
 
 void getReview(int i, string &path)
 {
-    ifstream binaryArchive(path + "ratings_Electronics.bin", ios::binary);
+    ifstream binaryArchive(PATH + "ratings_Electronics.bin", ios::binary);
 
     int userIdSize = 21;
     int productIdSize = 10;
@@ -114,6 +128,8 @@ void getReview(int i, string &path)
 
     productReview.print();
 }
+
+// Função para retornar um registro x
 
 ProductReview returnRegister(ifstream *file, int i)
 {
@@ -151,17 +167,16 @@ ProductReview returnRegister(ifstream *file, int i)
     return *productReview;
 }
 
-
-
+// Função para importar um vetor de n registros aleatórios
 
 ProductReview *import(int n)
 {
     int size = 7824483;
     ifstream binaryArchive;
-    binaryArchive.open("../Archives/text.bin", ios::in | ios::binary);
+    binaryArchive.open(PATH + "ratings_Electronics.bin", ios::in | ios::binary);
     if (!binaryArchive.is_open())
     {
-        cout << "Erro: Arquivo de entrada nao encontrado." << endl;
+        cout << "Error! Could not open binary file! (Error at import)" << endl;
         return NULL;
     }
 
@@ -202,8 +217,8 @@ void sort(ProductReview *vet, int n, int methodId, int* comparisons, int* moveme
 
 void metricsFunction(string pathToFolder, int repetition, int methodId)
 {
-    ifstream inputArchive(pathToFolder + "input.txt");
-    ofstream resultArchive(pathToFolder + "saida.txt", ios_base::app);
+    ifstream inputArchive(PATH + "input.txt");
+    ofstream resultArchive(PATH + "saida.txt", ios_base::app);
 
     switch(methodId)
     {
@@ -299,6 +314,7 @@ void metricsFunction(string pathToFolder, int repetition, int methodId)
     resultArchive.close();
 }
 
+
 // quicksort para o hashing
 
 void swap(RegistroHash* a, RegistroHash* b)
@@ -359,7 +375,6 @@ RegistroHash* createTable(int n)
         registro[i] = tabela->getHashTable(i);
     }
 
-
     return registro;
 }
 
@@ -370,6 +385,204 @@ RegistroHash* createTable(int n)
     for(int i = 0; i < p; i++)
             cout<< "ID do produto: " << registro[i].productId << " --- Reviews: " << registro[i].qtdReviews << endl;
  }
+
+//  Funções Auxiliares da SegundaEtapa
+
+ string concatRegisters(ProductReview *vet, int n)
+ {
+    string str = " ";
+    for(int i = 0; i<n; i++)
+    {
+        string aux = vet[i].getProductId() + vet[i].getUserId() + to_string(vet[i].getRating()) + vet[i].getTimestamp();
+        str += aux;
+    }
+
+    return str;
+
+ }
+
+unordered_map<char,long> createFrequenceMap(string str)
+{
+    int size = str.length();
+    unordered_map<char, long> frequenceMap;
+    for (int i = 0; i < size; i++)
+    {
+        frequenceMap[str[i]]++;
+    }       
+
+    return frequenceMap;
+}
+
+Huffman* instantiateHuffman(unordered_map<char, long> frequenceMap, long* frequence, char* content, long n, int* comparisons)
+{
+    Huffman* huffman = new Huffman(10000, n);
+    
+
+    for (int i = 0; i < n; i++)
+    {
+        content[i] = frequenceMap.begin()->first;
+        frequence[i] = frequenceMap.begin()->second;
+        frequenceMap.erase(frequenceMap.begin());
+    }
+    
+    huffman->buildHuffmanTree(content, frequence, comparisons);
+    int array[1000];
+    huffman->storeCodes(huffman->getRoot(), array, 0);
+
+    return huffman;
+}
+
+
+ // Funções de Compresssão
+
+ string comprime(string str, int metodo){
+
+    string ret;
+    switch (metodo) // estrutura de decisão para escolher o método de compressão a partir do número passado como parâmetro em metodo
+    {
+    case 1:
+    { 
+        int comparisons = 0;
+        FREQUENCEMAP = createFrequenceMap(str);
+        int relevantes = FREQUENCEMAP.size();
+        long* frequence = new long[relevantes];
+        char* content = new char[relevantes];
+        huffmanGlobal = instantiateHuffman(FREQUENCEMAP, frequence, content, relevantes, &comparisons);
+        huffmanGlobal->setOriginalSize(str.size());
+        cout<<"tamanho original"<<str.size()<<endl;
+        bool* compressionArray = huffmanGlobal->huffmanCompression(content, frequence, str, relevantes,PATH);
+        cout<<"teste"<<endl;
+        cout<<huffmanGlobal->getCompressionSize()<<endl;
+        cout<<huffmanGlobal->getOriginalSize()<<endl;
+        for(int i = 0;i<huffmanGlobal->getCompressionSize();i++)
+        {
+            if(compressionArray[i] == 1)
+                ret += "1";
+            else
+                ret += "0";
+        }
+        cout << "Comprimida: " << ret << endl;
+        break;
+    }    
+    case 2:
+    {
+        LZ77 *lz77 = new LZ77();
+        ret = lz77->comprime(str,PATH);
+        break;
+    }
+    case 3:
+    {
+        LZW *lzw = new LZW();
+        ret = lzw->comprime(str,PATH);  
+        break;  
+    }
+
+    default:
+    {
+        cout<<"Método de compressão não encontrado"<<endl;
+        break;
+    }
+
+    }
+
+    return ret;
+}
+
+string descomprime(string str, int metodo){
+    string ret =  "";
+    switch (metodo)
+    {
+        case 1:
+        {
+            bool *compressionArray = new bool[str.size()];
+            for(int i = 0;i<=huffmanGlobal->getCompressionSize();i++)
+            {
+                if(str[i] == '1')
+                    compressionArray[i] = 1;
+                else
+                    compressionArray[i] = 0;
+            }
+            ret = huffmanGlobal->decompress(compressionArray);
+
+            break;
+        }
+        case 2:
+        {
+            LZ77 *lz77 = new LZ77();
+            ret = lz77->descomprime(str);
+            break;
+        }
+        case 3:
+        {
+            LZW *lzw = new LZW();
+            ret = lzw->descomprime(str);  
+            break;
+        }
+        default:
+        {
+            cout<<"Método de descompressão não encontrado"<<endl;
+            break;
+        }
+    }
+    return ret;
+}
+
+void comprime(int metodo){
+    fstream reviewsOriginP,saida;
+    ofstream reviewsComprimedP;
+    string str = "\nMensagem Original : ",aux = "\nMensagem Comprimida: ",ret = "";
+    char *buffer;
+    int size;
+    reviewsOriginP.open(PATH +"reviewsOrig.txt",ios::in | ios::binary);
+    reviewsComprimedP.open(PATH + "reviewsComp.bin", ios::binary | ios::out);//apaga tudo que tem no arquivo para uma nova compressao
+    if(reviewsOriginP.is_open() && reviewsComprimedP.is_open()){
+        int begin = reviewsOriginP.tellg();
+        reviewsOriginP.seekg(0, ios::end);
+        int end = reviewsOriginP.tellg();
+        size = end - begin;
+        buffer = new char[size+1];
+        reviewsOriginP.seekg(0, ios::beg);
+        reviewsOriginP.read(buffer, size);
+        buffer[size] = '\0';
+        str += buffer;
+        cout<<"Size :"<<size<<endl;
+        cout<<"Buffer :"<<str<<endl;
+        ret = comprime(str, metodo);
+        aux += ret;
+        //reviewsComprimedP.write(reinterpret_cast<const char*>(ret.c_str()), ret.size());
+        reviewsComprimedP.write((ret.c_str()), ret.size());
+    }
+    saida.open(PATH +"saida.txt", ios::out | ios::app);
+    if(saida.is_open()){
+        saida.write((str.c_str()), str.size());
+        saida.write((aux.c_str()), aux.size());
+    }
+    reviewsOriginP.close();
+    reviewsComprimedP.close();
+}
+
+void descomprime(int metodo){
+    fstream reviewsComprimedP;
+    string str,ret = "\nMensagem descomprimida : ",comp = "";
+    float sizeComp = 0, sizeDescomp = 0;
+    reviewsComprimedP.open(PATH + "reviewsComp.bin", ios::in | ios::binary);
+    if(reviewsComprimedP.is_open()){
+        while(getline(reviewsComprimedP, str)){
+            comp += str; 
+            ret += descomprime(str, metodo);
+            sizeComp += str.size();
+        }
+    }
+    fstream saida;
+    saida.open(PATH +"saida.txt", ios::out | ios::app);
+    if(saida.is_open())
+        saida.write((ret.c_str()), ret.size());
+    reviewsComprimedP.close();
+}
+
+// Função de Métricas para a Segunda Etapa
+
+ // Funções de Chamada
 
 void doSorting(string pathToFolder)
 {
@@ -415,6 +628,7 @@ void doHashing(string pathToFolder)
     delete[] registro;
 
 }
+
 
  void printPrompt(ProductReview *vet, int n)
     {
@@ -567,20 +781,19 @@ int main(int argc, char *argv[])
     // {
     //     return 0;
     // }
+    string path(argv[1]);
 
-   
 
-    string path_teste(argv[1]);
+    PATH = path;
 
     cout << "Converting cvs file to binary..." << endl;
-    // createBinary(path_teste);
+    //createBinary(PATH);
     cout << "Binary file ready!" << endl;
 
     cout << "_____________________________________________" << endl;
     cout << "Pick one of the following options:" << endl;
     cout << "1) Sorting" << endl;
     cout << "2) Hashing" << endl;
-    cout << "3) Red and Black Tree" << endl;
     cout << "_____________________________________________" << endl;
 
     int mainOption;
@@ -591,14 +804,25 @@ int main(int argc, char *argv[])
     switch (mainOption)
     {
     case 1: 
-        doSorting(path_teste);
+        doSorting(PATH);
         break;
     case 2:
-        doHashing(path_teste);
+        doHashing(PATH);
         break;
     case 3:
-       metricasVp(); 
-       break;        
+        cout << "_____________________________________________" << endl;
+        cout << "Selecione a opção de compressao que deseja: " << endl;
+        cout << "1) Huffman" << endl;//nao colocar esse ainda
+        cout << "2) LZ77" << endl;
+        cout << "3) LZW" << endl;
+        cout << "_____________________________________________" << endl;
+
+        int compressionOption;
+        cin >> compressionOption;
+
+        comprime(compressionOption);
+        descomprime(compressionOption);
+        break;            
     default:
         cout << "This is not a valid option!" << endl;
         break;
