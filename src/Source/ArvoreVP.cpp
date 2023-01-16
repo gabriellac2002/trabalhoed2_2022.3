@@ -105,9 +105,7 @@ void ArvoreVP::insere(ProductReview *pr)
     // cout << "criei um novo no" << endl;
 
     //inserção usando busca binaria
-    cout << "1" <<endl;
     NodeAvp* no_aux = insereAux(getRaiz(), p);
-    cout << "em teoria eu inseri o novo no" << endl;
     // cout << "printei" << endl;
     repair(no_aux,p); // conserta os erros
     // cout << "em teoria eu consertei" << endl;

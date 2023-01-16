@@ -35,10 +35,6 @@ string PATH;
 unordered_map<char, long> FREQUENCEMAP;
 Huffman *huffmanGlobal;
 
-string PATH;
-unordered_map<char, long> FREQUENCEMAP;
-Huffman *huffmanGlobal;
-
 // COMANDOS PARA RODAR O PROGRAMA:
 // g++ *.cpp* -o final
 // .\final.exe ../Archives/ 
@@ -726,7 +722,7 @@ void doHashing(string pathToFolder)
 
 void metricasVp()
 {
-    ofstream resultArchive("../Archives/saidaVP.txt", ios_base::app);
+    ofstream resultArchive(PATH + "saidaVP.txt", ios_base::app);
 
     ArvoreVP* arv_vp = new ArvoreVP();
 
@@ -745,11 +741,8 @@ void metricasVp()
 
     }
 
-    cout << "Insere" <<endl;
     resultArchive << "Resultados das comparações e de tempo para " << n << " arquivos na insercao: \n" << endl;
-    cout<<  arv_vp->comparacoes << " -> Comparacoes" << endl;
     resultArchive << "comparacoes: "<< arv_vp->comparacoes << endl;
-    cout<<  arv_vp->tempo << "-> Tempo" << endl;
     resultArchive << "tempo: "<< arv_vp->tempo << endl;
     resultArchive << "============================="<< endl;
 
@@ -760,11 +753,8 @@ void metricasVp()
         ProductReview *x;
         x = arv_vp->busca(y.getUserId(), y.getProductId());
 
-        cout << "Busca" <<endl;
         resultArchive << "Resultados das comparações e de tempo para" << n << "arquivos na busca: \n" << endl;
-        cout<<  arv_vp->comparacoes << " -> Comparacoes" << endl;
         resultArchive << "comparacoes: "<< arv_vp->comparacoes << endl;
-        cout<<  arv_vp->tempo << "-> Tempo" << endl;
         resultArchive << "tempo: "<< arv_vp->tempo << endl;
         resultArchive << "============================="<< endl;
     }
@@ -786,7 +776,7 @@ int main(int argc, char *argv[])
     PATH = path;
 
     cout << "Converting cvs file to binary..." << endl;
-    //createBinary(PATH);
+    // createBinary(PATH);
     cout << "Binary file ready!" << endl;
 
     cout << "_____________________________________________" << endl;
@@ -794,6 +784,7 @@ int main(int argc, char *argv[])
     cout << "1) Sorting" << endl;
     cout << "2) Hashing" << endl;
     cout << "3) Compression" << endl;
+    cout << "4) Red and Black Tree" << endl;
     cout << "_____________________________________________" << endl;
 
     int mainOption;
@@ -815,7 +806,6 @@ int main(int argc, char *argv[])
         cout << "1) Huffman" << endl;//nao colocar esse ainda
         cout << "2) LZ77" << endl;
         cout << "3) LZW" << endl;
-        cout << "4) Red and Black Tree" << endl;
         cout << "_____________________________________________" << endl;
 
         int compressionOption;
